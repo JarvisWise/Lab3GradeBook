@@ -1,6 +1,7 @@
 package org.example.entities;
 
-public class Teacher implements Entity{
+//public class Teacher implements Entity{
+public class Teacher {
     private String teacherId;
     private String firstName;
     private String lastName;

@@ -1,7 +1,8 @@
 package org.example.entities;
 
-public class Subject implements Entity{
-    private String subject_id;
+//public class Subject implements Entity{
+public class Subject {
+    private String subjectId;
     private String subjectName;
     private int maxGrade;
     private int passProcGrade;
@@ -11,18 +12,18 @@ public class Subject implements Entity{
     }
 
     public Subject(String subject_id, String subjectName, int maxGrade, int passProcGrade) {
-        this.subject_id = subject_id;
+        this.subjectId = subject_id;
         this.subjectName = subjectName;
         this.maxGrade = maxGrade;
         this.passProcGrade = passProcGrade;
     }
 
-    public String getSubject_id() {
-        return subject_id;
+    public String getSubjectId() {
+        return subjectId;
     }
 
-    public void setSubject_id(String subject_id) {
-        this.subject_id = subject_id;
+    public void setSubjectId(String subjectId) {
+        this.subjectId = subjectId;
     }
 
     public String getSubjectName() {

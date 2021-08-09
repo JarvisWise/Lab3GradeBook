@@ -1,6 +1,7 @@
 package org.example.entities;
 
-public class Group implements Entity{
+//public class Group implements Entity{
+public class Group{
     private String groupId;
     private String groupName;
 

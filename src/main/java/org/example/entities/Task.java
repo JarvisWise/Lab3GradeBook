@@ -1,10 +1,11 @@
 package org.example.entities;
 
-public class Task implements Entity{
+//public class Task implements Entity{
+public class Task {
     private String taskId;
     private String SubjectId;
     private String studentSubjectId;
-    private String name;
+    private String taskName;
     private int maxGrade;
     private int grade;
 
@@ -12,11 +13,11 @@ public class Task implements Entity{
 
     }
 
-    public Task(String taskId, String subjectId, String studentSubjectId, String name, int maxGrade, int grade) {
+    public Task(String taskId, String subjectId, String studentSubjectId, String taskName, int maxGrade, int grade) {
         this.taskId = taskId;
         SubjectId = subjectId;
         this.studentSubjectId = studentSubjectId;
-        this.name = name;
+        this.taskName = taskName;
         this.maxGrade = maxGrade;
         this.grade = grade;
     }
@@ -45,12 +46,12 @@ public class Task implements Entity{
         this.studentSubjectId = studentSubjectId;
     }
 
-    public String getName() {
-        return name;
+    public String getTaskName() {
+        return taskName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
     }
 
     public int getMaxGrade() {

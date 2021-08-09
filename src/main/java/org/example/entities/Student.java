@@ -1,6 +1,7 @@
 package org.example.entities;
 
-public class Student implements Entity{
+//public class Student implements Entity{
+public class Student {
     private String studentId;
     private String fistName;
     private String lastName;
@@ -29,7 +30,7 @@ public class Student implements Entity{
         this.studentId = studentId;
     }
 
-    public String getFistName() {
+    public String getFirstName() {
         return fistName;
     }
 

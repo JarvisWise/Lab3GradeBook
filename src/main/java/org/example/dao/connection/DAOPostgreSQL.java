@@ -1,11 +1,12 @@
-package org.example.dao;
+package org.example.dao.connection;
 
 import org.example.entities.Student;
 import org.example.entities.Teacher;
 
 import java.sql.*;
 
-public class DAOPostgreSQL implements DAOInterface{
+//old
+public class DAOPostgreSQL implements DAOInterface {
 
     private static final DAOPostgreSQL instance = new DAOPostgreSQL();
     private Connection connection = null;
@@ -45,7 +46,7 @@ public class DAOPostgreSQL implements DAOInterface{
 
 
     //studentBy
-    /*private Student parseStudent(ResultSet result) throws SQLException {
+    private Student parseStudent(ResultSet result) throws SQLException {
         return new Student(
                 result.getString("student_id"),
                 result.getString("first_name"),
@@ -62,7 +63,8 @@ public class DAOPostgreSQL implements DAOInterface{
             statement = connection.prepareStatement(
                     "SELECT * FROM student WHERE student_id = ? AND password = ?");
 
-            statement.setString(1, studentId);
+            //statement.setString(1, studentId);
+            statement.setInt(1, Integer.parseInt(studentId));
             statement.setString(2, password);
 
             result = statement.executeQuery();
@@ -96,7 +98,8 @@ public class DAOPostgreSQL implements DAOInterface{
             statement = connection.prepareStatement(
                     "SELECT * FROM teacher WHERE teacher_id = ? AND password = ?");
 
-            statement.setString(1, teacherId);
+            //statement.setString(1, teacherId);
+            statement.setInt(1, Integer.parseInt(teacherId));
             statement.setString(2, password);
 
             result = statement.executeQuery();
@@ -112,6 +115,6 @@ public class DAOPostgreSQL implements DAOInterface{
         } finally {
             disconnect();
         }
-    }*/
+    }
 
 }
