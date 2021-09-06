@@ -1,5 +1,6 @@
 package org.example.dao.interfaces;
 
+import org.example.entities.Group;
 import org.example.entities.Student;
 import org.example.entities.StudentSubject;
 import org.example.tools.custom.exceptions.WrongEntityIdException;
@@ -17,4 +18,6 @@ public interface DAOStudent {
     void addStudent(Student student) throws SQLException;
     void updateStudent(Student student) throws SQLException;
     void deleteStudent(String studentId);
+    List<Student> getAllStudents() throws WrongEntityIdException;
+    List<Student> getStudentsByGroupId(String groupId) throws WrongEntityIdException;
 }

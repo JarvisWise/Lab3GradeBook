@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.example.dao.connection.Oracle;
 import org.example.dao.interfaces.DAOStudentSubject;
 import org.example.entities.StudentSubject;
+import org.example.tools.custom.exceptions.WrongEntityIdException;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
@@ -11,21 +12,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.example.tools.strings.Query.STUDENT_SUBJECT_LIST_BY_STUDENT_ID;
+import static org.example.tools.strings.Query.*;
 
 @Repository
 public class DAOStudentSubjectImpl extends Oracle implements DAOStudentSubject {
 
     private static final Logger logger = Logger.getLogger(DAOStudentSubjectImpl.class);
 
-    private String studentId;
-    private String subjectId;
-    private String teacherId;
-    private int totalGrade;
-
     @Override
     public StudentSubject parse(ResultSet result) throws SQLException {
         return new StudentSubject(
+                result.getString("student_subject_id"),
                 result.getString("student_id"),
                 result.getString("subject_id"),
                 result.getString("teacher_id"),
@@ -34,12 +31,30 @@ public class DAOStudentSubjectImpl extends Oracle implements DAOStudentSubject {
     }
 
     @Override
-    public StudentSubject getStudentById(String id) {
-        return null;
+    public StudentSubject getStudentSubjectById(String id) throws WrongEntityIdException {
+        try {
+            connect();
+            statement = connection.prepareStatement(
+                    STUDENT_SUBJECT_BY_ID.getQuery());
+
+            statement.setInt(1, Integer.parseInt(id));
+
+            result = statement.executeQuery();
+            if(result.next()) {
+                return parse(result);
+            } else {
+                throw new WrongEntityIdException("desc ");
+            }
+        } catch (SQLException | WrongEntityIdException e) {
+            e.printStackTrace();
+            throw new WrongEntityIdException("desc ", e);
+        } finally {
+            disconnect();
+        }
     }
 
     @Override
-    public List<StudentSubject> getStudentSubjectsByStudentId(String studentId) throws SQLException {
+    public List<StudentSubject> getStudentSubjectsByStudentId(String studentId) throws WrongEntityIdException {
         try {
             connect();
             List<StudentSubject> list = new ArrayList<>();
@@ -52,6 +67,25 @@ public class DAOStudentSubjectImpl extends Oracle implements DAOStudentSubject {
             return list;
         } catch (SQLException e) {
             logger.info("desc", e);
+            throw new WrongEntityIdException("desc", e);
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
+    public void addStudentSubject(StudentSubject studentSubject) throws SQLException {
+        try {
+            connect();
+            statement = connection.prepareStatement(ADD_STUDENT_SUBJECT.getQuery());
+            statement.setInt(1, studentSubject.getTotalGrade());
+            statement.setInt(2, Integer.parseInt(studentSubject.getStudentId()));
+            statement.setInt(3, Integer.parseInt(studentSubject.getSubjectId()));
+            statement.setInt(4, Integer.parseInt(studentSubject.getTeacherId()));
+
+            statement.execute();
+        } catch (SQLException e) {
+            logger.info("desc", e);
             throw new SQLException("desc", e);
         } finally {
             disconnect();
@@ -59,17 +93,36 @@ public class DAOStudentSubjectImpl extends Oracle implements DAOStudentSubject {
     }
 
     @Override
-    public void addStudent(StudentSubject studentSubject) {
+    public void updateStudentSubject(StudentSubject studentSubject) throws SQLException {
+        try {
+            connect();
+            statement = connection.prepareStatement(UPDATE_STUDENT_SUBJECT.getQuery());
 
+            statement.setInt(1, studentSubject.getTotalGrade());
+            statement.setInt(2, Integer.parseInt(studentSubject.getStudentId()));
+            statement.setInt(3, Integer.parseInt(studentSubject.getSubjectId()));
+            statement.setInt(4, Integer.parseInt(studentSubject.getTeacherId()));
+            statement.setInt(4, Integer.parseInt(studentSubject.getStudentSubjectId()));
+            statement.execute();
+        } catch (SQLException e) {
+            logger.info("desc", e);
+            throw new SQLException("desc", e);
+        } finally {
+            disconnect();
+        }
     }
 
     @Override
-    public void updateStudent(StudentSubject studentSubject) {
-
-    }
-
-    @Override
-    public void deleteStudent(StudentSubject studentSubject) {
-
+    public void deleteStudentSubject(String studentSubjectId) {
+        try {
+            connect();
+            statement = connection.prepareStatement(DELETE_STUDENT_SUBJECT_BY_ID.getQuery());
+            statement.setInt(1, Integer.parseInt(studentSubjectId));
+            statement.execute();
+        } catch (SQLException e) {
+            logger.info("desc");
+        } finally {
+            disconnect();
+        }
     }
 }

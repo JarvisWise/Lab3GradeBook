@@ -3,8 +3,8 @@ package org.example.dao.implementations;
 import org.apache.log4j.Logger;
 import org.example.dao.connection.Oracle;
 import org.example.dao.interfaces.DAOStudent;
+import org.example.entities.Group;
 import org.example.entities.Student;
-import org.example.entities.StudentSubject;
 import org.example.tools.custom.exceptions.WrongEntityIdException;
 import org.example.tools.custom.exceptions.WrongLoginDataException;
 import org.springframework.stereotype.Repository;
@@ -145,6 +145,45 @@ public class DAOStudentImpl extends Oracle implements DAOStudent {
             statement.execute();
         } catch (SQLException e) {
             logger.info("desc");
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
+    public List<Student> getStudentsByGroupId(String groupId) throws WrongEntityIdException {
+        try {
+            connect();
+            List<Student> list = new ArrayList<>();
+            statement = connection.prepareStatement(STUDENTS_BY_GROUP_ID.getQuery());
+            statement.setInt(1, Integer.parseInt(groupId));
+            result = statement.executeQuery();
+            while (result.next()) {
+                list.add(parse(result));
+            }
+            return list;
+        } catch (SQLException e) {
+            logger.info("desc", e);
+            throw new WrongEntityIdException("desc", e);
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
+    public List<Student> getAllStudents() throws WrongEntityIdException {
+        try {
+            connect();
+            List<Student> list = new ArrayList<>();
+            statement = connection.prepareStatement(ALL_STUDENTS.getQuery());
+            result = statement.executeQuery();
+            while (result.next()) {
+                list.add(parse(result));
+            }
+            return list;
+        } catch (SQLException e) {
+            logger.info("desc", e);
+            throw new WrongEntityIdException("desc", e);
         } finally {
             disconnect();
         }

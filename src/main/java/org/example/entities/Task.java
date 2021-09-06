@@ -69,4 +69,16 @@ public class Task {
     public void setGrade(int grade) {
         this.grade = grade;
     }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "taskId='" + taskId + '\'' +
+                ", SubjectId='" + SubjectId + '\'' +
+                ", studentSubjectId='" + studentSubjectId + '\'' +
+                ", taskName='" + taskName + '\'' +
+                ", maxGrade=" + maxGrade +
+                ", grade=" + grade +
+                '}';
+    }
 }

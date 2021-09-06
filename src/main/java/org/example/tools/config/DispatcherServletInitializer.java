@@ -2,7 +2,7 @@ package org.example.tools.config;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-public class DispatcherServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class DispatcherServletInitializer { /*extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override
     protected String[] getServletMappings() {
@@ -17,5 +17,5 @@ public class DispatcherServletInitializer extends AbstractAnnotationConfigDispat
     @Override
     protected Class<?>[] getServletConfigClasses() {
         return new Class[]{MVCConfig.class};
-    }
+    }*/
 }

@@ -21,6 +21,9 @@
             <label>
                 <input type="text" value="" name="search" placeholder="Search"/>
             </label>
+            <input type="button" value="All Student List">
+            <input type="button" value="All Group List">
+            <input type="button" value="All Subject List">
         </form>
     </div>
     <div>

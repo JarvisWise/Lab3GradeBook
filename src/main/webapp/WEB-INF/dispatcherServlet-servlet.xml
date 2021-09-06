@@ -10,6 +10,7 @@
     <mvc:annotation-driven />
     <context:component-scan base-package="org.example.controllers"/>
     <context:component-scan base-package="org.example.controllers.rest"/>
+    <context:component-scan base-package="org.example"/>
 
     <mvc:view-controller path="/" view-name="login"/>
     <bean id = "myViewResolver" class = "org.springframework.web.servlet.view.InternalResourceViewResolver">

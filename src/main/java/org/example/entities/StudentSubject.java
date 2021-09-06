@@ -2,6 +2,7 @@ package org.example.entities;
 
 //public class StudentSubject implements Entity{
 public class StudentSubject {
+    private String studentSubjectId;
     private String studentId;
     private String subjectId;
     private String teacherId;
@@ -11,7 +12,8 @@ public class StudentSubject {
 
     }
 
-    public StudentSubject(String studentId, String subjectId, String teacherId, int totalGrade) {
+    public StudentSubject(String studentSubjectId, String studentId, String subjectId, String teacherId, int totalGrade) {
+        this.studentSubjectId = studentSubjectId;
         this.studentId = studentId;
         this.subjectId = subjectId;
         this.teacherId = teacherId;
@@ -48,5 +50,24 @@ public class StudentSubject {
 
     public void setTotalGrade(int totalGrade) {
         this.totalGrade = totalGrade;
+    }
+
+    public String getStudentSubjectId() {
+        return studentSubjectId;
+    }
+
+    public void setStudentSubjectId(String studentSubjectId) {
+        this.studentSubjectId = studentSubjectId;
+    }
+
+    @Override
+    public String toString() {
+        return "StudentSubject{" +
+                "studentSubjectId='" + studentSubjectId + '\'' +
+                ", studentId='" + studentId + '\'' +
+                ", subjectId='" + subjectId + '\'' +
+                ", teacherId='" + teacherId + '\'' +
+                ", totalGrade=" + totalGrade +
+                '}';
     }
 }

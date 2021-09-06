@@ -1,5 +1,9 @@
 package org.example.controllers;
 
+import org.example.dao.implementations.DAOGroupImpl;
+import org.example.dao.implementations.DAOStudentImpl;
+import org.example.dao.implementations.DAOSubjectImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,43 +14,39 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(value = "/delete")
 public class DeleteController {
 
+    private final DAOStudentImpl daoStudent;
+    private final DAOGroupImpl daoGroup;
+    private final DAOSubjectImpl daoSubject;
+
+    @Autowired
+    public DeleteController(DAOStudentImpl daoStudent, DAOGroupImpl daoGroup, DAOSubjectImpl daoSubject) {
+        this.daoStudent = daoStudent;
+        this.daoGroup = daoGroup;
+        this.daoSubject = daoSubject;
+    }
+
     @RequestMapping(value = "/group")
     @GetMapping
     public ModelAndView deleteByGroupId(@RequestParam("groupId") String groupId) {
-
-
-
-
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("message", "WHYYYY!");
-        modelAndView.setViewName("main-page");
-        return modelAndView;
+        daoGroup.deleteGroup(groupId);
+        //add action
+        return new ModelAndView("main-page");
     }
 
     @RequestMapping(value = "/student")
     @GetMapping
     public ModelAndView deleteByStudentId(@RequestParam("studentId") String studentId) {
-
-
-
-
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("message", "WHYYYY!");
-        modelAndView.setViewName("main-page");
-        return modelAndView;
+        daoStudent.deleteStudent(studentId);
+        //add action
+        return new ModelAndView("main-page");
     }
 
     @RequestMapping(value = "/subject")
     @GetMapping
     public ModelAndView deleteBySubjectId(@RequestParam("subjectId") String subjectId) {
-
-
-
-
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("message", "WHYYYY!");
-        modelAndView.setViewName("main-page");
-        return modelAndView;
+        daoSubject.deleteSubject(subjectId);
+        //add action
+        return new ModelAndView("main-page");
     }
 
     @RequestMapping(value = "/task")

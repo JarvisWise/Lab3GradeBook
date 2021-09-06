@@ -69,4 +69,16 @@ public class Student {
     public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "studentId='" + studentId + '\'' +
+                ", fistName='" + fistName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", password='" + password + '\'' +
+                ", headman='" + headman + '\'' +
+                ", groupId='" + groupId + '\'' +
+                '}';
+    }
 }

@@ -49,4 +49,14 @@ public class Subject {
     public void setPassProcGrade(int passProcGrade) {
         this.passProcGrade = passProcGrade;
     }
+
+    @Override
+    public String toString() {
+        return "Subject{" +
+                "subjectId='" + subjectId + '\'' +
+                ", subjectName='" + subjectName + '\'' +
+                ", maxGrade=" + maxGrade +
+                ", passProcGrade=" + passProcGrade +
+                '}';
+    }
 }

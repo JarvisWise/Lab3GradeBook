@@ -1,14 +1,13 @@
 package org.example.dao.implementations;
 
 import org.apache.log4j.Logger;
-import org.example.dao.DAOEntity;
 import org.example.dao.connection.Oracle;
 import org.example.dao.interfaces.DAOTask;
-import org.example.entities.Entity;
 import org.example.entities.Task;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 @Repository
 public class DAOTaskImpl extends Oracle implements DAOTask {
@@ -16,8 +15,15 @@ public class DAOTaskImpl extends Oracle implements DAOTask {
     private static final Logger logger = Logger.getLogger(DAOTaskImpl.class);
 
     @Override
-    public Task parse(ResultSet result) {
-        return null;
+    public Task parse(ResultSet result) throws SQLException {
+        return new Task(
+                result.getString("subject_id"),
+                result.getString("task_id"),
+                result.getString("student_subject_id"),
+                result.getString("task_name"),
+                result.getInt("max_grade"),
+                result.getInt("grade")
+        );
     }
 
     @Override
@@ -36,7 +42,7 @@ public class DAOTaskImpl extends Oracle implements DAOTask {
     }
 
     @Override
-    public void deleteTask(Task task) {
+    public void deleteTask(String taskId) {
 
     }
 }

@@ -1,10 +1,8 @@
 package org.example.dao.implementations;
 
 import org.apache.log4j.Logger;
-import org.example.dao.DAOEntity;
 import org.example.dao.connection.Oracle;
 import org.example.dao.interfaces.DAOTeacher;
-import org.example.entities.Entity;
 import org.example.entities.Teacher;
 import org.example.tools.custom.exceptions.WrongEntityIdException;
 import org.example.tools.custom.exceptions.WrongLoginDataException;

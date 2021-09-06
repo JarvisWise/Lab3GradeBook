@@ -2,15 +2,17 @@ package org.example.dao.interfaces;
 
 import org.example.entities.Group;
 import org.example.entities.Student;
+import org.example.tools.custom.exceptions.WrongEntityIdException;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public interface DAOGroup {
-    Group parse(ResultSet result);
-    Group getGroupById(String id);
-    List<Student> getStudentsByGroupId(String groupId);
-    void addGroup(Group group);
-    void updateGroup(Group group);
+    Group parse(ResultSet result) throws SQLException;
+    Group getGroupById(String id) throws WrongEntityIdException;
+    void addGroup(Group group) throws SQLException;
+    void updateGroup(Group group) throws SQLException;
     void deleteGroup(String groupId);
+    List<Group> getAllGroups() throws WrongEntityIdException;
 }
