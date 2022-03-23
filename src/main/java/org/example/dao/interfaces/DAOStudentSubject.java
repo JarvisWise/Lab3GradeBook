@@ -10,7 +10,6 @@ import java.util.List;
 
 //?
 public interface DAOStudentSubject {
-    StudentSubject parse(ResultSet result) throws SQLException;
     StudentSubject getStudentSubjectById(String id) throws WrongEntityIdException;
     List<StudentSubject> getStudentSubjectsByStudentId(String studentId) throws WrongEntityIdException;
     void addStudentSubject(StudentSubject studentSubject) throws SQLException;

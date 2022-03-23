@@ -45,6 +45,7 @@ public class AddController {
     @RequestMapping(value = "/student")
     @GetMapping
     public ModelAndView addByStudentId(@RequestParam("firstName") String firstName,
+                                       @RequestParam("loginName") String loginName,
                                        @RequestParam("lastName") String lastName,
                                        @RequestParam("headman") String headman,
                                        @RequestParam("password") String password,
@@ -52,6 +53,7 @@ public class AddController {
 
         Student student = new Student(
                 "new",
+                loginName,
                 firstName,
                 lastName,
                 password,

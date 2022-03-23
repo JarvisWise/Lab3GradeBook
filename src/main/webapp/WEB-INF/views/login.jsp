@@ -20,7 +20,7 @@
         Name: <input type="text" value="" name="loginUserName" placeholder="Enter name"/> </br>
         Password: <input type="password" value="" name="loginPassword" placeholder="Enter password"/> </br>
         Role student: <input type="radio" name="loginType" value="student" checked>
-        Role student: <input type="radio" name="loginType" value="teacher"> </br>
+        Role teacher: <input type="radio" name="loginType" value="teacher"> </br>
         <input type="submit" value="Login" /> </br>
         <!--<a href="/practiceJBDC_war_exploded/dispatcher?action=toChangePassword">Change Password</a>-->
     </form>

@@ -20,17 +20,6 @@ public class DAOStudentSubjectImpl extends Oracle implements DAOStudentSubject {
     private static final Logger logger = Logger.getLogger(DAOStudentSubjectImpl.class);
 
     @Override
-    public StudentSubject parse(ResultSet result) throws SQLException {
-        return new StudentSubject(
-                result.getString("student_subject_id"),
-                result.getString("student_id"),
-                result.getString("subject_id"),
-                result.getString("teacher_id"),
-                result.getInt("total_grade")
-        );
-    }
-
-    @Override
     public StudentSubject getStudentSubjectById(String id) throws WrongEntityIdException {
         try {
             connect();
@@ -41,7 +30,7 @@ public class DAOStudentSubjectImpl extends Oracle implements DAOStudentSubject {
 
             result = statement.executeQuery();
             if(result.next()) {
-                return parse(result);
+                return StudentSubject.parse(result);
             } else {
                 throw new WrongEntityIdException("desc ");
             }
@@ -62,7 +51,7 @@ public class DAOStudentSubjectImpl extends Oracle implements DAOStudentSubject {
             statement.setInt(1, Integer.parseInt(studentId));
             result = statement.executeQuery();
             while (result.next()) {
-                list.add(parse(result));
+                list.add(StudentSubject.parse(result));
             }
             return list;
         } catch (SQLException e) {

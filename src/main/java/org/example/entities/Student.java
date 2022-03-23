@@ -1,9 +1,15 @@
 package org.example.entities;
 
+import org.example.tools.strings.Role;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 //public class Student implements Entity{
-public class Student {
+public class Student extends User {
     private String studentId;
-    private String fistName;
+    private String loginName;
+    private String firstName;
     private String lastName;
     private String password;
     private String headman;
@@ -13,9 +19,10 @@ public class Student {
 
     }
 
-    public Student(String studentId, String fistName, String lastName, String password, String headman, String groupId) {
+    public Student(String studentId, String loginName, String firstName, String lastName, String password, String headman, String groupId) {
         this.studentId = studentId;
-        this.fistName = fistName;
+        this.loginName = loginName;
+        this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.headman = headman;
@@ -30,16 +37,34 @@ public class Student {
         this.studentId = studentId;
     }
 
-    public String getFirstName() {
-        return fistName;
+    public String getLoginName() {
+        return loginName;
     }
 
-    public void setFistName(String fistName) {
-        this.fistName = fistName;
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
         return lastName;
+    }
+
+    @Override
+    public String getUserId() {
+        return studentId;
+    }
+
+    @Override
+    public String getRole() {
+        return Role.STUDENT.getRole();
     }
 
     public void setLastName(String lastName) {
@@ -70,11 +95,24 @@ public class Student {
         this.groupId = groupId;
     }
 
+    public static Student parse(ResultSet result) throws SQLException {
+        return new Student(
+                result.getString("student_id"),
+                result.getString("login_name"),
+                result.getString("first_name"),
+                result.getString("last_name"),
+                result.getString("password"),
+                result.getString("headman"),
+                result.getString("group_id")
+        );
+    }
+
     @Override
     public String toString() {
         return "Student{" +
                 "studentId='" + studentId + '\'' +
-                ", fistName='" + fistName + '\'' +
+                ", loginName='" + loginName + '\'' +
+                ", fistName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", password='" + password + '\'' +
                 ", headman='" + headman + '\'' +

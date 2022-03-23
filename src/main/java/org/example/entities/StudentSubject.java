@@ -1,5 +1,8 @@
 package org.example.entities;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 //public class StudentSubject implements Entity{
 public class StudentSubject {
     private String studentSubjectId;
@@ -58,6 +61,16 @@ public class StudentSubject {
 
     public void setStudentSubjectId(String studentSubjectId) {
         this.studentSubjectId = studentSubjectId;
+    }
+
+    public static StudentSubject parse(ResultSet result) throws SQLException {
+        return new StudentSubject(
+                result.getString("student_subject_id"),
+                result.getString("student_id"),
+                result.getString("subject_id"),
+                result.getString("teacher_id"),
+                result.getInt("total_grade")
+        );
     }
 
     @Override

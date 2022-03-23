@@ -10,9 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public interface DAOTeacher {
-    Teacher parse(ResultSet result) throws SQLException;
     Teacher getTeacherById(String id) throws WrongEntityIdException;
-    Teacher getTeacherByIdAndPassword(String teacherId, String password) throws WrongLoginDataException;
+    Teacher getTeacherByLoginNameAndPassword(String teacherId, String password) throws WrongLoginDataException;
     void changeTeacherPassword(String teacherId, String password) throws SQLException;
     void addTeacher(Teacher teacher) throws SQLException;
     void updateTeacher(Teacher teacher) throws SQLException;

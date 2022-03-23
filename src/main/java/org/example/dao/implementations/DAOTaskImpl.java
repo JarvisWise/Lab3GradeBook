@@ -15,18 +15,6 @@ public class DAOTaskImpl extends Oracle implements DAOTask {
     private static final Logger logger = Logger.getLogger(DAOTaskImpl.class);
 
     @Override
-    public Task parse(ResultSet result) throws SQLException {
-        return new Task(
-                result.getString("subject_id"),
-                result.getString("task_id"),
-                result.getString("student_subject_id"),
-                result.getString("task_name"),
-                result.getInt("max_grade"),
-                result.getInt("grade")
-        );
-    }
-
-    @Override
     public Task getTaskById(String id) {
         return null;
     }

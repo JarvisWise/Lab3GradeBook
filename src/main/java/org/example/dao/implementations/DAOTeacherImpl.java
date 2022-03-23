@@ -19,16 +19,6 @@ public class DAOTeacherImpl extends Oracle implements DAOTeacher {
     private static final Logger logger = Logger.getLogger(DAOTeacherImpl.class);
 
     @Override
-    public Teacher parse(ResultSet result) throws SQLException {
-        return new Teacher(
-                result.getString("teacher_id"),
-                result.getString("first_name"),
-                result.getString("last_name"),
-                result.getString("password")
-        );
-    }
-
-    @Override
     public Teacher getTeacherById(String id) throws WrongEntityIdException {
         try {
             connect();
@@ -39,7 +29,7 @@ public class DAOTeacherImpl extends Oracle implements DAOTeacher {
 
             result = statement.executeQuery();
             if(result.next()) {
-                return parse(result);
+                return Teacher.parse(result);
             } else {
                 throw new WrongEntityIdException("desc ");
             }
@@ -52,18 +42,18 @@ public class DAOTeacherImpl extends Oracle implements DAOTeacher {
     }
 
     @Override
-    public Teacher getTeacherByIdAndPassword(String teacherId, String password) throws WrongLoginDataException {
+    public Teacher getTeacherByLoginNameAndPassword(String teacherLoginName, String password) throws WrongLoginDataException {
         try {
             connect();
             statement = connection.prepareStatement(
-                    TEACHER_BY_ID_PASSWORD.getQuery());
+                    TEACHER_BY_LOGIN_NAME_AND_PASSWORD.getQuery());
 
-            statement.setInt(1, Integer.parseInt(teacherId));
+            statement.setString(1, teacherLoginName);
             statement.setString(2, password);
 
             result = statement.executeQuery();
             if(result.next()) {
-                return parse(result);
+                return Teacher.parse(result);
             } else {
                 throw new WrongLoginDataException("desc ");
             }

@@ -14,11 +14,9 @@ public class DAOPostgreSQL implements DAOInterface {
     private ResultSet result = null;
 
     private DAOPostgreSQL(){super();}
-
     public static DAOPostgreSQL getInstance(){
         return instance;
     }
-
 
     @Override
     public boolean connect() {
@@ -30,7 +28,6 @@ public class DAOPostgreSQL implements DAOInterface {
             return false;
         }
     }
-
 
     @Override
     public boolean disconnect() {
@@ -44,11 +41,11 @@ public class DAOPostgreSQL implements DAOInterface {
         }
     }
 
-
     //studentBy
-    private Student parseStudent(ResultSet result) throws SQLException {
+    /*private Student parseStudent(ResultSet result) throws SQLException {
         return new Student(
                 result.getString("student_id"),
+                result.getString("login_name"),
                 result.getString("first_name"),
                 result.getString("last_name"),
                 result.getString("password"),
@@ -86,6 +83,7 @@ public class DAOPostgreSQL implements DAOInterface {
     private Teacher parseTeacher(ResultSet result) throws SQLException {
         return new Teacher(
                 result.getString("teacher_id"),
+                result.getString("login_name"),
                 result.getString("first_name"),
                 result.getString("last_name"),
                 result.getString("password")
@@ -115,6 +113,5 @@ public class DAOPostgreSQL implements DAOInterface {
         } finally {
             disconnect();
         }
-    }
-
+    }*/
 }

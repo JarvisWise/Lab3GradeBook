@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.example.tools.strings.Query.*;
@@ -20,14 +21,6 @@ import static org.example.tools.strings.Query.*;
 public class DAOGroupImpl extends Oracle implements DAOGroup {
 
     private static final Logger logger = Logger.getLogger(DAOGroupImpl.class);
-
-    @Override
-    public Group parse(ResultSet result) throws SQLException {
-        return new Group(
-                result.getString("group_id"),
-                result.getString("group_name")
-        );
-    }
 
     @Override
     public Group getGroupById(String id) throws WrongEntityIdException {
@@ -40,7 +33,7 @@ public class DAOGroupImpl extends Oracle implements DAOGroup {
 
             result = statement.executeQuery();
             if(result.next()) {
-                return parse(result);
+                return Group.parse(result);
             } else {
                 throw new WrongEntityIdException("desc ");
             }
@@ -106,12 +99,38 @@ public class DAOGroupImpl extends Oracle implements DAOGroup {
             statement = connection.prepareStatement(ALL_GROUPS.getQuery());
             result = statement.executeQuery();
             while (result.next()) {
-                list.add(parse(result));
+                list.add(Group.parse(result));
             }
             return list;
         } catch (SQLException e) {
             logger.info("desc", e);
             throw new WrongEntityIdException("desc", e);
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
+    public List<Group> searchGroupsByName(String text) throws SQLException, WrongEntityIdException {
+        if (text == null || text.isEmpty()) {
+            return Collections.emptyList();
+        } else if (text.equals("*")) {
+            return getAllGroups();
+        }
+
+        try {
+            connect();
+            List<Group> list = new ArrayList<>();
+            statement = connection.prepareStatement(SEARCH_BY_GROUP_NAME.getQuery());
+            statement.setString(1, text);
+            result = statement.executeQuery();
+            while (result.next()) {
+                list.add(Group.parse(result));
+            }
+            return list;
+        } catch (SQLException e) {
+            logger.info("desc", e);
+            throw new SQLException("desc", e);
         } finally {
             disconnect();
         }

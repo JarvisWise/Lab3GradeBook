@@ -1,21 +1,24 @@
 package org.example.entities;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 //public class Subject implements Entity{
 public class Subject {
     private String subjectId;
     private String subjectName;
     private int maxGrade;
-    private int passProcGrade;
+    private int passProcGradeP;
 
     public Subject() {
 
     }
 
-    public Subject(String subject_id, String subjectName, int maxGrade, int passProcGrade) {
+    public Subject(String subject_id, String subjectName, int maxGrade, int passProcGradeP) {
         this.subjectId = subject_id;
         this.subjectName = subjectName;
         this.maxGrade = maxGrade;
-        this.passProcGrade = passProcGrade;
+        this.passProcGradeP = passProcGradeP;
     }
 
     public String getSubjectId() {
@@ -42,12 +45,21 @@ public class Subject {
         this.maxGrade = maxGrade;
     }
 
-    public int getPassProcGrade() {
-        return passProcGrade;
+    public int getPassProcGradeP() {
+        return passProcGradeP;
     }
 
-    public void setPassProcGrade(int passProcGrade) {
-        this.passProcGrade = passProcGrade;
+    public void setPassProcGradeP(int passProcGradeP) {
+        this.passProcGradeP = passProcGradeP;
+    }
+
+    public static Subject parse(ResultSet result) throws SQLException {
+        return new Subject(
+                result.getString("subject_id"),
+                result.getString("subject_name"),
+                result.getInt("max_grade"),
+                result.getInt("pass_proc_grade")
+        );
     }
 
     @Override
@@ -56,7 +68,7 @@ public class Subject {
                 "subjectId='" + subjectId + '\'' +
                 ", subjectName='" + subjectName + '\'' +
                 ", maxGrade=" + maxGrade +
-                ", passProcGrade=" + passProcGrade +
+                ", passProcGrade=" + passProcGradeP +
                 '}';
     }
 }

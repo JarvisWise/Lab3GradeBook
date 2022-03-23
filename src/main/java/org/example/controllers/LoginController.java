@@ -1,6 +1,5 @@
 package org.example.controllers;
 
-import org.example.dao.connection.DAOPostgreSQL;
 import org.example.dao.implementations.DAOStudentImpl;
 import org.example.dao.implementations.DAOTeacherImpl;
 import org.example.entities.Student;
@@ -13,8 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import static org.example.tools.strings.PageName.*;
+import static org.example.tools.strings.Role.*;
+
 @Controller
-public class LoginController {
+public class LoginController extends AbstractController{
 
     private final DAOStudentImpl daoStudent;
     private final DAOTeacherImpl daoTeacher;
@@ -29,26 +34,43 @@ public class LoginController {
     @GetMapping
     public ModelAndView checkUser(@RequestParam("loginType") String loginType,
                                    @RequestParam("loginUserName") String loginUserName,
-                                   @RequestParam("loginPassword") String loginPassword) {
+                                   @RequestParam("loginPassword") String loginPassword,
+                                   HttpServletRequest request) {
 
+        ModelAndView modelAndView;
+        if (TEACHER.getRole().equals(loginType)) {
+            modelAndView = loginTeacher(loginUserName, loginPassword, request);
+        } else  if (STUDENT.getRole().equals(loginType)) {
+            modelAndView = loginStudent(loginUserName, loginPassword, request);
+        } else {
+            modelAndView = new ModelAndView();
+            modelAndView.setViewName(ERROR_PAGE.getPageName());
+        }
+        return modelAndView;
+    }
+
+    private ModelAndView loginTeacher(String loginUserName, String loginPassword, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
-        if ("teacher".equals(loginType)) {
-            try {
-                Teacher teacher = daoTeacher.getTeacherByIdAndPassword(loginUserName, loginPassword);
-                modelAndView.addObject("username", teacher.getFirstName());
-                modelAndView.setViewName("main-page");
-            } catch (WrongLoginDataException e) {
-                modelAndView.setViewName("error-page");
-            }
+        try {
+            Teacher teacher = daoTeacher.getTeacherByLoginNameAndPassword(loginUserName, loginPassword);
+            setBaseSessionVariables(request, teacher);//
+            modelAndView.addObject("username", teacher.getFirstName());
+            modelAndView.setViewName(MAIN_PAGE.getPageName());
+        } catch (WrongLoginDataException e) {
+            modelAndView.setViewName(ERROR_PAGE.getPageName());
+        }
+        return modelAndView;
+    }
 
-        } else  if ("student".equals(loginType)) {
-            try {
-                Student student = daoStudent.getStudentByIdAndPassword(loginUserName, loginPassword);
-                modelAndView.addObject("username", student.getFirstName());
-                modelAndView.setViewName("main-page");
-            } catch (WrongLoginDataException e) {
-                modelAndView.setViewName("error-page");
-            }
+    private ModelAndView loginStudent(String loginUserName, String loginPassword, HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView();
+        try {
+            Student student = daoStudent.getStudentByLoginNameAndPassword(loginUserName, loginPassword);
+            setBaseSessionVariables(request, student);//
+            modelAndView.addObject("username", student.getFirstName());
+            modelAndView.setViewName(MAIN_PAGE.getPageName());
+        } catch (WrongLoginDataException e) {
+            modelAndView.setViewName(ERROR_PAGE.getPageName());
         }
         return modelAndView;
     }

@@ -9,6 +9,7 @@
         <c:when test="${action eq 'edit'}">
         <form action="<c:url value='/${action}/student/${student.getStudentId()}' />" method="POST">
             <label>First Name</label><input type="text" name="firstName" required value="${student.getFirstName()}" placeholder="Enter First Name">
+            <label>Login Name</label><input type="text" name="loginName" required value="${student.getLoginName()}" placeholder="Enter Login Name">
             <label>Last Name</label><input type="text" name="lastName" required value="${student.getLastName()}" placeholder="Enter Last Name">
             <label>Headman</label><input type="text" name="headman" required value="${student.getHeadman()}" placeholder="Enter Headman">
             <label>Group Id</label><input type="text" name="groupId" required value="${student.getGroupId()}" placeholder="Enter Group Id">
@@ -17,6 +18,7 @@
         <c:otherwise>
             <form action="<c:url value='/${action}/student' />" method="POST">
             <label>First Name</label><input type="text" name="firstName" required value="" placeholder="Enter First Name">
+            <label>Login Name</label><input type="text" name="loginName" required value="" placeholder="Enter Login Name">
             <label>Last Name</label><input type="text" name="lastName" required value="" placeholder="Enter Last Name">
             <label>Headman</label><input type="text" name="headman" required value="" placeholder="Enter Headman">
             <label>Group Id</label><input type="text" name="groupId" required value="" placeholder="Enter Group Id">

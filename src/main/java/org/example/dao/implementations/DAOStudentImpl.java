@@ -3,7 +3,6 @@ package org.example.dao.implementations;
 import org.apache.log4j.Logger;
 import org.example.dao.connection.Oracle;
 import org.example.dao.interfaces.DAOStudent;
-import org.example.entities.Group;
 import org.example.entities.Student;
 import org.example.tools.custom.exceptions.WrongEntityIdException;
 import org.example.tools.custom.exceptions.WrongLoginDataException;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.example.tools.strings.Query.*;
@@ -20,18 +20,6 @@ import static org.example.tools.strings.Query.*;
 public class DAOStudentImpl extends Oracle implements DAOStudent {
 
     private static final Logger logger = Logger.getLogger(DAOStudentImpl.class);
-
-    @Override
-    public Student parse(ResultSet result) throws SQLException {
-        return new Student(
-                result.getString("student_id"),
-                result.getString("first_name"),
-                result.getString("last_name"),
-                result.getString("password"),
-                result.getString("headman"),
-                result.getString("group_id")
-        );
-    }
 
     @Override
     public Student getStudentById(String id) throws WrongEntityIdException {
@@ -44,7 +32,7 @@ public class DAOStudentImpl extends Oracle implements DAOStudent {
 
             result = statement.executeQuery();
             if(result.next()) {
-                return parse(result);
+                return Student.parse(result);
             } else {
                 throw new WrongEntityIdException("desc ");
             }
@@ -57,18 +45,18 @@ public class DAOStudentImpl extends Oracle implements DAOStudent {
     }
 
     @Override
-    public Student getStudentByIdAndPassword(String studentId, String password) throws WrongLoginDataException {
+    public Student getStudentByLoginNameAndPassword(String studentLoginName, String password) throws WrongLoginDataException {
         try {
             connect();
             statement = connection.prepareStatement(
-                    STUDENT_BY_ID_PASSWORD.getQuery());
+                    STUDENT_BY_LOGIN_NAME_AND_PASSWORD.getQuery());
 
-            statement.setInt(1, Integer.parseInt(studentId));
+            statement.setString(1, studentLoginName);
             statement.setString(2, password);
 
             result = statement.executeQuery();
             if(result.next()) {
-                return parse(result);
+                return Student.parse(result);
             } else {
                 throw new WrongLoginDataException("desc ");
             }
@@ -159,7 +147,7 @@ public class DAOStudentImpl extends Oracle implements DAOStudent {
             statement.setInt(1, Integer.parseInt(groupId));
             result = statement.executeQuery();
             while (result.next()) {
-                list.add(parse(result));
+                list.add(Student.parse(result));
             }
             return list;
         } catch (SQLException e) {
@@ -178,12 +166,38 @@ public class DAOStudentImpl extends Oracle implements DAOStudent {
             statement = connection.prepareStatement(ALL_STUDENTS.getQuery());
             result = statement.executeQuery();
             while (result.next()) {
-                list.add(parse(result));
+                list.add(Student.parse(result));
             }
             return list;
         } catch (SQLException e) {
             logger.info("desc", e);
             throw new WrongEntityIdException("desc", e);
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
+    public List<Student> searchStudentsByFullName(String text) throws SQLException, WrongEntityIdException {
+        if (text == null || text.isEmpty()) {
+            return Collections.emptyList();
+        } else if (text.equals("*")) {
+            return getAllStudents();
+        }
+
+        try {
+            connect();
+            List<Student> list = new ArrayList<>();
+            statement = connection.prepareStatement(SEARCH_BY_STUDENT_FULL_NAME.getQuery());
+            statement.setString(1, text);
+            result = statement.executeQuery();
+            while (result.next()) {
+                list.add(Student.parse(result));
+            }
+            return list;
+        } catch (SQLException e) {
+            logger.info("desc", e);
+            throw new SQLException("desc", e);
         } finally {
             disconnect();
         }

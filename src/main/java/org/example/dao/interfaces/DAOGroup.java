@@ -9,10 +9,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface DAOGroup {
-    Group parse(ResultSet result) throws SQLException;
     Group getGroupById(String id) throws WrongEntityIdException;
     void addGroup(Group group) throws SQLException;
     void updateGroup(Group group) throws SQLException;
     void deleteGroup(String groupId);
     List<Group> getAllGroups() throws WrongEntityIdException;
+    List<Group> searchGroupsByName(String text) throws SQLException, WrongEntityIdException;
 }

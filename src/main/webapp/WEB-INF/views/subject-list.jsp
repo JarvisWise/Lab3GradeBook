@@ -5,6 +5,7 @@
     <title>Subjects</title>
 </head>
 <body>
+<jsp:include page="header.jsp" />
 <c:if test="${userType eq 'teacher'}">
     <a href="<c:url value='/redirect/add/subject' />">Add new subject</a>
 </c:if>
@@ -35,5 +36,6 @@
         </tr>
     </c:forEach>
 </table>
+<jsp:include page="footer.jsp" />
 </body>
 </html>

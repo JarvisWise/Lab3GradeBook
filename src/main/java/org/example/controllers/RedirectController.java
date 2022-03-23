@@ -3,10 +3,12 @@ package org.example.controllers;
 import org.example.dao.implementations.DAOGroupImpl;
 import org.example.dao.implementations.DAOStudentImpl;
 import org.example.dao.implementations.DAOSubjectImpl;
-import org.example.entities.Group;
-import org.example.entities.Student;
-import org.example.entities.Subject;
+import org.example.dao.implementations.DAOTeacherImpl;
+import org.example.entities.*;
 import org.example.tools.custom.exceptions.WrongEntityIdException;
+import org.example.tools.strings.PageName;
+import org.example.tools.strings.Role;
+import org.example.tools.strings.SessionAttributeName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,17 +16,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import static org.example.tools.strings.SessionAttributeName.CURRENT_USER_ID;
+
 @Controller
 @RequestMapping(value = "/redirect")
 public class RedirectController {
 
     private final DAOStudentImpl daoStudent;
+    private final DAOTeacherImpl daoTeacher;
     private final DAOGroupImpl daoGroup;
     private final DAOSubjectImpl daoSubject;
 
     @Autowired
-    public RedirectController(DAOStudentImpl daoStudent, DAOGroupImpl daoGroup, DAOSubjectImpl daoSubject) {
+    public RedirectController(DAOStudentImpl daoStudent, DAOTeacherImpl daoTeacher, DAOGroupImpl daoGroup, DAOSubjectImpl daoSubject) {
         this.daoStudent = daoStudent;
+        this.daoTeacher = daoTeacher;
         this.daoGroup = daoGroup;
         this.daoSubject = daoSubject;
     }
@@ -111,6 +120,37 @@ public class RedirectController {
     @GetMapping
     public ModelAndView redirectMain() {
         return new ModelAndView("main-page");
+    }
+
+    @RequestMapping(value = "/profile")
+    @GetMapping
+    public ModelAndView redirectProfile(@RequestParam("userId") String userId,
+                                        @RequestParam("userRole") String userRole,
+                                        HttpServletRequest request) {
+
+        //add varial vhen params are empty but session not empty (for MyProfile)
+        ModelAndView modelAndView = new ModelAndView();
+        //---
+        HttpSession session = request.getSession(false);
+        boolean isCurrentProfile =
+                session.getAttribute(CURRENT_USER_ID.getSessionAttributeName()) == userId;
+        //---
+        try {
+            if (Role.STUDENT.getRole().equals(userRole)) {
+                Student user = daoStudent.getStudentById(userId);
+                modelAndView.addObject("user", user);
+            } else { //mb one more if
+                Teacher user = daoTeacher.getTeacherById(userId);
+                modelAndView.addObject("user", user);
+            }
+        } catch (WrongEntityIdException e) {
+            e.printStackTrace();
+        }
+
+        modelAndView.addObject("userRole", userRole);
+        modelAndView.addObject("isCurrentProfile", isCurrentProfile);
+        modelAndView.setViewName(PageName.PROFILE_PAGE.getPageName());
+        return modelAndView;
     }
 
 }

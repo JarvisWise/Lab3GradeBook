@@ -5,8 +5,10 @@
     <title>Students</title>
 </head>
 <body>
+<jsp:include page="header.jsp" />
+
 <c:if test="${userType eq 'teacher'}">
-    <a href="<c:url value='/redirect//add/student' />">Add new student</a>
+    <a href="<c:url value='/redirect/add/student' />">Add new student</a>
 </c:if>
 <table>
     <tr>
@@ -37,5 +39,7 @@
         </tr>
     </c:forEach>
 </table>
+
+<jsp:include page="footer.jsp" />
 </body>
 </html>

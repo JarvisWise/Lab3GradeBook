@@ -10,11 +10,11 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface DAOSubject {
-    Subject parse(ResultSet result) throws SQLException;
     Subject getSubjectById(String id) throws WrongEntityIdException;
     List<Student> getStudentsBySubjectId(String subjectId);
     void addSubject(Subject subject) throws SQLException;
     void updateSubject(Subject subject) throws SQLException;
     void deleteSubject(String subjectId);
     List<Subject> getAllSubjects() throws WrongEntityIdException;
+    List<Subject> searchSubjectsByName(String text) throws SQLException, WrongEntityIdException;
 }

@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public interface DAOTask {
-    Task parse(ResultSet result) throws SQLException;
     Task getTaskById(String id);
     void addTask(Task task);
     void updateTask(Task task);
