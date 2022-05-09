@@ -23,11 +23,11 @@
             var searchType = e.value;
             var url = "";
             if(searchType == "byStudent") { //check then ===
-                url = "./search/by-student-full-name?studentFullName=";
+                url = "/Lab3GradeBook/search/by-student-full-name?studentFullName=";
             } else if(searchType == "byGroup") { //check then ===
-                url = "./search/by-group-name?groupName=";
+                url = "/Lab3GradeBook/search/by-group-name?groupName=";
             } else {
-                url = "./search/by-subject-name?subjectName=";
+                url = "/Lab3GradeBook/search/by-subject-name?subjectName=";
             }
 
             xmlhttp.open("GET",url+str,true);
@@ -85,9 +85,9 @@
                 <div id="searchResultId"></div>
             </label>
 
-            <input type="button" value="All Student List">
+            <!--<input type="button" value="All Student List">
             <input type="button" value="All Group List">
-            <input type="button" value="All Subject List">
+            <input type="button" value="All Subject List">-->
         </form>
     </div>
     <div>
@@ -95,8 +95,15 @@
             <c:param name="userId" value="<%=userId%>"/>
             <c:param name="userRole" value="<%=userRole%>"/>
         </c:url>
+        <c:url value='/logout' var="logoutURL"/>
+        <c:url value='/show/student-all' var="allStudentURL"/>
+        <c:url value='/show/group-all' var="allGroupURL"/> <!-- group-list.jsp hasn't exist yet!-->
+        <c:url value='/show/subject-all' var="allSubjectURL"/>
+        <a href="<c:out value="${allStudentURL}"/>">All Student List</a>
+        <a href="<c:out value="${allGroupURL}"/>">All Group List</a>
+        <a href="<c:out value="${allSubjectURL}"/>">All Subject List</a>
         <a href="<c:out value="${profileURL}"/>"><%=username%></a>
-        <a href="<c:url value='/logout' />">Logout</a>
+        <a href="<c:out value="${logoutURL}"/>">Logout</a>
     </div>
 </header>
 <div id="MainTable">

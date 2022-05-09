@@ -148,7 +148,7 @@ public class EditController {
             modelAndView.addObject("userRole", currentUserRole);
         }
 
-        modelAndView.addObject("isCurrentProfile", true);
+        modelAndView.addObject("isCurrentProfile", "Yes");
         modelAndView.setViewName(PageName.PROFILE_PAGE.getPageName());
         return modelAndView;
     }

@@ -11,7 +11,9 @@ import java.util.List;
 
 public interface DAOSubject {
     Subject getSubjectById(String id) throws WrongEntityIdException;
-    List<Student> getStudentsBySubjectId(String subjectId);
+    List<Student> getStudentsBySubjectId(String subjectId) throws WrongEntityIdException;
+    List<Subject> getSubjectsByStudentId(String studentId) throws WrongEntityIdException;
+    List<Subject> getSubjectsByTeacherId(String teacherId) throws WrongEntityIdException;
     void addSubject(Subject subject) throws SQLException;
     void updateSubject(Subject subject) throws SQLException;
     void deleteSubject(String subjectId);

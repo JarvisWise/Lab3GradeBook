@@ -1,15 +1,8 @@
 package org.example.controllers;
 
-import org.example.dao.implementations.DAOGroupImpl;
-import org.example.dao.implementations.DAOStudentImpl;
-import org.example.dao.implementations.DAOStudentSubjectImpl;
-import org.example.dao.implementations.DAOSubjectImpl;
-import org.example.entities.Group;
-import org.example.entities.Student;
-import org.example.entities.StudentSubject;
-import org.example.entities.Subject;
+import org.example.dao.implementations.*;
+import org.example.entities.*;
 import org.example.tools.custom.exceptions.WrongEntityIdException;
-import org.example.tools.custom.exceptions.WrongLoginDataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +12,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.example.tools.strings.PageName.*;
 import static org.example.tools.strings.SessionAttributeName.CURRENT_USER_ROLE;
@@ -30,13 +24,15 @@ import static org.example.tools.strings.SessionAttributeName.CURRENT_USER_ROLE;
 public class ShowController {
 
     private final DAOStudentImpl daoStudent;
+    private final DAOTeacherImpl daoTeacher;
     private final DAOGroupImpl daoGroup;
     private final DAOSubjectImpl daoSubject;
     private final DAOStudentSubjectImpl daoStudentSubject;
 
     @Autowired
-    public ShowController(DAOStudentImpl daoStudent, DAOGroupImpl daoGroup, DAOSubjectImpl daoSubject, DAOStudentSubjectImpl daoStudentSubject) {
+    public ShowController(DAOStudentImpl daoStudent, DAOTeacherImpl daoTeacher, DAOGroupImpl daoGroup, DAOSubjectImpl daoSubject, DAOStudentSubjectImpl daoStudentSubject) {
         this.daoStudent = daoStudent;
+        this.daoTeacher = daoTeacher;
         this.daoGroup = daoGroup;
         this.daoSubject = daoSubject;
         this.daoStudentSubject = daoStudentSubject;
@@ -93,8 +89,25 @@ public class ShowController {
     public ModelAndView showBySubjectId(@RequestParam("subjectId") String subjectId) {
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("message", "WHYYYY!");
-        modelAndView.setViewName("main-page");
+        Subject subject = null;
+        HashMap<Student, StudentSubject> studentSubjectMap = null;
+        List<Teacher> teacherList = null;
+
+        try {
+            subject = daoSubject.getSubjectById(subjectId);
+            studentSubjectMap = daoStudentSubject.getStudentsInfoBySubjectId(subjectId);
+            teacherList = daoTeacher.getTeachersBySubjectId(subjectId);
+        } catch (WrongEntityIdException e) {
+            e.printStackTrace();
+        }
+        /*for (Map.Entry<Student, StudentSubject> e: studentSubjectMap.entrySet()) {
+            e.getKey();
+            e.getValue();
+        }*/
+        modelAndView.addObject("subject", subject);
+        modelAndView.addObject("studentSubjectMap", studentSubjectMap);
+        modelAndView.addObject("teacherList", teacherList);
+        modelAndView.setViewName("show-subject-page");
         return modelAndView;
     }
 
@@ -107,11 +120,13 @@ public class ShowController {
             List<Student> studentAllList = daoStudent.getAllStudents();
 
             //--time solution
-            HttpSession session = request.getSession(false);
-            String currentRole = (String)session.getAttribute(CURRENT_USER_ROLE.getSessionAttributeName());
-            modelAndView.addObject("userType", currentRole);
+            //HttpSession session = request.getSession(false);
+            //String currentRole = (String)session.getAttribute(CURRENT_USER_ROLE.getSessionAttributeName());
+            //modelAndView.addObject("userType", currentRole);
             //--time solution
             //--and mb remove from [studentAllList] list current user
+            //TO DO: remove current student from LIST
+            //TO DO:
 
             modelAndView.addObject("students", studentAllList);
             modelAndView.setViewName(STUDENT_LIST_PAGE.getPageName());
@@ -130,9 +145,9 @@ public class ShowController {
             List<Group> groupAllList = daoGroup.getAllGroups();
 
             //--time solution
-            HttpSession session = request.getSession(false);
-            String currentRole = (String)session.getAttribute(CURRENT_USER_ROLE.getSessionAttributeName());
-            modelAndView.addObject("userType", currentRole);
+            //HttpSession session = request.getSession(false);
+            //String currentRole = (String)session.getAttribute(CURRENT_USER_ROLE.getSessionAttributeName());
+            //modelAndView.addObject("userType", currentRole);
             //--time solution
 
             modelAndView.addObject("groups", groupAllList);
@@ -152,9 +167,9 @@ public class ShowController {
             List<Subject> subjectAllList = daoSubject.getAllSubjects();
 
             //--time solution
-            HttpSession session = request.getSession(false);
-            String currentRole = (String)session.getAttribute(CURRENT_USER_ROLE.getSessionAttributeName());
-            modelAndView.addObject("userType", currentRole);
+            //HttpSession session = request.getSession(false);
+            //String currentRole = (String)session.getAttribute(CURRENT_USER_ROLE.getSessionAttributeName());
+            //modelAndView.addObject("userType", currentRole);
             //--time solution
 
             modelAndView.addObject("subjects", subjectAllList);

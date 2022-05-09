@@ -109,8 +109,10 @@ public class SearchController {
                 result.append("<br/>");
             }
             //add link
-            result.append("<label><a href=\"<c:url value='/show/student?studentId=")
-                    .append(st.getStudentId()).append("' />\">")
+            //result.append("<label><a href=\"<c:url value='/show/student?studentId=")
+            //        .append(st.getStudentId()).append("' />\">")
+            result.append("<label><a href=\"/Lab3GradeBook/redirect/profile?userId=")
+                    .append(st.getStudentId()).append("&userRole=").append(st.getRole()).append("\">")
                     .append(st.getFirstName()).append(" ").append(st.getLastName()).append("</a></label>");
 
             Group group;
@@ -137,8 +139,8 @@ public class SearchController {
                 result.append("<br/>");
             }
             //add link
-            result.append("<label><a href=\"<c:url value='/show/group?groupId=")
-                    .append(gr.getGroupId()).append("' />\">")
+            result.append("<label><a href=\"/Lab3GradeBook/show/group?groupId=")
+                    .append(gr.getGroupId()).append("\">")
                     .append(gr.getGroupName()).append("</a></label>");
         }
         return result.toString();
@@ -152,8 +154,8 @@ public class SearchController {
                 result.append("<br/>");
             }
             //add link
-            result.append("<label><a href=\"<c:url value='/show/subject?subjectId=")
-                    .append(s.getSubjectId()).append("' />\">")
+            result.append("<label><a href=\"/Lab3GradeBook/show/subject?subjectId=")
+                    .append(s.getSubjectId()).append("\">")
                     .append(s.getSubjectName()).append("</a></label>");
             //rebuild ER and show teacher of subject
             //teacher must be linked to subject!! not to student_subject!

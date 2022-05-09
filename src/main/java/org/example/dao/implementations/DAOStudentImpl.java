@@ -2,8 +2,11 @@ package org.example.dao.implementations;
 
 import org.apache.log4j.Logger;
 import org.example.dao.connection.Oracle;
+import org.example.dao.interfaces.DAOGroup;
 import org.example.dao.interfaces.DAOStudent;
+import org.example.entities.Group;
 import org.example.entities.Student;
+import org.example.entities.StudentInfoSet;
 import org.example.tools.custom.exceptions.WrongEntityIdException;
 import org.example.tools.custom.exceptions.WrongLoginDataException;
 import org.springframework.stereotype.Repository;
@@ -66,6 +69,21 @@ public class DAOStudentImpl extends Oracle implements DAOStudent {
         } finally {
             disconnect();
         }
+    }
+
+    @Override
+    public StudentInfoSet getStudentInfoSet(String studentId) throws WrongEntityIdException {
+        DAOGroup daoGroup = new DAOGroupImpl();
+        Student student = getStudentById(studentId);
+        Student headman = null;
+        if (student.getHeadman() != null) {
+            headman = getStudentById(student.getHeadman());
+        }
+        Group group = null;
+        if (student.getGroupId() != null) {
+            group = daoGroup.getGroupById(student.getGroupId());
+        }
+        return new StudentInfoSet(student, group, headman);
     }
 
     @Override

@@ -1,14 +1,10 @@
 package org.example.controllers;
 
-import org.example.dao.implementations.DAOGroupImpl;
-import org.example.dao.implementations.DAOStudentImpl;
-import org.example.dao.implementations.DAOSubjectImpl;
-import org.example.dao.implementations.DAOTeacherImpl;
+import org.example.dao.implementations.*;
 import org.example.entities.*;
 import org.example.tools.custom.exceptions.WrongEntityIdException;
 import org.example.tools.strings.PageName;
 import org.example.tools.strings.Role;
-import org.example.tools.strings.SessionAttributeName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +14,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import java.util.HashMap;
+import java.util.List;
 
 import static org.example.tools.strings.SessionAttributeName.CURRENT_USER_ID;
 
@@ -29,13 +28,15 @@ public class RedirectController {
     private final DAOTeacherImpl daoTeacher;
     private final DAOGroupImpl daoGroup;
     private final DAOSubjectImpl daoSubject;
+    private final DAOStudentSubjectImpl daoStudentSubject;
 
     @Autowired
-    public RedirectController(DAOStudentImpl daoStudent, DAOTeacherImpl daoTeacher, DAOGroupImpl daoGroup, DAOSubjectImpl daoSubject) {
+    public RedirectController(DAOStudentImpl daoStudent, DAOTeacherImpl daoTeacher, DAOGroupImpl daoGroup, DAOSubjectImpl daoSubject, DAOStudentSubjectImpl daoStudentSubject) {
         this.daoStudent = daoStudent;
         this.daoTeacher = daoTeacher;
         this.daoGroup = daoGroup;
         this.daoSubject = daoSubject;
+        this.daoStudentSubject = daoStudentSubject;
     }
 
     @RequestMapping(value = "/add/student")
@@ -132,15 +133,32 @@ public class RedirectController {
         ModelAndView modelAndView = new ModelAndView();
         //---
         HttpSession session = request.getSession(false);
-        boolean isCurrentProfile =
-                session.getAttribute(CURRENT_USER_ID.getSessionAttributeName()) == userId;
+        String isCurrentProfile =
+                session.getAttribute(CURRENT_USER_ID.getSessionAttributeName()).equals(userId)? //do check on null
+                        "Yes" : "No";
         //---
         try {
             if (Role.STUDENT.getRole().equals(userRole)) {
                 Student user = daoStudent.getStudentById(userId);
+                //add check for group or headman is exist
+                if(user.getHeadman() != null) {
+                    Student userHeadman = daoStudent.getStudentById(user.getHeadman());
+                    modelAndView.addObject("userHeadman", userHeadman);
+                }
+                if(user.getGroupId() != null) {
+                    Group userGroup = daoGroup.getGroupById(user.getGroupId());
+                    modelAndView.addObject("userGroup", userGroup);
+                }
+                //add validation on present subject or not
+                HashMap<Subject, StudentSubject> studentSubjectMap = daoStudentSubject.getSubjectsInfoByStudentId(userId);
+                modelAndView.addObject("studentSubjectMap", studentSubjectMap);
+
                 modelAndView.addObject("user", user);
             } else { //mb one more if
                 Teacher user = daoTeacher.getTeacherById(userId);
+                //add validation on present subject or not
+                List<Subject> teacherSubjectMap = daoSubject.getSubjectsByTeacherId(userId);
+                modelAndView.addObject("teacherSubjectMap", teacherSubjectMap);
                 modelAndView.addObject("user", user);
             }
         } catch (WrongEntityIdException e) {

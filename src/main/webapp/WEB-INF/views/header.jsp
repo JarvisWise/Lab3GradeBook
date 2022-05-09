@@ -21,13 +21,12 @@
         var searchType = e.value;
         var url = "";
         if(searchType == "byStudent") { //check then ===
-            url = "./search/by-student-full-name?studentFullName=";
+            url = "/Lab3GradeBook/search/by-student-full-name?studentFullName=";
         } else if(searchType == "byGroup") { //check then ===
-            url = "./search/by-group-name?groupName=";
+            url = "/Lab3GradeBook/search/by-group-name?groupName=";
         } else {
-            url = "./search/by-subject-name?subjectName=";
+            url = "/Lab3GradeBook/search/by-subject-name?subjectName=";
         }
-
         xmlhttp.open("GET",url+str,true);
         xmlhttp.send();
     }
@@ -59,6 +58,7 @@
 <c:url value='/show/group-all' var="allGroupURL"/> <!-- group-list.jsp hasn't exist yet!-->
 <c:url value='/show/subject-all' var="allSubjectURL"/>
 
+<!--<script src="searchMain.js"></script>-->
 <header>
     <div>
         <form name="search_form">

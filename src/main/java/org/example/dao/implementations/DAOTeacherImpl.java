@@ -3,6 +3,7 @@ package org.example.dao.implementations;
 import org.apache.log4j.Logger;
 import org.example.dao.connection.Oracle;
 import org.example.dao.interfaces.DAOTeacher;
+import org.example.entities.StudentSubject;
 import org.example.entities.Teacher;
 import org.example.tools.custom.exceptions.WrongEntityIdException;
 import org.example.tools.custom.exceptions.WrongLoginDataException;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.example.tools.strings.Query.*;
 
@@ -36,6 +39,26 @@ public class DAOTeacherImpl extends Oracle implements DAOTeacher {
         } catch (SQLException | WrongEntityIdException e) {
             e.printStackTrace();
             throw new WrongEntityIdException("desc ", e);
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
+    public List<Teacher> getTeachersBySubjectId(String subjectId) throws WrongEntityIdException {
+        try {
+            connect();
+            List<Teacher> list = new ArrayList<>();
+            statement = connection.prepareStatement(TEACHER_LIST_BY_SUBJECT_ID.getQuery());
+            statement.setInt(1, Integer.parseInt(subjectId));
+            result = statement.executeQuery();
+            while (result.next()) {
+                list.add(Teacher.parse(result));
+            }
+            return list;
+        } catch (SQLException e) {
+            logger.info("desc", e);
+            throw new WrongEntityIdException("desc", e);
         } finally {
             disconnect();
         }

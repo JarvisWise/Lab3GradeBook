@@ -8,7 +8,7 @@ public class StudentSubject {
     private String studentSubjectId;
     private String studentId;
     private String subjectId;
-    private String teacherId;
+    private String teacherId;//delete this field and move it to teacher_subject
     private int totalGrade;
 
     public StudentSubject() {

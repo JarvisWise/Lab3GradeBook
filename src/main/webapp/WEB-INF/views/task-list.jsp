@@ -14,7 +14,7 @@ private int grade;
 
 <body>
 <c:if test="${userType eq 'teacher'}">
-    <a href="<c:url value='/redirect/add/task' />">Add new subject</a>
+    <a href="<c:url value='/redirect/add/studentTask' />">Add new subject</a>
 </c:if>
 <table>
     <tr>
@@ -30,14 +30,14 @@ private int grade;
     </tr>
     <c:forEach var="subject" items="${subjects}">
         <tr>
-            <td>${task.getTaskId()}</td>
-            <td>${task.getTaskName()}</td>
-            <td>${task.getSubjectId()}</td>
-            <td>${task.getMaxGrade()}</td>
-            <td>${task.getGrade()}</td>
+            <td>${studentTask.getTaskId()}</td>
+            <td>${studentTask.getTaskName()}</td>
+            <td>${studentTask.getSubjectId()}</td>
+            <td>${studentTask.getMaxGrade()}</td>
+            <td>${studentTask.getGrade()}</td>
             <c:if test="${userType eq 'teacher'}">
-                <td><a href="<c:url value='/redirect/edit/task?taskId=${task.getTaskId()}' />">Edit</a></td>
-                <td><a href="<c:url value='/delete/task?taskId=${task.getTaskId()}' />">Delete</a></td>
+                <td><a href="<c:url value='/redirect/edit/studentTask?taskId=${studentTask.getTaskId()}' />">Edit</a></td>
+                <td><a href="<c:url value='/delete/studentTask?taskId=${studentTask.getTaskId()}' />">Delete</a></td>
             </c:if>
         </tr>
     </c:forEach>

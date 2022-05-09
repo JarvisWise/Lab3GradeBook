@@ -5,8 +5,10 @@
     <title>Subjects</title>
 </head>
 <body>
+<%String userRole=(String)session.getAttribute("current_user_role");%>
+<c:set var = "userRole" value = "<%=userRole%>"/>
 <jsp:include page="header.jsp" />
-<c:if test="${userType eq 'teacher'}">
+<c:if test="${userRole eq 'teacher'}">
     <a href="<c:url value='/redirect/add/subject' />">Add new subject</a>
 </c:if>
 <table>
@@ -16,23 +18,29 @@
         <th>Max Grade</th>
         <th>Pass Grade</th>
         <th>More...</th>
-        <c:if test="${userType eq 'teacher'}">
+        <!-- TO DO: no need this functional-->
+        <c:if test="${userRole eq 'teacher'}">
             <th>Edit</th>
             <th>Delete</th>
         </c:if>
+        <!-- TO DO: no need this functional-->
     </tr>
     <c:forEach var="subject" items="${subjects}">
         <tr>
             <td>${subject.getSubjectId()}</td>
             <td>${subject.getSubjectName()}</td>
             <td>${subject.getMaxGrade()}</td>
-            <td>${subject.getPassProgGrade()}</td>
-            <td><a href="<c:url value='/show/subject?subjectId=${subject.getSubjectId()}' />">More...</a></td>
-            <c:if test="${userType eq 'teacher'}">
+            <td>${subject.getPassProcGradeP()}%</td>
+            <c:url value='/show/subject' var="subjectURL">
+                <c:param name="subjectId" value="${subject.getSubjectId()}"/>
+            </c:url>
+            <td><a href="<c:out value="${subjectURL}"/>">More...</a></td>
+            <!-- TO DO: no need this functional-->
+            <c:if test="${userRole eq 'teacher'}">
                 <td><a href="<c:url value='/redirect/edit/subject?subjectId=${subject.getSubjectId()}' />">Edit</a></td>
                 <td><a href="<c:url value='/delete/subject?subjectId=${subject.getSubjectId()}' />">Delete</a></td>
             </c:if>
-
+            <!-- TO DO: no need this functional-->
         </tr>
     </c:forEach>
 </table>

@@ -5,6 +5,7 @@ import org.example.dao.connection.Oracle;
 import org.example.dao.interfaces.DAOSubject;
 import org.example.entities.Student;
 import org.example.entities.Subject;
+import org.example.entities.Teacher;
 import org.example.tools.custom.exceptions.WrongEntityIdException;
 import org.springframework.stereotype.Repository;
 
@@ -44,8 +45,67 @@ public class DAOSubjectImpl extends Oracle implements DAOSubject {
     }
 
     @Override
-    public List<Student> getStudentsBySubjectId(String subjectId) {
-        return null;
+    public List<Student> getStudentsBySubjectId(String subjectId) throws WrongEntityIdException {
+        try {
+            connect();
+            List<Student> list = new ArrayList<>();
+            statement = connection.prepareStatement(STUDENTS_BY_SUBJECT_ID.getQuery());
+
+            statement.setInt(1, Integer.parseInt(subjectId));
+
+            result = statement.executeQuery();
+            while (result.next()) {
+                list.add(Student.parse(result));
+            }
+            return list;
+        } catch (SQLException e) {
+            logger.info("desc", e);
+            throw new WrongEntityIdException("desc", e);
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
+    public List<Subject> getSubjectsByStudentId(String studentId) throws WrongEntityIdException {
+        try {
+            connect();
+            List<Subject> list = new ArrayList<>();
+            statement = connection.prepareStatement(SUBJECTS_BY_STUDENT_ID.getQuery());
+
+            statement.setInt(1, Integer.parseInt(studentId));
+
+            result = statement.executeQuery();
+            while (result.next()) {
+                list.add(Subject.parse(result));
+            }
+            return list;
+        } catch (SQLException e) {
+            logger.info("desc", e);
+            throw new WrongEntityIdException("desc", e);
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
+    public List<Subject> getSubjectsByTeacherId(String teacherId) throws WrongEntityIdException {
+        try {
+            connect();
+            List<Subject> list = new ArrayList<>();
+            statement = connection.prepareStatement(SUBJECT_LIST_BY_TEACHER_ID.getQuery());
+            statement.setInt(1, Integer.parseInt(teacherId));
+            result = statement.executeQuery();
+            while (result.next()) {
+                list.add(Subject.parse(result));
+            }
+            return list;
+        } catch (SQLException e) {
+            logger.info("desc", e);
+            throw new WrongEntityIdException("desc", e);
+        } finally {
+            disconnect();
+        }
     }
 
     @Override

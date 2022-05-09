@@ -3,26 +3,21 @@ package org.example.entities;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-//public class Task implements Entity{
 public class Task {
     private String taskId;
     private String SubjectId;
-    private String studentSubjectId;
     private String taskName;
     private int maxGrade;
-    private int grade;
 
     public Task() {
 
     }
 
-    public Task(String taskId, String subjectId, String studentSubjectId, String taskName, int maxGrade, int grade) {
+    public Task(String taskId, String subjectId, String taskName, int maxGrade) {
         this.taskId = taskId;
-        SubjectId = subjectId;
-        this.studentSubjectId = studentSubjectId;
+        this.SubjectId = subjectId;
         this.taskName = taskName;
         this.maxGrade = maxGrade;
-        this.grade = grade;
     }
 
     public String getTaskId() {
@@ -41,14 +36,6 @@ public class Task {
         SubjectId = subjectId;
     }
 
-    public String getStudentSubjectId() {
-        return studentSubjectId;
-    }
-
-    public void setStudentSubjectId(String studentSubjectId) {
-        this.studentSubjectId = studentSubjectId;
-    }
-
     public String getTaskName() {
         return taskName;
     }
@@ -65,22 +52,12 @@ public class Task {
         this.maxGrade = maxGrade;
     }
 
-    public int getGrade() {
-        return grade;
-    }
-
-    public void setGrade(int grade) {
-        this.grade = grade;
-    }
-
     public static Task parse(ResultSet result) throws SQLException {
         return new Task(
                 result.getString("subject_id"),
                 result.getString("task_id"),
-                result.getString("student_subject_id"),
                 result.getString("task_name"),
-                result.getInt("max_grade"),
-                result.getInt("grade")
+                result.getInt("max_grade")
         );
     }
 
@@ -89,10 +66,8 @@ public class Task {
         return "Task{" +
                 "taskId='" + taskId + '\'' +
                 ", SubjectId='" + SubjectId + '\'' +
-                ", studentSubjectId='" + studentSubjectId + '\'' +
                 ", taskName='" + taskName + '\'' +
                 ", maxGrade=" + maxGrade +
-                ", grade=" + grade +
                 '}';
     }
 }
