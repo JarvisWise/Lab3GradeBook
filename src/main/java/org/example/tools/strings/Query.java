@@ -4,9 +4,12 @@ public enum Query {
     ALL_STUDENTS("SELECT * FROM student"),
     ALL_SUBJECTS("SELECT * FROM subject"),
     ALL_GROUPS("SELECT * FROM group_"),
+    ALL_TEACHERS("SELECT * FROM teacher"),
     STUDENTS_BY_GROUP_ID("SELECT * FROM student WHERE group_id = ?"),
     STUDENT_BY_LOGIN_NAME_AND_PASSWORD("SELECT * FROM student WHERE login_name = ? AND password = ?"),
     TEACHER_BY_LOGIN_NAME_AND_PASSWORD("SELECT * FROM teacher WHERE login_name = ? AND password = ?"),
+    EXIST_STUDENT_BY_LOGIN("SELECT * FROM student WHERE login_name = ?"),
+    EXIST_TEACHER_BY_LOGIN("SELECT * FROM teacher WHERE login_name = ?"),
     SUBJECT_BY_ID("SELECT * FROM subject WHERE subject_id = ?"),
     SUBJECTS_BY_STUDENT_ID("SELECT * FROM student_subject WHERE student_id = ?"),
     STUDENTS_BY_SUBJECT_ID("SELECT * FROM student WHERE student_id IN (" +
@@ -22,22 +25,25 @@ public enum Query {
     STUDENT_TASK_BY_ID("SELECT * FROM student_task WHERE student_subject_id = ? AND task_id = ?"), //check for this one
     DELETE_SUBJECT_BY_ID("DELETE FROM subject WHERE subject_id = ?"),
     DELETE_STUDENT_SUBJECT_BY_ID("DELETE FROM student_subject WHERE student_subject_id = ?"),
+    DELETE_STUDENT_SUBJECT_BY_IDS("DELETE FROM student_subject WHERE student_id = ? AND subject_id = ?"),
+    DELETE_TEACHER_SUBJECT_BY_ID("DELETE FROM teacher_subject WHERE subject_id = ? AND teacher_id = ?"), //subject_id, teacher_id
     DELETE_GROUP_BY_ID("DELETE FROM group_ WHERE group_id = ?"),
     DELETE_STUDENT_BY_ID("DELETE FROM student WHERE student_id = ?"),
     DELETE_TEACHER_BY_ID("DELETE FROM teacher WHERE teacher_id = ?"),
     DELETE_TASK_BY_ID("DELETE FROM task WHERE task_id = ?"),
     DELETE_STUDENT_TASK_BY_ID("DELETE FROM student_task WHERE student_subject_id = ? AND task_id = ?"),
     ADD_SUBJECT("INSERT INTO subject VALUES (subject_id_seq.nextval, ?, ?, ?)"),
-    ADD_STUDENT_SUBJECT("INSERT INTO student_subject VALUES (student_subject_id_seq.nextval, ?, ?, ?, ?)"),
+    ADD_STUDENT_SUBJECT("INSERT INTO student_subject VALUES (student_subject_id_seq.nextval, ?, ?, ?, ?)"), //total_grade, student_id, subject_id, teacher_id(for remove)
+    ADD_TEACHER_SUBJECT("INSERT INTO teacher_subject VALUES (?, ?)"), //subject_id, teacher_id
     ADD_GROUP("INSERT INTO group_ VALUES (group_id_seq.nextval, ?)"),
-    ADD_STUDENT("INSERT INTO student VALUES (student_id_seq.nextval, ?, ?, ?, ?, ?)"),
+    ADD_STUDENT("INSERT INTO student VALUES (student_id_seq.nextval, ?, ?, ?, ?, ?, ?)"),
     ADD_TEACHER("INSERT INTO teacher VALUES (teacher_id_seq.nextval, ?, ?, ?)"),
     ADD_TASK("INSERT INTO task VALUES (task_id_seq.nextval, ?, ?, ?)"),
     ADD_STUDENT_TASK("INSERT INTO student_task VALUES (?, ?, ?, ?)"),
     UPDATE_SUBJECT("UPDATE subject SET subject_name=?, max_grade=?, pass_proc_grade=? WHERE subject_id=?"),
     UPDATE_STUDENT_SUBJECT("UPDATE student_subject SET total_grade=?, student_id=?, subject_id=?, teacher_id=? WHERE student_subject_id=?"),
     UPDATE_GROUP("UPDATE group_ SET group_name=? WHERE group_id=?"),
-    UPDATE_STUDENT("UPDATE student SET first_name=?, last_name=?, headman=?, group_id=?, WHERE student_id=?"),
+    UPDATE_STUDENT("UPDATE student SET first_name=?, last_name=?, headman=?, group_id=? WHERE student_id=?"),
     UPDATE_TEACHER("UPDATE teacher SET first_name=?, last_name=? WHERE teacher_id=?"),
     //--do more specific query for update
     UPDATE_TASK_NAME("UPDATE task SET task_name=? WHERE task_id=?"),

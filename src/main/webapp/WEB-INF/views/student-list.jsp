@@ -24,50 +24,50 @@
             <th>Delete</th>
         </c:if>
     </tr>
-    <c:forEach var="student" items="${students}">
+    <c:forEach var="studentInfoSet" items="${studentInfoSetList}">
         <tr>
-            <td>${student.getLoginName()}</td>
-            <td>${student.getFirstName()}</td>
-            <td>${student.getLastName()}</td>
+            <td>${studentInfoSet.getStudent().getLoginName()}</td>
+            <td>${studentInfoSet.getStudent().getFirstName()}</td>
+            <td>${studentInfoSet.getStudent().getLastName()}</td>
             <c:choose>
-                <c:when test="${empty student.getHeadman()}">
+                <c:when test="${empty studentInfoSet.getStudent().getHeadman()}">
                     <td>(not yet)</td>
                 </c:when>
                 <c:otherwise>
                     <c:url value='/redirect/profile' var="studentHeadmanURL">
                         <!-- TO DO: userHeadman.getStudentId()-->
-                        <c:param name="userId" value="${student.getHeadman()}"/>
+                        <c:param name="userId" value="${studentInfoSet.getHeadman().getStudentId()}"/>
                         <!-- TO DO: userHeadman.getRole()-->
-                        <c:param name="userRole" value="${student.getRole()}"/>
+                        <c:param name="userRole" value="${studentInfoSet.getHeadman().getRole()}"/>
                     </c:url>
                     <!-- TO DO: userHeadman.getFullName()-->
-                    <td><a href="<c:out value="${studentHeadmanURL}"/>">${student.getHeadman()}</a></td>
+                    <td><a href="<c:out value="${studentHeadmanURL}"/>">${studentInfoSet.getHeadman().getFullName()}</a></td>
                 </c:otherwise>
             </c:choose>
 
             <c:choose>
-                <c:when test="${empty student.getGroupId()}">
+                <c:when test="${empty studentInfoSet.getStudent().getGroupId()}">
                     <td>(not yet)</td>
                 </c:when>
                 <c:otherwise>
                     <c:url value='/show/group' var="studentGroupURL">
-                        <c:param name="groupId" value="${student.getGroupId()}"/>
+                        <c:param name="groupId" value="${studentInfoSet.getGroup().getGroupId()}"/>
                     </c:url>
                     <!-- TO DO: userGroup.getGroupName()-->
-                    <td>Group: <a href="<c:out value="${studentGroupURL}"/>">${student.getGroupId()}</a></td>
+                    <td><a href="<c:out value="${studentGroupURL}"/>">${studentInfoSet.getGroup().getGroupName()}</a></td>
                 </c:otherwise>
             </c:choose>
 
             <c:url value='/redirect/profile' var="studentURL">
-                <c:param name="userId" value="${student.getStudentId()}"/>
-                <c:param name="userRole" value="${student.getRole()}"/>
+                <c:param name="userId" value="${studentInfoSet.getStudent().getStudentId()}"/>
+                <c:param name="userRole" value="${studentInfoSet.getStudent().getRole()}"/>
             </c:url>
             <td><a href="<c:out value="${studentURL}"/>">More...</a></td>
 
             <!-- TO DO: no need this functional-->
             <c:if test="${userRole eq 'admin'}">
-                <td><a href="<c:url value='/redirect/edit/student?studentId=${student.getStudentId()}' />">Edit</a></td>
-                <td><a href="<c:url value='/delete/student?studentId=${student.getStudentId()}' />">Delete</a></td>
+                <td><a href="<c:url value='/redirect/edit/student?studentId=${studentInfoSet.getStudent().getStudentId()}' />">Edit</a></td>
+                <td><a href="<c:url value='/delete/student?studentId=${studentInfoSet.getStudent().getStudentId()}' />">Delete</a></td>
             </c:if>
             <!-- TO DO: no need this functional-->
 

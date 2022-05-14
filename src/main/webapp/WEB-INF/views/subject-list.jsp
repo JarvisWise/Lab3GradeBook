@@ -36,7 +36,7 @@
             </c:url>
             <td><a href="<c:out value="${subjectURL}"/>">More...</a></td>
             <!-- TO DO: no need this functional-->
-            <c:if test="${userRole eq 'teacher'}">
+            <c:if test="${userRole eq 'admin'}">
                 <td><a href="<c:url value='/redirect/edit/subject?subjectId=${subject.getSubjectId()}' />">Edit</a></td>
                 <td><a href="<c:url value='/delete/subject?subjectId=${subject.getSubjectId()}' />">Delete</a></td>
             </c:if>

@@ -57,6 +57,7 @@
 <c:url value='/show/student-all' var="allStudentURL"/>
 <c:url value='/show/group-all' var="allGroupURL"/> <!-- group-list.jsp hasn't exist yet!-->
 <c:url value='/show/subject-all' var="allSubjectURL"/>
+<c:url value='/show/teacher-all' var="allTeacherURL"/>
 
 <!--<script src="searchMain.js"></script>-->
 <header>
@@ -82,6 +83,7 @@
             <a href="<c:out value="${allStudentURL}"/>">All Student List</a>
             <a href="<c:out value="${allGroupURL}"/>">All Group List</a>
             <a href="<c:out value="${allSubjectURL}"/>">All Subject List</a>
+            <a href="<c:out value="${allTeacherURL}"/>">All Teacher List</a>
             <a href="<c:out value="${profileURL}"/>"><%=username%></a>
             <a href="<c:out value="${logoutURL}"/>">Logout</a>
         </div>

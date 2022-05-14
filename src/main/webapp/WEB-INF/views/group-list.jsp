@@ -33,7 +33,7 @@
         </c:url>
         <td><a href="<c:out value="${groupURL}"/>">More...</a></td>
         <!-- TO DO: no need this functional-->
-        <c:if test="${userRole eq 'teacher'}">
+        <c:if test="${userRole eq 'admin'}">
             <td><a href="<c:url value='/redirect/edit/group?groupId=${group.getGroupId()}' />">Edit</a></td>
             <c:choose>
                 <c:when test="${userRole eq 'teacher'}"> <!-- studentCount == 0 //TO DO-->

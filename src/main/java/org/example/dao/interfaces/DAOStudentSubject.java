@@ -21,4 +21,5 @@ public interface DAOStudentSubject {
     void addStudentSubject(StudentSubject studentSubject) throws SQLException;
     void updateStudentSubject(StudentSubject studentSubject) throws SQLException;
     void deleteStudentSubject(String studentSubjectId);
+    void deleteStudentSubject(String studentId, String subjectId);
 }

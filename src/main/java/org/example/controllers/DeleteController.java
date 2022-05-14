@@ -1,14 +1,15 @@
 package org.example.controllers;
 
-import org.example.dao.implementations.DAOGroupImpl;
-import org.example.dao.implementations.DAOStudentImpl;
-import org.example.dao.implementations.DAOSubjectImpl;
+import org.example.dao.implementations.*;
+import org.example.entities.TeacherSubject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import static org.example.tools.strings.PageName.ERROR_PAGE;
 
 @Controller
 @RequestMapping(value = "/delete")
@@ -17,12 +18,16 @@ public class DeleteController {
     private final DAOStudentImpl daoStudent;
     private final DAOGroupImpl daoGroup;
     private final DAOSubjectImpl daoSubject;
+    private final DAOTeacherSubjectImpl daoTeacherSubject;
+    private final DAOStudentSubjectImpl daoStudentSubject;
 
     @Autowired
-    public DeleteController(DAOStudentImpl daoStudent, DAOGroupImpl daoGroup, DAOSubjectImpl daoSubject) {
+    public DeleteController(DAOStudentImpl daoStudent, DAOGroupImpl daoGroup, DAOSubjectImpl daoSubject, DAOTeacherSubjectImpl daoTeacherSubject, DAOStudentSubjectImpl daoStudentSubject) {
         this.daoStudent = daoStudent;
         this.daoGroup = daoGroup;
         this.daoSubject = daoSubject;
+        this.daoTeacherSubject = daoTeacherSubject;
+        this.daoStudentSubject = daoStudentSubject;
     }
 
     @RequestMapping(value = "/group")
@@ -47,6 +52,47 @@ public class DeleteController {
         daoSubject.deleteSubject(subjectId);
         //add action
         return new ModelAndView("main-page");
+    }
+
+    //TO DO
+    @RequestMapping(value = "/teacher-subject")
+    @GetMapping
+    public ModelAndView deleteTeacherSubjectById(@RequestParam("teacherId") String teacherId,
+                                                 @RequestParam("subjectId") String subjectId) {
+
+        ModelAndView modelAndView = new ModelAndView();
+        TeacherSubject teacherSubject = new TeacherSubject(
+                subjectId,
+                teacherId
+        );
+
+        try {
+            daoTeacherSubject.deleteTeacherSubject(teacherSubject);
+            modelAndView.setViewName("redirect:/show/subject?subjectId=" + subjectId);//
+        } catch (Exception throwables) {
+            throwables.printStackTrace();
+            modelAndView.setViewName(ERROR_PAGE.getPageName());
+        }
+
+        return modelAndView;
+    }
+
+    //TO DO
+    @RequestMapping(value = "/student-subject")
+    @GetMapping
+    public ModelAndView deleteStudentSubjectById(@RequestParam("studentId") String studentId,
+                                                 @RequestParam("subjectId") String subjectId) {
+
+        ModelAndView modelAndView = new ModelAndView();
+        try {
+            daoStudentSubject.deleteStudentSubject(studentId, subjectId);
+            modelAndView.setViewName("redirect:/show/subject?subjectId=" + subjectId);//
+        } catch (Exception throwables) {
+            throwables.printStackTrace();
+            modelAndView.setViewName(ERROR_PAGE.getPageName());
+        }
+
+        return modelAndView;
     }
 
     @RequestMapping(value = "/task")

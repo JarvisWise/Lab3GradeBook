@@ -13,8 +13,10 @@ import java.util.List;
 
 public interface DAOStudent {
     Student getStudentById(String id) throws WrongEntityIdException;
+    boolean isExistStudentByLogin(String loginName) throws WrongEntityIdException;
     Student getStudentByLoginNameAndPassword(String studentId, String password) throws WrongLoginDataException;
     StudentInfoSet getStudentInfoSet(String studentId) throws WrongEntityIdException;
+    List<StudentInfoSet> getStudentInfoSetList(List<Student> studentList) throws WrongEntityIdException;
     void changeStudentPassword(String studentId, String password) throws SQLException;
     void addStudent(Student student) throws SQLException;
     void updateStudent(Student student) throws SQLException;

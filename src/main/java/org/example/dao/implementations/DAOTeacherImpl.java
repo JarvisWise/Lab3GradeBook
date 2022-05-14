@@ -3,6 +3,7 @@ package org.example.dao.implementations;
 import org.apache.log4j.Logger;
 import org.example.dao.connection.Oracle;
 import org.example.dao.interfaces.DAOTeacher;
+import org.example.entities.Student;
 import org.example.entities.StudentSubject;
 import org.example.entities.Teacher;
 import org.example.tools.custom.exceptions.WrongEntityIdException;
@@ -37,6 +38,25 @@ public class DAOTeacherImpl extends Oracle implements DAOTeacher {
                 throw new WrongEntityIdException("desc ");
             }
         } catch (SQLException | WrongEntityIdException e) {
+            e.printStackTrace();
+            throw new WrongEntityIdException("desc ", e);
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
+    public boolean isExistTeacherByLogin(String loginName) throws WrongEntityIdException {
+        try {
+            connect();
+            statement = connection.prepareStatement(
+                    EXIST_TEACHER_BY_LOGIN.getQuery());
+
+            statement.setString(1, loginName);
+            result = statement.executeQuery();
+            return result.next();
+
+        } catch (SQLException e) {
             e.printStackTrace();
             throw new WrongEntityIdException("desc ", e);
         } finally {
@@ -149,6 +169,25 @@ public class DAOTeacherImpl extends Oracle implements DAOTeacher {
             statement.execute();
         } catch (SQLException e) {
             logger.info("desc");
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
+    public List<Teacher> getAllTeachers() throws WrongEntityIdException {
+        try {
+            connect();
+            List<Teacher> list = new ArrayList<>();
+            statement = connection.prepareStatement(ALL_TEACHERS.getQuery());
+            result = statement.executeQuery();
+            while (result.next()) {
+                list.add(Teacher.parse(result));
+            }
+            return list;
+        } catch (SQLException e) {
+            logger.info("desc", e);
+            throw new WrongEntityIdException("desc", e);
         } finally {
             disconnect();
         }

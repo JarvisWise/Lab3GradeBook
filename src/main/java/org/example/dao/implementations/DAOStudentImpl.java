@@ -48,6 +48,24 @@ public class DAOStudentImpl extends Oracle implements DAOStudent {
     }
 
     @Override
+    public boolean isExistStudentByLogin(String loginName) throws WrongEntityIdException {
+        try {
+            connect();
+            statement = connection.prepareStatement(
+                    EXIST_STUDENT_BY_LOGIN.getQuery());
+
+            statement.setString(1, loginName);
+            result = statement.executeQuery();
+            return result.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new WrongEntityIdException("desc ", e);
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
     public Student getStudentByLoginNameAndPassword(String studentLoginName, String password) throws WrongLoginDataException {
         try {
             connect();
@@ -87,6 +105,16 @@ public class DAOStudentImpl extends Oracle implements DAOStudent {
     }
 
     @Override
+    public List<StudentInfoSet> getStudentInfoSetList(List<Student> studentList) throws WrongEntityIdException {
+        List<StudentInfoSet> studentInfoSetList =  new ArrayList<>();
+        for (Student s: studentList) {
+            // TO DO: mb add check
+            studentInfoSetList.add(getStudentInfoSet(s.getStudentId()));
+        }
+        return studentInfoSetList;
+    }
+
+    @Override
     public void changeStudentPassword(String studentId, String password) throws SQLException {
         try {
             connect();
@@ -109,10 +137,11 @@ public class DAOStudentImpl extends Oracle implements DAOStudent {
             connect();
             statement = connection.prepareStatement(ADD_STUDENT.getQuery());
             statement.setInt(1, Integer.parseInt(student.getHeadman()));
-            statement.setString(2, student.getFirstName());
-            statement.setString(3, student.getLastName());
-            statement.setInt(4, Integer.parseInt(student.getGroupId()));
-            statement.setString(5, "password"); //default password
+            statement.setString(2, student.getLoginName());
+            statement.setString(3, student.getFirstName());
+            statement.setString(4, student.getLastName());
+            statement.setInt(5, Integer.parseInt(student.getGroupId()));
+            statement.setString(6, student.getPassword()); //default password
             statement.execute();
         } catch (SQLException e) {
             logger.info("desc", e);

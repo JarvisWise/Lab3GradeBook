@@ -4,6 +4,7 @@ import org.example.dao.implementations.DAOStudentImpl;
 import org.example.dao.implementations.DAOTeacherImpl;
 import org.example.entities.Student;
 import org.example.entities.Teacher;
+import org.example.tools.custom.exceptions.WrongEntityIdException;
 import org.example.tools.custom.exceptions.WrongLoginDataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,18 +33,21 @@ public class LoginController extends AbstractController{
 
     @RequestMapping(value = "/login")
     @GetMapping
-    public ModelAndView checkUser(@RequestParam("loginType") String loginType,
-                                   @RequestParam("loginUserName") String loginUserName,
+    public ModelAndView checkUser(@RequestParam("loginUserName") String loginUserName,
                                    @RequestParam("loginPassword") String loginPassword,
                                    HttpServletRequest request) {
 
-        ModelAndView modelAndView;
-        if (TEACHER.getRole().equals(loginType)) {
-            modelAndView = loginTeacher(loginUserName, loginPassword, request);
-        } else  if (STUDENT.getRole().equals(loginType)) {
-            modelAndView = loginStudent(loginUserName, loginPassword, request);
-        } else {
-            modelAndView = new ModelAndView();
+        ModelAndView modelAndView = new ModelAndView();
+        try {
+            if (/*TEACHER.getRole().equals(loginType) && */daoTeacher.isExistTeacherByLogin(loginUserName)) {
+                modelAndView = loginTeacher(loginUserName, loginPassword, request);
+            } else if (/*STUDENT.getRole().equals(loginType) && */daoStudent.isExistStudentByLogin(loginUserName)) {
+                modelAndView = loginStudent(loginUserName, loginPassword, request);
+            } else {
+                modelAndView.setViewName(ERROR_PAGE.getPageName());
+            }
+        } catch (WrongEntityIdException e) {
+            e.printStackTrace();
             modelAndView.setViewName(ERROR_PAGE.getPageName());
         }
         return modelAndView;

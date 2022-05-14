@@ -13,8 +13,15 @@
 
     <jsp:include page="header.jsp" />
     <div>
+            <!-- TO DO: find better way to edit function-->
+            <div>
+                <c:if test="${userRole eq 'teacher' && user.getRole() eq 'student'}">
+                    <a href="<c:url value='/redirect/edit/student?studentId=${user.getStudentId()}' />">Edit</a>
+                    <a href="<c:url value='/delete/student?studentId=${user.getStudentId()}' />">Delete</a>
+                </c:if>
+            </div>
             <c:if test="${isCurrentProfile eq 'Yes'}">
-                <label>Login: ${user.getLoginName()}</label><br>
+                <label>Login: ${user.getLoginName()}</label><br> <!-- TO DO: move from if-->
             </c:if>
             <label>First Name: ${user.getFirstName()}</label><br>
             <label>Last Name: ${user.getLastName()}</label><br>
@@ -27,10 +34,10 @@
                         </c:when>
                         <c:otherwise>
                             <c:url value='/redirect/profile' var="headmanURL">
-                                <c:param name="userId" value="${userHeadman.getStudentId()}"/>
-                                <c:param name="userRole" value="${userHeadman.getRole()}"/>
+                                <c:param name="userId" value="${studentInfoSet.getHeadman().getStudentId()}"/>
+                                <c:param name="userRole" value="${studentInfoSet.getHeadman().getRole()}"/>
                             </c:url>
-                            <label>Headman: <a href="<c:out value="${headmanURL}"/>">${userHeadman.getFullName()}</a></label><br>
+                            <label>Headman: <a href="<c:out value="${headmanURL}"/>">${studentInfoSet.getHeadman().getFullName()}</a></label><br>
                         </c:otherwise>
                     </c:choose>
                 <c:choose>
@@ -39,9 +46,9 @@
                     </c:when>
                     <c:otherwise>
                         <c:url value='/show/group' var="studentGroupURL">
-                            <c:param name="groupId" value="${userGroup.getGroupId()}"/>
+                            <c:param name="groupId" value="${studentInfoSet.getGroup().getGroupId()}"/>
                         </c:url>
-                        <label>Group: <a href="<c:out value="${studentGroupURL}"/>">${userGroup.getGroupName()}</a></label><br>
+                        <label>Group: <a href="<c:out value="${studentGroupURL}"/>">${studentInfoSet.getGroup().getGroupName()}</a></label><br>
                     </c:otherwise>
                 </c:choose>
                 <!-- forEach for subjects-->

@@ -177,4 +177,19 @@ public class DAOStudentSubjectImpl extends Oracle implements DAOStudentSubject {
             disconnect();
         }
     }
+
+    @Override
+    public void deleteStudentSubject(String studentId, String subjectId) {
+        try {
+            connect();
+            statement = connection.prepareStatement(DELETE_STUDENT_SUBJECT_BY_IDS.getQuery());
+            statement.setInt(1, Integer.parseInt(studentId));
+            statement.setInt(2, Integer.parseInt(subjectId));
+            statement.execute();
+        } catch (SQLException e) {
+            logger.info("desc");
+        } finally {
+            disconnect();
+        }
+    }
 }

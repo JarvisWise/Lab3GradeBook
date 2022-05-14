@@ -10,9 +10,11 @@ import org.example.entities.Subject;
 import org.example.entities.User;
 import org.example.tools.custom.exceptions.WrongEntityIdException;
 import org.example.tools.strings.PageName;
+import org.example.tools.strings.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 
+import static org.example.tools.strings.PageName.ERROR_PAGE;
 import static org.example.tools.strings.Role.STUDENT;
 import static org.example.tools.strings.Role.TEACHER;
 import static org.example.tools.strings.SessionAttributeName.*;
@@ -44,48 +47,61 @@ public class EditController {
 
     @RequestMapping(value = "/group/{groupId}")
     @GetMapping
-    public ModelAndView editByGroupId(@RequestParam("groupId") String groupId,
-                                      @RequestParam("groupName") String groupName) {
+    public ModelAndView editByGroupId(@RequestParam("groupName") String groupName,
+                                      @PathVariable String groupId) {
+
+        ModelAndView modelAndView = new ModelAndView();
         try {
             daoGroup.updateGroup(new Group(groupId, groupName));
+            modelAndView.setViewName("redirect:/show/group?groupId="+groupId);//
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            modelAndView.setViewName(ERROR_PAGE.getPageName());
         }
         //add action
-        return new ModelAndView("main-page");
+        return modelAndView;
     }
 
     @RequestMapping(value = "/student/{studentId}")
     @GetMapping
-    public ModelAndView editByStudentId(@RequestParam("studentId") String studentId,
-                                        @RequestParam("loginName") String loginName,
+    public ModelAndView editByStudentId(@RequestParam("loginName") String loginName,
                                         @RequestParam("firstName") String firstName,
                                         @RequestParam("lastName") String lastName,
                                         @RequestParam("headman") String headman,
                                         @RequestParam("password") String password,
-                                        @RequestParam("groupId") String groupId) {
+                                        @RequestParam("groupId") String groupId,
+                                        @PathVariable String studentId) {
 
+        ModelAndView modelAndView = new ModelAndView();
         Student student = new Student(
-                studentId, loginName, firstName,
-                lastName, password, headman, groupId
+                studentId,
+                loginName,
+                firstName,
+                lastName,
+                password,
+                Strings.NOT_YET.getStrings().equals(headman) ? null : headman ,
+                Strings.NOT_YET.getStrings().equals(groupId) ? null : groupId
         );
 
         try {
             daoStudent.updateStudent(student);
+            modelAndView.setViewName("redirect:/redirect/profile?userId="+studentId+"&userRole="+student.getRole());//
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            modelAndView.setViewName(ERROR_PAGE.getPageName());
         }
         //add action
-        return new ModelAndView("main-page");
+        return modelAndView;
     }
 
-    @RequestMapping(value = "/subject")
+    @RequestMapping(value = "/subject/{subjectId}")
     @GetMapping
-    public ModelAndView editBySubjectId(@RequestParam("subjectId") String subjectId,
-                                        @RequestParam("subjectName") String subjectName,
+    public ModelAndView editBySubjectId(@RequestParam("subjectName") String subjectName,
                                         @RequestParam("maxGrade") String maxGrade,
-                                        @RequestParam("passProcGrade") String passProcGrade) {
+                                        @RequestParam("passProcGrade") String passProcGrade,
+                                        @PathVariable String subjectId) {
 
+        ModelAndView modelAndView = new ModelAndView();
         Subject subject = new Subject(
                 subjectId,
                 subjectName,
@@ -95,11 +111,13 @@ public class EditController {
 
         try {
             daoSubject.updateSubject(subject);
+            modelAndView.setViewName("redirect:/show/subject?subjectId="+subjectId);//
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            modelAndView.setViewName(ERROR_PAGE.getPageName());
         }
         //add action
-        return new ModelAndView("main-page");
+        return modelAndView;
     }
 
     @RequestMapping(value = "/task")

@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,7 +23,7 @@ import static org.example.tools.strings.SessionAttributeName.CURRENT_USER_ID;
 
 @Controller
 @RequestMapping(value = "/redirect")
-public class RedirectController {
+public class RedirectController extends AbstractController{
 
     private final DAOStudentImpl daoStudent;
     private final DAOTeacherImpl daoTeacher;
@@ -43,6 +44,18 @@ public class RedirectController {
     @GetMapping
     public ModelAndView redirectAddStudent() {
         ModelAndView modelAndView = new ModelAndView();
+
+        List<Student> headmanList = null;
+        List<Group> groupList =  null;
+        try {
+            headmanList = daoStudent.getAllStudents();
+            groupList = daoGroup.getAllGroups();
+        } catch (WrongEntityIdException throwables) {
+            throwables.printStackTrace();
+        }
+
+        modelAndView.addObject("headmanList", headmanList);
+        modelAndView.addObject("groupList", groupList);
         modelAndView.addObject("action", "add");
         modelAndView.setViewName("add-edit-student-page");
         return modelAndView;
@@ -53,13 +66,30 @@ public class RedirectController {
     public ModelAndView redirectEditStudent(@RequestParam("studentId") String studentId) {
 
         ModelAndView modelAndView = new ModelAndView();
-        Student student = null;
+        StudentInfoSet studentInfoSet = null;
+        List<Student> headmanList = null;
+        List<Group> groupList =  null;
+
         try {
-            student = daoStudent.getStudentById(studentId);
+            studentInfoSet = daoStudent.getStudentInfoSet(studentId);
+            headmanList = daoStudent.getAllStudents();
+            groupList = daoGroup.getAllGroups();
         } catch (WrongEntityIdException e) {
             e.printStackTrace();
         }
-        modelAndView.addObject("student", student);
+
+        removeStudentById(headmanList, studentInfoSet.getStudent().getStudentId());
+        if (studentInfoSet.getStudent().getHeadman() != null) {
+            removeStudentById(headmanList, studentInfoSet.getStudent().getHeadman());
+        }
+
+        if (studentInfoSet.getStudent().getGroupId() != null) {
+            removeGroupById(groupList, studentInfoSet.getStudent().getGroupId());
+        }
+
+        modelAndView.addObject("headmanList", headmanList);
+        modelAndView.addObject("groupList", groupList);
+        modelAndView.addObject("studentInfoSet", studentInfoSet);
         modelAndView.addObject("action", "edit");
         modelAndView.setViewName("add-edit-student-page");
         return modelAndView;
@@ -85,8 +115,8 @@ public class RedirectController {
         } catch (WrongEntityIdException e) {
             e.printStackTrace();
         }
-        modelAndView.addObject("student", group);
-        modelAndView.addObject("action", "add");
+        modelAndView.addObject("group", group);
+        modelAndView.addObject("action", "edit");
         modelAndView.setViewName("add-edit-group-page");
         return modelAndView;
     }
@@ -112,8 +142,8 @@ public class RedirectController {
             e.printStackTrace();
         }
         modelAndView.addObject("subject", subject);
-        modelAndView.addObject("action", "add");
-        modelAndView.setViewName("add-edit-group-page");
+        modelAndView.addObject("action", "edit");
+        modelAndView.setViewName("add-edit-subject-page");
         return modelAndView;
     }
 
@@ -140,19 +170,19 @@ public class RedirectController {
         try {
             if (Role.STUDENT.getRole().equals(userRole)) {
                 Student user = daoStudent.getStudentById(userId);
-                //add check for group or headman is exist
-                if(user.getHeadman() != null) {
+                /*if(user.getHeadman() != null) { //remove
                     Student userHeadman = daoStudent.getStudentById(user.getHeadman());
                     modelAndView.addObject("userHeadman", userHeadman);
                 }
-                if(user.getGroupId() != null) {
+                if(user.getGroupId() != null) { //remove
                     Group userGroup = daoGroup.getGroupById(user.getGroupId());
                     modelAndView.addObject("userGroup", userGroup);
-                }
+                }*/
+                StudentInfoSet studentInfoSet = daoStudent.getStudentInfoSet(user.getStudentId());
+                modelAndView.addObject("studentInfoSet", studentInfoSet);
                 //add validation on present subject or not
                 HashMap<Subject, StudentSubject> studentSubjectMap = daoStudentSubject.getSubjectsInfoByStudentId(userId);
                 modelAndView.addObject("studentSubjectMap", studentSubjectMap);
-
                 modelAndView.addObject("user", user);
             } else { //mb one more if
                 Teacher user = daoTeacher.getTeacherById(userId);

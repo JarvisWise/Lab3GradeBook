@@ -17,12 +17,11 @@
     <!--<div><-%= new DAOStudentImpl().getStudentById("1").toString()%></div>-->
     <!-- action="./login" -->
     <form name="username" action="<c:url value='/login' />" method="POST">
-        Name: <input type="text" value="" name="loginUserName" placeholder="Enter name"/> </br>
-        Password: <input type="password" value="" name="loginPassword" placeholder="Enter password"/> </br>
-        Role student: <input type="radio" name="loginType" value="student" checked>
-        Role teacher: <input type="radio" name="loginType" value="teacher"> </br>
-        <input type="submit" value="Login" /> </br>
-        <!--<a href="/practiceJBDC_war_exploded/dispatcher?action=toChangePassword">Change Password</a>-->
+        <label>Name: <input type="text" value="" name="loginUserName" placeholder="Enter name"/></label> <br>
+        <label>Password: <input type="password" value="" name="loginPassword" placeholder="Enter password"/></label> <br>
+        <!--Role student: <input type="radio" name="loginType" value="student" checked>
+        Role teacher: <input type="radio" name="loginType" value="teacher"> </br>-->
+        <input type="submit" value="Login" /> <br>
     </form>
 
 </div>

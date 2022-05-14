@@ -61,6 +61,21 @@ public class DAOGroupImpl extends Oracle implements DAOGroup {
     }
 
     @Override
+    public void addGroup(String groupName) throws SQLException {
+        try {
+            connect();
+            statement = connection.prepareStatement(ADD_GROUP.getQuery());
+            statement.setString(1, groupName);
+            statement.execute();
+        } catch (SQLException e) {
+            logger.info("desc", e);
+            throw new SQLException("desc", e);
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
     public void updateGroup(Group group) throws SQLException {
         try {
             connect();

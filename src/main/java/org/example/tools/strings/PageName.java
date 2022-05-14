@@ -9,6 +9,7 @@ public enum PageName {
     TASK_LIST_PAGE("task-list"),
     STUDENT_LIST_PAGE("student-list"),
     SUBJECT_LIST_PAGE("subject-list"),
+    TEACHER_LIST_PAGE("teacher-list"),
     SHOW_GROUP_PAGE("show-group-page"),
     SHOW_STUDENT_PAGE("show-student-page"),
     ADD_EDIT_GROUP_PAGE("edd-edit-group-page"),

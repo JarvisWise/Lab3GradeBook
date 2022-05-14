@@ -22,6 +22,36 @@
             <a href="<c:url value='/delete/subject?subjectId=${subject.getSubjectId()}' />">Delete</a>
         </c:if>
     </div>
+    <div>
+        <!-- TO DO: add student & add teacher-->
+        <c:if test="${userRole eq 'teacher'}">
+            <!-- teacher selector -->
+            <form action="<c:url value='/add/teacher-subject?subjectId=${subject.getSubjectId()}' />" method="POST"><!-- -->
+                <label> Add teacher
+                    <select name="teacherId">
+                        <option value="" selected="selected">choose teacher</option>
+                        <c:forEach var="at" items="${availableTeachers}">
+                            <option value="${at.getTeacherId()}">${at.getFullNameWithLogin}</option>
+                        </c:forEach>
+                    </select>
+                </label><br>
+                <input type="submit" value="Add Teacher">
+            </form>
+            <!-- teacher selector -->
+            <form action="<c:url value='/add/student-subject?subjectId=${subject.getSubjectId()}' />" method="POST"><!-- -->
+                <label> Add student
+                    <select name="studentId">
+                        <option value="" selected="selected">choose student</option>
+                        <c:forEach var="as" items="${availableStudents}">
+                            <option value="${as.getStudentId()}">${as.getFullNameWithLogin}</option>
+                        </c:forEach>
+                    </select>
+                </label><br>
+                <input type="submit" value="Add Student">
+            </form>
+        </c:if>
+        <!-- TO DO: add student & add teacher-->
+    </div>
     <!-- teachers -->
     <table>
         <tr>
