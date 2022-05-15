@@ -18,10 +18,12 @@ public enum Query {
     JOIN subject sub ON (st.student_id = sub.student_id)
     WHERE sub.subject_id = ?*/
     STUDENT_SUBJECT_BY_ID("SELECT * FROM student_subject WHERE student_subject_id = ?"),
+    STUDENT_SUBJECT_BY_IDS("SELECT * FROM student_subject WHERE subject_id = ? AND student_id = ?"),
     GROUP_BY_ID("SELECT * FROM group_ WHERE group_id = ?"),
     STUDENT_BY_ID("SELECT * FROM student WHERE student_id = ?"),
     TEACHER_BY_ID("SELECT * FROM teacher WHERE teacher_id = ?"),
     TASK_BY_ID("SELECT * FROM task WHERE task_id = ?"),
+    TASKS_BY_SUBJECT_ID("SELECT * FROM task WHERE subject_id = ?"),
     STUDENT_TASK_BY_ID("SELECT * FROM student_task WHERE student_subject_id = ? AND task_id = ?"), //check for this one
     DELETE_SUBJECT_BY_ID("DELETE FROM subject WHERE subject_id = ?"),
     DELETE_STUDENT_SUBJECT_BY_ID("DELETE FROM student_subject WHERE student_subject_id = ?"),
@@ -44,10 +46,12 @@ public enum Query {
     UPDATE_STUDENT_SUBJECT("UPDATE student_subject SET total_grade=?, student_id=?, subject_id=?, teacher_id=? WHERE student_subject_id=?"),
     UPDATE_GROUP("UPDATE group_ SET group_name=? WHERE group_id=?"),
     UPDATE_STUDENT("UPDATE student SET first_name=?, last_name=?, headman=?, group_id=? WHERE student_id=?"),
+    UPDATE_GROUP_OF_STUDENT("UPDATE student SET group_id = ? WHERE student_id = ?"),
     UPDATE_TEACHER("UPDATE teacher SET first_name=?, last_name=? WHERE teacher_id=?"),
     //--do more specific query for update
     UPDATE_TASK_NAME("UPDATE task SET task_name=? WHERE task_id=?"),
     UPDATE_TASK_MAX_GRADE("UPDATE task SET max_grade=? WHERE task_id=?"),
+    UPDATE_TASK_NAME_AND_GRADE("UPDATE task SET max_grade = ?, task_name = ? WHERE task_id = ?"),
     UPDATE_STUDENT_TASK_GRADE("UPDATE student_task SET grade=? WHERE student_subject_id = ? AND task_id = ?"),
     CHANGE_STUDENT_PASSWORD("UPDATE student SET password=? WHERE student_id=?"),
     CHANGE_TEACHER_PASSWORD("UPDATE teacher SET password=? WHERE teacher_id=?"),
@@ -61,6 +65,8 @@ public enum Query {
             "JOIN student s ON (ss.student_id = s.student_id) WHERE ss.subject_id = ?"),
     STUDENT_SUBJECT_MAP_BY_STUDENT_ID("SELECT s.*, ss.* FROM student_subject ss " +
             "JOIN subject s ON (ss.subject_id = s.subject_id) WHERE ss.student_id = ?"),
+    STUDENT_TASK_MAP_BY_STUDENT_SUBJECT_ID("SELECT t.*, st.* FROM student_task st " +
+            "    JOIN task t ON (st.task_id = t.task_id) WHERE st.student_subject_id = ?"),
     /*SEARCH_BY_STUDENT_FULL_NAME("SELECT * FROM student WHERE REGEXP_LIKE (first_name||' '||last_name, '%?%', 'i')" +
             "OR REGEXP_LIKE (last_name||' '||first_name, '%?%', 'i')"),*/
     /*SEARCH_BY_STUDENT_FULL_NAME("SELECT * FROM student WHERE first_name||' '||last_name ILIKE '%?%' " +

@@ -23,14 +23,18 @@ public class AddController {
     private final DAOSubjectImpl daoSubject;
     private final DAOTeacherSubjectImpl daoTeacherSubject;
     private final DAOStudentSubjectImpl daoStudentSubject;
+    private final DAOStudentTaskImpl daoStudentTask;
+    private final DAOTaskImpl daoTask;
 
     @Autowired
-    public AddController(DAOStudentImpl daoStudent, DAOGroupImpl daoGroup, DAOSubjectImpl daoSubject, DAOTeacherSubjectImpl daoTeacherSubject, DAOStudentSubjectImpl daoStudentSubject) {
+    public AddController(DAOStudentImpl daoStudent, DAOGroupImpl daoGroup, DAOSubjectImpl daoSubject, DAOTeacherSubjectImpl daoTeacherSubject, DAOStudentSubjectImpl daoStudentSubject, DAOStudentTaskImpl daoStudentTask, DAOTaskImpl daoTask) {
         this.daoStudent = daoStudent;
         this.daoGroup = daoGroup;
         this.daoSubject = daoSubject;
         this.daoTeacherSubject = daoTeacherSubject;
         this.daoStudentSubject = daoStudentSubject;
+        this.daoStudentTask = daoStudentTask;
+        this.daoTask = daoTask;
     }
 
     @RequestMapping(value = "/group")
@@ -160,12 +164,54 @@ public class AddController {
 
     @RequestMapping(value = "/task")
     @GetMapping
-    public ModelAndView addByTaskId(@RequestParam("taskId") String taskId) {
+    public ModelAndView addByTaskId(@RequestParam("subjectId") String subjectId,
+                                    @RequestParam("taskName") String taskName,
+                                    @RequestParam("maxGrade") String maxGrade) {
 
-        ///
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("message", "WHYYYY!");
-        modelAndView.setViewName("main-page");
+        Task task = new Task(
+                null,
+                subjectId,
+                taskName,
+                Integer.parseInt(maxGrade)
+        );
+
+        //add studentTask for all students of subject
+        try {
+            daoTask.addTask(task);
+            modelAndView.setViewName("redirect:/show/subject?subjectId=" + subjectId);//
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            modelAndView.setViewName(ERROR_PAGE.getPageName());
+        }
+
+        return modelAndView;
+    }
+
+    //TO DO: chekc if need
+    @RequestMapping(value = "/task")
+    @GetMapping
+    public ModelAndView addByTaskId(@RequestParam("studentSubjectId") String studentSubjectId,
+                                    @RequestParam("taskId") String taskId,
+                                    @RequestParam("subjectId") String subjectId,
+                                    @RequestParam("grade") String grade) {
+
+        ModelAndView modelAndView = new ModelAndView();
+        StudentTask studentTask = new StudentTask(
+                taskId,
+                subjectId,
+                studentSubjectId,
+                Integer.parseInt(grade)
+        );
+
+        try {
+            daoStudentTask.addStudentTask(studentTask);
+            modelAndView.setViewName("redirect:/show/subject?subjectId=" + subjectId);//TO DO: if need
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            modelAndView.setViewName(ERROR_PAGE.getPageName());
+        }
+
         return modelAndView;
     }
 }

@@ -12,14 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.example.tools.strings.PageName.*;
-import static org.example.tools.strings.SessionAttributeName.CURRENT_USER_ROLE;
 
 @Controller
 @RequestMapping(value = "/show")
@@ -29,14 +25,18 @@ public class ShowController extends AbstractController{
     private final DAOTeacherImpl daoTeacher;
     private final DAOGroupImpl daoGroup;
     private final DAOSubjectImpl daoSubject;
+    private final DAOTaskImpl daoTask;
+    private final DAOStudentTaskImpl daoStudentTask;
     private final DAOStudentSubjectImpl daoStudentSubject;
 
     @Autowired
-    public ShowController(DAOStudentImpl daoStudent, DAOTeacherImpl daoTeacher, DAOGroupImpl daoGroup, DAOSubjectImpl daoSubject, DAOStudentSubjectImpl daoStudentSubject) {
+    public ShowController(DAOStudentImpl daoStudent, DAOTeacherImpl daoTeacher, DAOGroupImpl daoGroup, DAOSubjectImpl daoSubject, DAOTaskImpl daoTask, DAOStudentTaskImpl daoStudentTask, DAOStudentSubjectImpl daoStudentSubject) {
         this.daoStudent = daoStudent;
         this.daoTeacher = daoTeacher;
         this.daoGroup = daoGroup;
         this.daoSubject = daoSubject;
+        this.daoTask = daoTask;
+        this.daoStudentTask = daoStudentTask;
         this.daoStudentSubject = daoStudentSubject;
     }
 
@@ -47,15 +47,21 @@ public class ShowController extends AbstractController{
         ModelAndView modelAndView = new ModelAndView();
         Group group = null;
         List<Student> studentList = null;
+        List<Student> availableStudents = null;
+
         try {
             group = daoGroup.getGroupById(groupId);
             studentList = daoStudent.getStudentsByGroupId(groupId);
+            //
+            availableStudents = daoStudent.getAllStudents();
+            removeStudentByList(availableStudents, studentList);
         } catch (WrongEntityIdException e) {
             e.printStackTrace();
         }
 
         modelAndView.addObject("group", group);
         modelAndView.addObject("studentList", studentList);
+        modelAndView.addObject("availableStudents", availableStudents);
         modelAndView.setViewName("show-group-page");
         return modelAndView;
     }
@@ -65,24 +71,6 @@ public class ShowController extends AbstractController{
     public ModelAndView showByStudentId(@RequestParam("studentId") String studentId) {
 
         ModelAndView modelAndView = new ModelAndView();
-        /*Student student = null;
-        Student headman = null;
-        Group group = null;
-        List<StudentSubject> studentSubjectList = null;
-        try {
-            student = daoStudent.getStudentById(studentId);
-            headman = daoStudent.getStudentById(student.getHeadman());
-            group = daoGroup.getGroupById(student.getGroupId());
-            studentSubjectList = daoStudentSubject.getStudentSubjectsByStudentId(studentId);
-        } catch (WrongEntityIdException e) {
-            e.printStackTrace();
-        }
-
-        modelAndView.addObject("student", student);
-        modelAndView.addObject("headman", headman);
-        modelAndView.addObject("group", group);
-        modelAndView.addObject("studentSubjectList", studentSubjectList);
-        modelAndView.setViewName("show-student-page");*/
         modelAndView.setViewName("redirect:/redirect/profile?userId=" +
                 studentId + "&userRole=" + Role.STUDENT.getRole());//
         return modelAndView;
@@ -107,6 +95,7 @@ public class ShowController extends AbstractController{
         List<Teacher> teacherList = null;
         List<Student> availableStudents = null;
         List<Teacher> availableTeachers = null;
+        List<Task> taskList = null;//
 
         try {
             subject = daoSubject.getSubjectById(subjectId);
@@ -120,6 +109,7 @@ public class ShowController extends AbstractController{
             availableTeachers = daoTeacher.getAllTeachers();
             removeTeacherByList(availableTeachers, teacherList);
             //
+            taskList = daoTask.getTaskListBySubjectId(subjectId);
         } catch (WrongEntityIdException e) {
             e.printStackTrace();
         }
@@ -128,10 +118,40 @@ public class ShowController extends AbstractController{
         modelAndView.addObject("availableStudents", availableStudents);
         modelAndView.addObject("availableTeachers", availableTeachers);
         //
+        modelAndView.addObject("taskList", taskList);
         modelAndView.addObject("subject", subject);
         modelAndView.addObject("studentSubjectMap", studentSubjectMap);
         modelAndView.addObject("teacherList", teacherList);
         modelAndView.setViewName("show-subject-page");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/student-task-list")
+    @GetMapping
+    public ModelAndView showStudentTaskList(@RequestParam("subjectId") String subjectId,
+                                            @RequestParam("studentId") String studentId) {
+
+        ModelAndView modelAndView = new ModelAndView();
+        Student student = null;
+        Subject subject = null;
+        StudentSubject studentSubject = null;
+        HashMap<Task, StudentTask> studentTaskMap = null;
+
+        try {
+            subject = daoSubject.getSubjectById(subjectId);
+            student = daoStudent.getStudentById(studentId);
+            studentSubject = daoStudentSubject.getStudentSubjectBySubjectIdAndStudentId(subjectId, studentId);
+            studentTaskMap = daoStudentTask.
+                    getStudentTasksInfoByStudentSubjectId(studentSubject.getStudentSubjectId());
+        } catch (WrongEntityIdException e) {
+            e.printStackTrace();
+        }
+
+        modelAndView.addObject("student", student);
+        modelAndView.addObject("subject", subject);
+        modelAndView.addObject("studentSubject", studentSubject);
+        modelAndView.addObject("studentTaskMap", studentTaskMap);
+        modelAndView.setViewName("student-task-list");
         return modelAndView;
     }
 

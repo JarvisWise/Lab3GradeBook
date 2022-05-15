@@ -20,6 +20,7 @@ public interface DAOStudent {
     void changeStudentPassword(String studentId, String password) throws SQLException;
     void addStudent(Student student) throws SQLException;
     void updateStudent(Student student) throws SQLException;
+    void updateGroupOfStudent(String studentId, String groupId) throws SQLException;
     void deleteStudent(String studentId);
     List<Student> getAllStudents() throws WrongEntityIdException;
     List<Student> getStudentsByGroupId(String groupId) throws WrongEntityIdException;

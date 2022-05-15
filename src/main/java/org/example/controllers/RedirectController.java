@@ -15,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,14 +28,16 @@ public class RedirectController extends AbstractController{
     private final DAOTeacherImpl daoTeacher;
     private final DAOGroupImpl daoGroup;
     private final DAOSubjectImpl daoSubject;
+    private final DAOTaskImpl daoTask;
     private final DAOStudentSubjectImpl daoStudentSubject;
 
     @Autowired
-    public RedirectController(DAOStudentImpl daoStudent, DAOTeacherImpl daoTeacher, DAOGroupImpl daoGroup, DAOSubjectImpl daoSubject, DAOStudentSubjectImpl daoStudentSubject) {
+    public RedirectController(DAOStudentImpl daoStudent, DAOTeacherImpl daoTeacher, DAOGroupImpl daoGroup, DAOSubjectImpl daoSubject, DAOTaskImpl daoTask, DAOStudentSubjectImpl daoStudentSubject) {
         this.daoStudent = daoStudent;
         this.daoTeacher = daoTeacher;
         this.daoGroup = daoGroup;
         this.daoSubject = daoSubject;
+        this.daoTask = daoTask;
         this.daoStudentSubject = daoStudentSubject;
     }
 
@@ -118,6 +119,41 @@ public class RedirectController extends AbstractController{
         modelAndView.addObject("group", group);
         modelAndView.addObject("action", "edit");
         modelAndView.setViewName("add-edit-group-page");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/add/task")
+    @GetMapping
+    public ModelAndView redirectAddTask(@RequestParam("subjectId") String subjectId) {
+
+        ModelAndView modelAndView = new ModelAndView();
+        Subject subject = null;
+        try {
+            subject = daoSubject.getSubjectById(subjectId);
+        } catch (WrongEntityIdException e) {
+            e.printStackTrace();
+        }
+
+        modelAndView.addObject("subject", subject);
+        modelAndView.addObject("action", "add");
+        modelAndView.setViewName("add-edit-task-page");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/edit/task")
+    @GetMapping
+    public ModelAndView redirectEditTask(@RequestParam("taskId") String taskId) {
+
+        ModelAndView modelAndView = new ModelAndView();
+        Task task = null;
+        try {
+            task = daoTask.getTaskById(taskId);
+        } catch (WrongEntityIdException e) {
+            e.printStackTrace();
+        }
+        modelAndView.addObject("task", task);
+        modelAndView.addObject("action", "edit");
+        modelAndView.setViewName("add-edit-task-page");
         return modelAndView;
     }
 

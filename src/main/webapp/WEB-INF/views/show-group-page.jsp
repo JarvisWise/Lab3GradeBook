@@ -22,6 +22,22 @@
             <a href="<c:url value='/delete/group?groupId=${group.getGroupId()}' />">Delete</a>
         </c:if>
     </div>
+    <div>
+        <c:if test="${userRole eq 'teacher'}">
+            <!-- student selector -->
+            <form action="<c:url value='/edit/student-group?groupId=${group.getGroupId()}' />" method="POST"><!-- -->
+                <label> Add student
+                    <select name="studentId">
+                        <option value="" selected="selected">choose student</option>
+                        <c:forEach var="as" items="${availableStudents}">
+                            <option value="${as.getStudentId()}">${as.getFullNameWithLogin}</option>
+                        </c:forEach>
+                    </select>
+                </label><br>
+                <input type="submit" value="Add Student">
+            </form>
+        </c:if>
+    </div>
     <table>
         <tr>
             <th>First Name</th>

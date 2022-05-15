@@ -3,11 +3,14 @@ package org.example.dao.implementations;
 import org.apache.log4j.Logger;
 import org.example.dao.connection.Oracle;
 import org.example.dao.interfaces.DAOTask;
+import org.example.entities.Student;
 import org.example.entities.Task;
 import org.example.tools.custom.exceptions.WrongEntityIdException;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.example.tools.strings.Query.*;
 
@@ -96,6 +99,24 @@ public class DAOTaskImpl extends Oracle implements DAOTask {
     }
 
     @Override
+    public void updateTaskNameAndGrade(String taskId, String newTaskName, int newMaxGrade) throws SQLException {
+        try {
+            connect();
+            statement = connection.prepareStatement(UPDATE_TASK_NAME_AND_GRADE.getQuery());
+
+            statement.setInt(1, newMaxGrade);
+            statement.setString(2, newTaskName);
+            statement.setInt(3, Integer.parseInt(taskId));
+            statement.execute();
+        } catch (SQLException e) {
+            logger.info("desc", e);
+            throw new SQLException("desc", e);
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
     public void deleteTask(String taskId) {
         try {
             connect();
@@ -104,6 +125,26 @@ public class DAOTaskImpl extends Oracle implements DAOTask {
             statement.execute();
         } catch (SQLException e) {
             logger.info("desc");
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
+    public List<Task> getTaskListBySubjectId(String subjectId) throws WrongEntityIdException {
+        try {
+            connect();
+            java.util.List<Task> list = new ArrayList<>();
+            statement = connection.prepareStatement(TASKS_BY_SUBJECT_ID.getQuery());
+            statement.setInt(1, Integer.parseInt(subjectId));
+            result = statement.executeQuery();
+            while (result.next()) {
+                list.add(Task.parse(result));
+            }
+            return list;
+        } catch (SQLException e) {
+            logger.info("desc", e);
+            throw new WrongEntityIdException("desc", e);
         } finally {
             disconnect();
         }

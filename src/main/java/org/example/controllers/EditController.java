@@ -1,13 +1,7 @@
 package org.example.controllers;
 
-import org.example.dao.implementations.DAOGroupImpl;
-import org.example.dao.implementations.DAOStudentImpl;
-import org.example.dao.implementations.DAOSubjectImpl;
-import org.example.dao.implementations.DAOTeacherImpl;
-import org.example.entities.Group;
-import org.example.entities.Student;
-import org.example.entities.Subject;
-import org.example.entities.User;
+import org.example.dao.implementations.*;
+import org.example.entities.*;
 import org.example.tools.custom.exceptions.WrongEntityIdException;
 import org.example.tools.strings.PageName;
 import org.example.tools.strings.Strings;
@@ -36,13 +30,19 @@ public class EditController {
     private final DAOTeacherImpl daoTeacher;
     private final DAOGroupImpl daoGroup;
     private final DAOSubjectImpl daoSubject;
+    private final DAOStudentSubjectImpl daoStudentSubject;
+    private final DAOTaskImpl daoTask;
+    private final DAOStudentTaskImpl daoStudentTask;
 
     @Autowired
-    public EditController(DAOStudentImpl daoStudent, DAOTeacherImpl daoTeacher, DAOGroupImpl daoGroup, DAOSubjectImpl daoSubject) {
+    public EditController(DAOStudentImpl daoStudent, DAOTeacherImpl daoTeacher, DAOGroupImpl daoGroup, DAOSubjectImpl daoSubject, DAOStudentSubjectImpl daoStudentSubject, DAOTaskImpl daoTask, DAOStudentTaskImpl daoStudentTask) {
         this.daoStudent = daoStudent;
         this.daoTeacher = daoTeacher;
         this.daoGroup = daoGroup;
         this.daoSubject = daoSubject;
+        this.daoStudentSubject = daoStudentSubject;
+        this.daoTask = daoTask;
+        this.daoStudentTask = daoStudentTask;
     }
 
     @RequestMapping(value = "/group/{groupId}")
@@ -94,6 +94,24 @@ public class EditController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/student-group")
+    @GetMapping
+    public ModelAndView editByStudentId(@RequestParam("studentId") String studentId,
+                                        @RequestParam("groupId") String groupId) {
+
+        ModelAndView modelAndView = new ModelAndView();
+
+        try {
+            daoStudent.updateGroupOfStudent(studentId, groupId);
+            modelAndView.setViewName("redirect:/show/group?groupId=" + groupId);//
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            modelAndView.setViewName(ERROR_PAGE.getPageName());
+        }
+        //add action
+        return modelAndView;
+    }
+
     @RequestMapping(value = "/subject/{subjectId}")
     @GetMapping
     public ModelAndView editBySubjectId(@RequestParam("subjectName") String subjectName,
@@ -122,14 +140,42 @@ public class EditController {
 
     @RequestMapping(value = "/task")
     @GetMapping
-    public ModelAndView editByTaskId(@RequestParam("taskId") String taskId) {
-
-
-
+    public ModelAndView editByTaskId(@RequestParam("taskId") String taskId,
+                                     @RequestParam("subjectId") String subjectId,
+                                     @RequestParam("taskName") String taskName,
+                                     @RequestParam("maxGrade") String maxGrade) {
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("message", "WHYYYY!");
-        modelAndView.setViewName("main-page");
+
+        try {
+            daoTask.updateTaskNameAndGrade(taskId, taskName, Integer.parseInt(maxGrade));
+            modelAndView.setViewName("redirect:/show/subject?subjectId="+subjectId);//
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            modelAndView.setViewName(ERROR_PAGE.getPageName());
+        }
+        //add action
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/student-task")
+    @GetMapping
+    public ModelAndView editByTaskId(@RequestParam("taskId") String taskId,
+                                     @RequestParam("studentSubjectId") String studentSubjectId,
+                                     @RequestParam("grade") String grade) {
+
+        ModelAndView modelAndView = new ModelAndView();
+        StudentSubject studentSubject = null;
+        try {
+            daoStudentTask.updateStudentTaskGrade(taskId, studentSubjectId, Integer.parseInt(grade));
+            studentSubject = daoStudentSubject.getStudentSubjectById(studentSubjectId);
+            modelAndView.setViewName("redirect:/show/student-task-list?subjectId=" +
+                    studentSubject.getSubjectId() + "&studentId=" + studentSubject.getStudentId());
+        } catch (SQLException | WrongEntityIdException throwables) {
+            throwables.printStackTrace();
+            modelAndView.setViewName(ERROR_PAGE.getPageName());
+        }
+        //add action
         return modelAndView;
     }
 

@@ -132,7 +132,7 @@ public class DAOTeacherImpl extends Oracle implements DAOTeacher {
             statement = connection.prepareStatement(ADD_TEACHER.getQuery());
             statement.setString(1, teacher.getFirstName());
             statement.setString(2, teacher.getLastName());
-            statement.setString(3, "password"); //default password
+            statement.setString(3, teacher.getPassword());
             statement.execute();
         } catch (SQLException e) {
             logger.info("desc", e);

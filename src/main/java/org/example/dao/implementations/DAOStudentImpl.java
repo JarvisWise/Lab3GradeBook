@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -136,12 +137,24 @@ public class DAOStudentImpl extends Oracle implements DAOStudent {
         try {
             connect();
             statement = connection.prepareStatement(ADD_STUDENT.getQuery());
-            statement.setInt(1, Integer.parseInt(student.getHeadman()));
+
+            if (student.getHeadman() == null || student.getHeadman().isEmpty()) {
+                statement.setNull(1, Types.INTEGER);
+            } else {
+                statement.setInt(1, Integer.parseInt(student.getHeadman()));
+            }
+
             statement.setString(2, student.getLoginName());
             statement.setString(3, student.getFirstName());
             statement.setString(4, student.getLastName());
-            statement.setInt(5, Integer.parseInt(student.getGroupId()));
-            statement.setString(6, student.getPassword()); //default password
+
+            if (student.getGroupId() == null || student.getGroupId().isEmpty()) {
+                statement.setNull(5, Types.INTEGER);
+            } else {
+                statement.setInt(5, Integer.parseInt(student.getGroupId()));
+            }
+
+            statement.setString(6, student.getPassword());
             statement.execute();
         } catch (SQLException e) {
             logger.info("desc", e);
@@ -159,9 +172,41 @@ public class DAOStudentImpl extends Oracle implements DAOStudent {
 
             statement.setString(1, student.getFirstName());
             statement.setString(2, student.getLastName());
-            statement.setInt(3, Integer.parseInt(student.getHeadman()));
-            statement.setInt(4, Integer.parseInt(student.getGroupId()));
+
+            if (student.getHeadman() == null || student.getHeadman().isEmpty()) {
+                statement.setNull(3, Types.INTEGER);
+            } else {
+                statement.setInt(3, Integer.parseInt(student.getHeadman()));
+            }
+
+            if (student.getGroupId() == null || student.getGroupId().isEmpty()) {
+                statement.setNull(4, Types.INTEGER);
+            } else {
+                statement.setInt(4, Integer.parseInt(student.getGroupId()));
+            }
+
             statement.setInt(5, Integer.parseInt(student.getStudentId()));
+            statement.execute();
+        } catch (SQLException e) {
+            logger.info("desc", e);
+            throw new SQLException("desc", e);
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
+    public void updateGroupOfStudent(String studentId, String groupId) throws SQLException {
+        try {
+            connect();
+            statement = connection.prepareStatement(UPDATE_GROUP_OF_STUDENT.getQuery());
+
+            if (groupId == null || groupId.isEmpty()) {
+                statement.setNull(1, Types.INTEGER);
+            } else {
+                statement.setInt(1, Integer.parseInt(groupId));
+            }
+            statement.setInt(2, Integer.parseInt(studentId));
             statement.execute();
         } catch (SQLException e) {
             logger.info("desc", e);

@@ -86,6 +86,30 @@ public class DAOStudentSubjectImpl extends Oracle implements DAOStudentSubject {
     }
 
     @Override
+    public StudentSubject getStudentSubjectBySubjectIdAndStudentId(String subjectId, String studentId) throws WrongEntityIdException {
+        try {
+            connect();
+            statement = connection.prepareStatement(
+                    STUDENT_SUBJECT_BY_IDS.getQuery());
+
+            statement.setInt(1, Integer.parseInt(subjectId));
+            statement.setInt(2, Integer.parseInt(studentId));
+
+            result = statement.executeQuery();
+            if(result.next()) {
+                return StudentSubject.parse(result);
+            } else {
+                throw new WrongEntityIdException("desc ");
+            }
+        } catch (SQLException | WrongEntityIdException e) {
+            e.printStackTrace();
+            throw new WrongEntityIdException("desc ", e);
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
     public HashMap<Student, StudentSubject> getStudentsInfoBySubjectId(String subjectId) throws WrongEntityIdException {
         try {
             connect();

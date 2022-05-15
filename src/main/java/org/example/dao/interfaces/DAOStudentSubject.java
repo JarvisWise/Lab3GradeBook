@@ -16,6 +16,7 @@ public interface DAOStudentSubject {
     StudentSubject getStudentSubjectById(String id) throws WrongEntityIdException;
     List<StudentSubject> getStudentSubjectsByStudentId(String studentId) throws WrongEntityIdException;
     List<StudentSubject> getStudentSubjectsBySubjectId(String subjectId) throws WrongEntityIdException;
+    StudentSubject getStudentSubjectBySubjectIdAndStudentId(String subjectId, String studentId) throws WrongEntityIdException;
     HashMap<Student, StudentSubject> getStudentsInfoBySubjectId(String subjectId) throws WrongEntityIdException;
     HashMap<Subject, StudentSubject> getSubjectsInfoByStudentId(String studentId) throws WrongEntityIdException;
     void addStudentSubject(StudentSubject studentSubject) throws SQLException;

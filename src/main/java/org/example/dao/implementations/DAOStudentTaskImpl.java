@@ -3,11 +3,15 @@ package org.example.dao.implementations;
 import org.apache.log4j.Logger;
 import org.example.dao.connection.Oracle;
 import org.example.dao.interfaces.DAOStudentTask;
+import org.example.entities.Student;
+import org.example.entities.StudentSubject;
 import org.example.entities.StudentTask;
+import org.example.entities.Task;
 import org.example.tools.custom.exceptions.WrongEntityIdException;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 
 import static org.example.tools.strings.Query.*;
 
@@ -93,6 +97,26 @@ public class DAOStudentTaskImpl extends Oracle implements DAOStudentTask {
             statement.execute();
         } catch (SQLException e) {
             logger.info("desc");
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
+    public HashMap<Task, StudentTask> getStudentTasksInfoByStudentSubjectId(String studentSubjectId) throws WrongEntityIdException {
+        try {
+            connect();
+            HashMap<Task, StudentTask> studentTaskMap = new HashMap<>();
+            statement = connection.prepareStatement(STUDENT_TASK_MAP_BY_STUDENT_SUBJECT_ID.getQuery());
+            statement.setInt(1, Integer.parseInt(studentSubjectId));
+            result = statement.executeQuery();
+            while (result.next()) {
+                studentTaskMap.put(Task.parse(result), StudentTask.parse(result));
+            }
+            return studentTaskMap;
+        } catch (SQLException e) {
+            logger.info("desc", e);
+            throw new WrongEntityIdException("desc", e);
         } finally {
             disconnect();
         }

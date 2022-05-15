@@ -20,14 +20,16 @@ public class DeleteController {
     private final DAOSubjectImpl daoSubject;
     private final DAOTeacherSubjectImpl daoTeacherSubject;
     private final DAOStudentSubjectImpl daoStudentSubject;
+    private final DAOTaskImpl daoTask;
 
     @Autowired
-    public DeleteController(DAOStudentImpl daoStudent, DAOGroupImpl daoGroup, DAOSubjectImpl daoSubject, DAOTeacherSubjectImpl daoTeacherSubject, DAOStudentSubjectImpl daoStudentSubject) {
+    public DeleteController(DAOStudentImpl daoStudent, DAOGroupImpl daoGroup, DAOSubjectImpl daoSubject, DAOTeacherSubjectImpl daoTeacherSubject, DAOStudentSubjectImpl daoStudentSubject, DAOTaskImpl daoTask) {
         this.daoStudent = daoStudent;
         this.daoGroup = daoGroup;
         this.daoSubject = daoSubject;
         this.daoTeacherSubject = daoTeacherSubject;
         this.daoStudentSubject = daoStudentSubject;
+        this.daoTask = daoTask;
     }
 
     @RequestMapping(value = "/group")
@@ -97,14 +99,18 @@ public class DeleteController {
 
     @RequestMapping(value = "/task")
     @GetMapping
-    public ModelAndView deleteByTaskId(@RequestParam("taskId") String taskId) {
-
-
-
+    public ModelAndView deleteByTaskId(@RequestParam("taskId") String taskId,
+                                       @RequestParam("subjectId") String subjectId) {
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("message", "WHYYYY!");
-        modelAndView.setViewName("main-page");
+        try {
+            daoTask.deleteTask(taskId);
+            modelAndView.setViewName("redirect:/show/subject?subjectId=" + subjectId);//
+        } catch (Exception throwables) {
+            throwables.printStackTrace();
+            modelAndView.setViewName(ERROR_PAGE.getPageName());
+        }
+
         return modelAndView;
     }
 }
