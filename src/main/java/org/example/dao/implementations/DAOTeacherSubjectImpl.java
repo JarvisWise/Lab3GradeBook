@@ -48,4 +48,19 @@ public class DAOTeacherSubjectImpl extends Oracle implements DAOTeacherSubject {
             disconnect();
         }
     }
+
+    @Override
+    public void deleteTeacherSubjectsBySubjectId(String subjectId) {
+        try {
+            connect();
+            statement = connection.prepareStatement(DELETE_TEACHER_SUBJECT_BY_SUBJECT_ID.getQuery());
+            statement.setInt(1, Integer.parseInt(subjectId));
+
+            statement.execute();
+        } catch (SQLException e) {
+            logger.info("desc");
+        } finally {
+            disconnect();
+        }
+    }
 }

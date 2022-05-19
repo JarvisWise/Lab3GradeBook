@@ -16,6 +16,11 @@
 <div>
     <!--<div><-%= new DAOStudentImpl().getStudentById("1").toString()%></div>-->
     <!-- action="./login" -->
+    <c:if test="${not empty ExceptionMessage}">
+        <div>
+            <label>${ExceptionMessage}</label>
+        </div>
+    </c:if>
     <form name="username" action="<c:url value='/login' />" method="POST">
         <label>Name: <input type="text" value="" name="loginUserName" placeholder="Enter name"/></label> <br>
         <label>Password: <input type="password" value="" name="loginPassword" placeholder="Enter password"/></label> <br>

@@ -32,10 +32,10 @@
                     <select name="teacherId">
                         <option value="" selected="selected">choose teacher</option>
                         <c:forEach var="at" items="${availableTeachers}">
-                            <option value="${at.getTeacherId()}">${at.getFullNameWithLogin}</option>
+                            <option value="${at.getTeacherId()}">${at.getFullNameWithLogin()}</option>
                         </c:forEach>
                     </select>
-                </label><br>
+                </label>
                 <input type="submit" value="Add Teacher">
             </form>
             <!-- student selector -->
@@ -44,10 +44,10 @@
                     <select name="studentId">
                         <option value="" selected="selected">choose student</option>
                         <c:forEach var="as" items="${availableStudents}">
-                            <option value="${as.getStudentId()}">${as.getFullNameWithLogin}</option>
+                            <option value="${as.getStudentId()}">${as.getFullNameWithLogin()}</option>
                         </c:forEach>
                     </select>
-                </label><br>
+                </label>
                 <input type="submit" value="Add Student">
             </form>
         </c:if>
@@ -75,10 +75,7 @@
                 </c:url>
                 <td><a href="<c:out value="${teacherURL}"/>">More...</a></td>
                 <c:if test="${userRole eq 'teacher'}">
-                    <!-- no need -->
-                    <td><a href="<c:url value='/redirect/edit/student?studentId=${student.getStudentId()}' />">Edit</a></td>
-                    <!-- TO DO delete form subject -->
-                    <td><a href="<c:url value='/delete/student?studentId=${student.getStudentId()}' />">Delete</a></td>
+                    <td><a href="<c:url value='/delete/teacher-subject?teacherId=${teacher.getTeacherId()}&subjectId=${subject.getSubjectId()}' />">Remove from subject</a></td>
                 </c:if>
 
             </tr>
@@ -96,8 +93,7 @@
             <th>More...</th>
             <th>Grade details...</th>
             <c:if test="${userRole eq 'teacher'}">
-                <th>Edit</th>
-                <th>Delete</th>
+                <th>Remove from subject</th>
             </c:if>
 
         </tr>
@@ -121,10 +117,7 @@
                 </c:url>
                 <td><a href="<c:out value="${studentTaskListURL}"/>">Grade details...</a></td>
                 <c:if test="${userRole eq 'teacher'}">
-                    <!-- no need -->
-                    <td><a href="<c:url value='/redirect/edit/student?studentId=${student.getStudentId()}' />">Edit</a></td>
-                    <!-- TO DO delete form subject -->
-                    <td><a href="<c:url value='/delete/student?studentId=${student.getStudentId()}' />">Delete</a></td>
+                    <td><a href="<c:url value='/delete/student-subject?studentId=${student.getStudentId()}&subjectId=${subject.getSubjectId()}' />">Remove from subject</a></td>
                 </c:if>
 
             </tr>

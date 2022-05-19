@@ -96,6 +96,34 @@ public class RedirectController extends AbstractController{
         return modelAndView;
     }
 
+    @RequestMapping(value = "/add/teacher")
+    @GetMapping
+    public ModelAndView redirectAddTeacher() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("action", "add");
+        modelAndView.setViewName("add-edit-teacher-page");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/edit/teacher")
+    @GetMapping
+    public ModelAndView redirectEditTeacher(@RequestParam("teacherId") String teacherId) {
+
+        ModelAndView modelAndView = new ModelAndView();
+        Teacher teacher = null;
+
+        try {
+            teacher = daoTeacher.getTeacherById(teacherId);
+        } catch (WrongEntityIdException e) {
+            e.printStackTrace();
+        }
+
+        modelAndView.addObject("teacher", teacher);
+        modelAndView.addObject("action", "edit");
+        modelAndView.setViewName("add-edit-teacher-page");
+        return modelAndView;
+    }
+
     @RequestMapping(value = "/add/group")
     @GetMapping
     public ModelAndView redirectAddGroup() {

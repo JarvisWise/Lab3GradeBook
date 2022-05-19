@@ -16,6 +16,7 @@ public interface DAOSubject {
     List<Subject> getSubjectsByTeacherId(String teacherId) throws WrongEntityIdException;
     void addSubject(Subject subject) throws SQLException;
     void updateSubject(Subject subject) throws SQLException;
+    void  actualizeMaxGrade(String subjectId) throws SQLException;
     void deleteSubject(String subjectId);
     List<Subject> getAllSubjects() throws WrongEntityIdException;
     List<Subject> searchSubjectsByName(String text) throws SQLException, WrongEntityIdException;

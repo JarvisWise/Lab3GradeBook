@@ -19,10 +19,6 @@
         <th>Headman ID</th>
         <th>Group ID</th>
         <th>More...</th>
-        <c:if test="${userRole eq 'teacher'}">
-            <th>Edit</th>
-            <th>Delete</th>
-        </c:if>
     </tr>
     <c:forEach var="studentInfoSet" items="${studentInfoSetList}">
         <tr>
@@ -63,14 +59,6 @@
                 <c:param name="userRole" value="${studentInfoSet.getStudent().getRole()}"/>
             </c:url>
             <td><a href="<c:out value="${studentURL}"/>">More...</a></td>
-
-            <!-- TO DO: no need this functional-->
-            <c:if test="${userRole eq 'admin'}">
-                <td><a href="<c:url value='/redirect/edit/student?studentId=${studentInfoSet.getStudent().getStudentId()}' />">Edit</a></td>
-                <td><a href="<c:url value='/delete/student?studentId=${studentInfoSet.getStudent().getStudentId()}' />">Delete</a></td>
-            </c:if>
-            <!-- TO DO: no need this functional-->
-
         </tr>
     </c:forEach>
 </table>

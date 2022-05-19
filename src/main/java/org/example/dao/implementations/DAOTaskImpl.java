@@ -47,8 +47,9 @@ public class DAOTaskImpl extends Oracle implements DAOTask {
             connect();
             statement = connection.prepareStatement(ADD_TASK.getQuery());
             statement.setInt(1, Integer.parseInt(task.getSubjectId()));
-            statement.setInt(2, Integer.parseInt(task.getTaskName()));
+            statement.setString(2, task.getTaskName());
             statement.setInt(3, task.getMaxGrade());
+            statement.setString(4, task.getTaskDescription());
 
             statement.execute();
         } catch (SQLException e) {
@@ -99,14 +100,15 @@ public class DAOTaskImpl extends Oracle implements DAOTask {
     }
 
     @Override
-    public void updateTaskNameAndGrade(String taskId, String newTaskName, int newMaxGrade) throws SQLException {
+    public void updateTaskNameAndGrade(String taskId, String newTaskName, int newMaxGrade, String taskDescription) throws SQLException {
         try {
             connect();
-            statement = connection.prepareStatement(UPDATE_TASK_NAME_AND_GRADE.getQuery());
+            statement = connection.prepareStatement(UPDATE_TASK.getQuery());
 
             statement.setInt(1, newMaxGrade);
             statement.setString(2, newTaskName);
-            statement.setInt(3, Integer.parseInt(taskId));
+            statement.setString(3, taskDescription);
+            statement.setInt(4, Integer.parseInt(taskId));
             statement.execute();
         } catch (SQLException e) {
             logger.info("desc", e);
@@ -131,6 +133,20 @@ public class DAOTaskImpl extends Oracle implements DAOTask {
     }
 
     @Override
+    public void deleteTasksBySubjectId(String subjectId) {
+        try {
+            connect();
+            statement = connection.prepareStatement(DELETE_TASK_BY_SUBJECT_ID.getQuery());
+            statement.setInt(1, Integer.parseInt(subjectId));
+            statement.execute();
+        } catch (SQLException e) {
+            logger.info("desc");
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
     public List<Task> getTaskListBySubjectId(String subjectId) throws WrongEntityIdException {
         try {
             connect();
@@ -145,6 +161,27 @@ public class DAOTaskImpl extends Oracle implements DAOTask {
         } catch (SQLException e) {
             logger.info("desc", e);
             throw new WrongEntityIdException("desc", e);
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
+    public String getLastTaskId() throws WrongEntityIdException {
+        try {
+            connect();
+            statement = connection.prepareStatement(
+                    GET_LAST_TASK_ID.getQuery());
+
+            result = statement.executeQuery();
+            if(result.next()) {
+                return Integer.toString(result.getInt("last_id"));
+            } else {
+                throw new WrongEntityIdException("desc ");
+            }
+        } catch (SQLException | WrongEntityIdException e) {
+            e.printStackTrace();
+            throw new WrongEntityIdException("desc ", e);
         } finally {
             disconnect();
         }

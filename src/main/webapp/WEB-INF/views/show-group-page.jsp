@@ -30,10 +30,10 @@
                     <select name="studentId">
                         <option value="" selected="selected">choose student</option>
                         <c:forEach var="as" items="${availableStudents}">
-                            <option value="${as.getStudentId()}">${as.getFullNameWithLogin}</option>
+                            <option value="${as.getStudentId()}">${as.getFullNameWithLogin()}</option>
                         </c:forEach>
                     </select>
-                </label><br>
+                </label>
                 <input type="submit" value="Add Student">
             </form>
         </c:if>
@@ -44,8 +44,7 @@
             <th>Last Name</th>
             <th>More...</th>
             <c:if test="${userRole eq 'teacher'}">
-                <th>Edit</th>
-                <th>Delete</th>
+                <th>Remove from group</th>
             </c:if>
 
         </tr>
@@ -73,8 +72,7 @@
             <!--url value='/show/student?studentId=$-{student.getStudentId()}' />-->
             <td><a href="<c:out value="${studentURL}"/>">More...</a></td>
             <c:if test="${userRole eq 'teacher'}">
-                <td><a href="<c:url value='/redirect/edit/student?studentId=${student.getStudentId()}' />">Edit</a></td>
-                <td><a href="<c:url value='/delete/student?studentId=${student.getStudentId()}' />">Delete</a></td>
+                <td><a href="<c:url value='/delete/student-group?studentId=${student.getStudentId()}&groupId=${group.getGroupId()}' />">Remove from group</a></td>
             </c:if>
 
         </tr>

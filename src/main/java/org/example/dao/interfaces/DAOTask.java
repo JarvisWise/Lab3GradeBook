@@ -13,7 +13,9 @@ public interface DAOTask {
     void updateTask(Task task);
     void updateTaskName(String taskId, String newName) throws SQLException;
     void updateTaskMaxGrade(String taskId, int newMaxGrade) throws SQLException;
-    void updateTaskNameAndGrade(String taskId, String newTaskName, int newMaxGrade) throws SQLException;
+    void updateTaskNameAndGrade(String taskId, String newTaskName, int newMaxGrade, String taskDescription) throws SQLException;
     void deleteTask(String taskId);
+    void deleteTasksBySubjectId(String subjectId);
     List<Task> getTaskListBySubjectId(String subjectId) throws WrongEntityIdException;
+    String getLastTaskId() throws WrongEntityIdException;
 }

@@ -10,7 +10,7 @@
     <jsp:include page="header.jsp" />
 
     <c:if test="${userRole eq 'teacher'}">
-        <!--<a href="">Add new student</a>-->
+        <a href="<c:url value='/redirect/add/teacher' />">Add new teacher</a>
     </c:if>
     <table>
         <tr>

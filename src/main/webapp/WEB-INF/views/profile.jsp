@@ -14,10 +14,21 @@
     <jsp:include page="header.jsp" />
     <div>
             <!-- TO DO: find better way to edit function-->
+            <!-- only owner can edit !!!-->
+
+            <!-- old: userRole eq 'teacher' && user.getRole() eq 'student' -->
             <div>
-                <c:if test="${userRole eq 'teacher' && user.getRole() eq 'student'}">
-                    <a href="<c:url value='/redirect/edit/student?studentId=${user.getStudentId()}' />">Edit</a>
-                    <a href="<c:url value='/delete/student?studentId=${user.getStudentId()}' />">Delete</a>
+                <c:if test="${isCurrentProfile eq 'Yes'}">
+                    <c:choose>
+                        <c:when test="${user.getRole() eq 'student'}">
+                            <a href="<c:url value='/redirect/edit/student?studentId=${user.getStudentId()}' />">Edit</a>
+                            <a href="<c:url value='/delete/student?studentId=${user.getStudentId()}' />">Delete</a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="<c:url value='/redirect/edit/teacher?teacherId=${user.getTeacherId()}' />">Edit</a>
+                            <a href="<c:url value='/delete/teacher?teacherId=${user.getTeacherId()}' />">Delete</a>
+                        </c:otherwise>
+                    </c:choose>
                 </c:if>
             </div>
             <c:if test="${isCurrentProfile eq 'Yes'}">

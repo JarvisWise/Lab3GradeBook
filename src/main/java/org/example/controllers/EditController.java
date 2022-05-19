@@ -48,11 +48,12 @@ public class EditController {
     @RequestMapping(value = "/group/{groupId}")
     @GetMapping
     public ModelAndView editByGroupId(@RequestParam("groupName") String groupName,
+                                      @RequestParam("groupDescription") String groupDescription,
                                       @PathVariable String groupId) {
 
         ModelAndView modelAndView = new ModelAndView();
         try {
-            daoGroup.updateGroup(new Group(groupId, groupName));
+            daoGroup.updateGroup(new Group(groupId, groupName, groupDescription));
             modelAndView.setViewName("redirect:/show/group?groupId="+groupId);//
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -94,6 +95,33 @@ public class EditController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/teacher/{teacherId}")
+    @GetMapping
+    public ModelAndView editByTeacherId(@RequestParam("loginName") String loginName,
+                                        @RequestParam("firstName") String firstName,
+                                        @RequestParam("lastName") String lastName,
+                                        @PathVariable String teacherId) {
+
+        ModelAndView modelAndView = new ModelAndView();
+        Teacher teacher = new Teacher(
+                null,
+                loginName,
+                firstName,
+                lastName,
+                null
+        );
+
+        try {
+            daoTeacher.updateTeacher(teacher);
+            modelAndView.setViewName("redirect:/show/teacher?teacherId="+teacherId);//
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            modelAndView.setViewName(ERROR_PAGE.getPageName());
+        }
+        //add action
+        return modelAndView;
+    }
+
     @RequestMapping(value = "/student-group")
     @GetMapping
     public ModelAndView editByStudentId(@RequestParam("studentId") String studentId,
@@ -117,6 +145,7 @@ public class EditController {
     public ModelAndView editBySubjectId(@RequestParam("subjectName") String subjectName,
                                         @RequestParam("maxGrade") String maxGrade,
                                         @RequestParam("passProcGrade") String passProcGrade,
+                                        @RequestParam("subjectDescription") String subjectDescription,
                                         @PathVariable String subjectId) {
 
         ModelAndView modelAndView = new ModelAndView();
@@ -124,7 +153,8 @@ public class EditController {
                 subjectId,
                 subjectName,
                 Integer.parseInt(maxGrade),
-                Integer.parseInt(passProcGrade)
+                Integer.parseInt(passProcGrade),
+                subjectDescription
         );
 
         try {
@@ -138,17 +168,20 @@ public class EditController {
         return modelAndView;
     }
 
+
     @RequestMapping(value = "/task")
     @GetMapping
     public ModelAndView editByTaskId(@RequestParam("taskId") String taskId,
                                      @RequestParam("subjectId") String subjectId,
                                      @RequestParam("taskName") String taskName,
-                                     @RequestParam("maxGrade") String maxGrade) {
+                                     @RequestParam("maxGrade") String maxGrade,
+                                     @RequestParam("taskDescription") String taskDescription) {
 
         ModelAndView modelAndView = new ModelAndView();
 
         try {
-            daoTask.updateTaskNameAndGrade(taskId, taskName, Integer.parseInt(maxGrade));
+            daoTask.updateTaskNameAndGrade(taskId, taskName, Integer.parseInt(maxGrade), taskDescription);
+            daoSubject.actualizeMaxGrade(subjectId);
             modelAndView.setViewName("redirect:/show/subject?subjectId="+subjectId);//
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -168,6 +201,7 @@ public class EditController {
         StudentSubject studentSubject = null;
         try {
             daoStudentTask.updateStudentTaskGrade(taskId, studentSubjectId, Integer.parseInt(grade));
+            daoStudentSubject.actualizeTotalGrade(studentSubjectId);
             studentSubject = daoStudentSubject.getStudentSubjectById(studentSubjectId);
             modelAndView.setViewName("redirect:/show/student-task-list?subjectId=" +
                     studentSubject.getSubjectId() + "&studentId=" + studentSubject.getStudentId());

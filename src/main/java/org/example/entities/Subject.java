@@ -9,16 +9,26 @@ public class Subject {
     private String subjectName;
     private int maxGrade;
     private int passProcGradeP;
+    private String subjectDescription;
 
     public Subject() {
 
     }
 
-    public Subject(String subject_id, String subjectName, int maxGrade, int passProcGradeP) {
+    public Subject(String subject_id, String subjectName, int maxGrade, int passProcGradeP, String subjectDescription) {
         this.subjectId = subject_id;
         this.subjectName = subjectName;
         this.maxGrade = maxGrade;
         this.passProcGradeP = passProcGradeP;
+        this.subjectDescription = subjectDescription;
+    }
+
+    public String getSubjectDescription() {
+        return subjectDescription;
+    }
+
+    public void setSubjectDescription(String subjectDescription) {
+        this.subjectDescription = subjectDescription;
     }
 
     public String getSubjectId() {
@@ -58,7 +68,8 @@ public class Subject {
                 result.getString("subject_id"),
                 result.getString("subject_name"),
                 result.getInt("max_grade"),
-                result.getInt("pass_proc_grade")
+                result.getInt("pass_proc_grade"),
+                result.getString("subject_description")
         );
     }
 
@@ -69,6 +80,7 @@ public class Subject {
                 ", subjectName='" + subjectName + '\'' +
                 ", maxGrade=" + maxGrade +
                 ", passProcGrade=" + passProcGradeP +
+                ", subjectDescription='" + subjectDescription + '\'' +
                 '}';
     }
 }

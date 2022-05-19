@@ -51,6 +51,7 @@ public class DAOGroupImpl extends Oracle implements DAOGroup {
             connect();
             statement = connection.prepareStatement(ADD_GROUP.getQuery());
             statement.setString(1, group.getGroupName());
+            statement.setString(2, group.getGroupDescription());
             statement.execute();
         } catch (SQLException e) {
             logger.info("desc", e);
@@ -82,7 +83,8 @@ public class DAOGroupImpl extends Oracle implements DAOGroup {
             statement = connection.prepareStatement(UPDATE_GROUP.getQuery());
 
             statement.setString(1, group.getGroupName());
-            statement.setInt(2, Integer.parseInt(group.getGroupId()));
+            statement.setString(2, group.getGroupDescription());
+            statement.setInt(3, Integer.parseInt(group.getGroupId()));
             statement.execute();
         } catch (SQLException e) {
             logger.info("desc", e);

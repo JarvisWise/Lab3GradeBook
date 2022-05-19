@@ -46,7 +46,7 @@ public class DAOTeacherImpl extends Oracle implements DAOTeacher {
     }
 
     @Override
-    public boolean isExistTeacherByLogin(String loginName) throws WrongEntityIdException {
+    public boolean isExistTeacherByLogin(String loginName) throws SQLException {
         try {
             connect();
             statement = connection.prepareStatement(
@@ -58,7 +58,7 @@ public class DAOTeacherImpl extends Oracle implements DAOTeacher {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new WrongEntityIdException("desc ", e);
+            throw new SQLException("desc ", e);
         } finally {
             disconnect();
         }
@@ -130,9 +130,10 @@ public class DAOTeacherImpl extends Oracle implements DAOTeacher {
         try {
             connect();
             statement = connection.prepareStatement(ADD_TEACHER.getQuery());
-            statement.setString(1, teacher.getFirstName());
-            statement.setString(2, teacher.getLastName());
-            statement.setString(3, teacher.getPassword());
+            statement.setString(1, teacher.getLoginName());
+            statement.setString(2, teacher.getFirstName());
+            statement.setString(3, teacher.getLastName());
+            statement.setString(4, teacher.getPassword());
             statement.execute();
         } catch (SQLException e) {
             logger.info("desc", e);
@@ -148,9 +149,10 @@ public class DAOTeacherImpl extends Oracle implements DAOTeacher {
             connect();
             statement = connection.prepareStatement(UPDATE_TEACHER.getQuery());
 
-            statement.setString(1, teacher.getFirstName());
-            statement.setString(2, teacher.getLastName());
-            statement.setInt(3, Integer.parseInt(teacher.getTeacherId()));
+            statement.setString(1, teacher.getLoginName());
+            statement.setString(2, teacher.getFirstName());
+            statement.setString(3, teacher.getLastName());
+            statement.setInt(4, Integer.parseInt(teacher.getTeacherId()));
             statement.execute();
         } catch (SQLException e) {
             logger.info("desc", e);

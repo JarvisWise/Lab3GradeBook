@@ -11,7 +11,9 @@ import org.example.tools.custom.exceptions.WrongEntityIdException;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static org.example.tools.strings.Query.*;
 
@@ -44,15 +46,36 @@ public class DAOStudentTaskImpl extends Oracle implements DAOStudentTask {
         }
     }
 
+    @Override
+    public List<StudentTask> getStudentTaskByStudentSubjectId(String studentSubjectId) throws WrongEntityIdException {
+        try {
+            connect();
+            List<StudentTask> list = new ArrayList<>();
+            statement = connection.prepareStatement(STUDENT_TASKS_BY_STUDENT_SUBJECT_ID.getQuery());
+
+            statement.setInt(1, Integer.parseInt(studentSubjectId));
+
+            result = statement.executeQuery();
+            while (result.next()) {
+                list.add(StudentTask.parse(result));
+            }
+            return list;
+        } catch (SQLException e) {
+            logger.info("desc", e);
+            throw new WrongEntityIdException("desc", e);
+        } finally {
+            disconnect();
+        }
+    }
 
     @Override
     public void addStudentTask(StudentTask studentTask) throws SQLException {
         try {
             connect();
             statement = connection.prepareStatement(ADD_STUDENT_TASK.getQuery());
-            statement.setInt(1, Integer.parseInt(studentTask.getTaskId()));
-            statement.setInt(2, Integer.parseInt(studentTask.getSubjectId()));
-            statement.setInt(3, Integer.parseInt(studentTask.getStudentSubjectId()));
+            statement.setInt(1, Integer.parseInt(studentTask.getStudentSubjectId()));
+            statement.setInt(2, Integer.parseInt(studentTask.getTaskId()));
+            statement.setInt(3, Integer.parseInt(studentTask.getSubjectId()));
             statement.setInt(4, studentTask.getGrade());
 
             statement.execute();
@@ -94,6 +117,48 @@ public class DAOStudentTaskImpl extends Oracle implements DAOStudentTask {
             statement = connection.prepareStatement(DELETE_STUDENT_TASK_BY_ID.getQuery());
             statement.setInt(1, Integer.parseInt(studentTaskId));
             statement.setInt(2, Integer.parseInt(taskId));
+            statement.execute();
+        } catch (SQLException e) {
+            logger.info("desc");
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
+    public void deleteStudentTasksBySubjectId(String subjectId) {
+        try {
+            connect();
+            statement = connection.prepareStatement(DELETE_STUDENT_TASK_BY_SUBJECT_ID.getQuery());
+            statement.setInt(1, Integer.parseInt(subjectId));
+            statement.execute();
+        } catch (SQLException e) {
+            logger.info("desc");
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
+    public void deleteStudentTasksByStudentSubjectId(String studentSubjectId) {
+        try {
+            connect();
+            statement = connection.prepareStatement(DELETE_STUDENT_TASK_BY_STUDENT_SUBJECT_ID.getQuery());
+            statement.setInt(1, Integer.parseInt(studentSubjectId));
+            statement.execute();
+        } catch (SQLException e) {
+            logger.info("desc");
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
+    public void deleteStudentTasksByTaskId(String taskId) {
+        try {
+            connect();
+            statement = connection.prepareStatement(DELETE_STUDENT_TASK_BY_TASK_ID.getQuery());
+            statement.setInt(1, Integer.parseInt(taskId));
             statement.execute();
         } catch (SQLException e) {
             logger.info("desc");

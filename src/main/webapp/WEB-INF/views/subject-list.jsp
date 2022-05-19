@@ -17,13 +17,8 @@
         <th>Subject Name</th>
         <th>Max Grade</th>
         <th>Pass Grade</th>
+        <th>Subject Description</th>
         <th>More...</th>
-        <!-- TO DO: no need this functional-->
-        <c:if test="${userRole eq 'teacher'}">
-            <th>Edit</th>
-            <th>Delete</th>
-        </c:if>
-        <!-- TO DO: no need this functional-->
     </tr>
     <c:forEach var="subject" items="${subjects}">
         <tr>
@@ -31,16 +26,11 @@
             <td>${subject.getSubjectName()}</td>
             <td>${subject.getMaxGrade()}</td>
             <td>${subject.getPassProcGradeP()}%</td>
+            <td>${subject.getSubjectDescription()}%</td>
             <c:url value='/show/subject' var="subjectURL">
                 <c:param name="subjectId" value="${subject.getSubjectId()}"/>
             </c:url>
             <td><a href="<c:out value="${subjectURL}"/>">More...</a></td>
-            <!-- TO DO: no need this functional-->
-            <c:if test="${userRole eq 'admin'}">
-                <td><a href="<c:url value='/redirect/edit/subject?subjectId=${subject.getSubjectId()}' />">Edit</a></td>
-                <td><a href="<c:url value='/delete/subject?subjectId=${subject.getSubjectId()}' />">Delete</a></td>
-            </c:if>
-            <!-- TO DO: no need this functional-->
         </tr>
     </c:forEach>
 </table>

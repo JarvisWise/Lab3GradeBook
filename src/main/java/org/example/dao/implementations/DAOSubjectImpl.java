@@ -88,6 +88,7 @@ public class DAOSubjectImpl extends Oracle implements DAOSubject {
         }
     }
 
+    //TO DO: no need at new view
     @Override
     public List<Subject> getSubjectsByTeacherId(String teacherId) throws WrongEntityIdException {
         try {
@@ -116,6 +117,7 @@ public class DAOSubjectImpl extends Oracle implements DAOSubject {
             statement.setString(1, subject.getSubjectName());
             statement.setInt(2, subject.getMaxGrade());
             statement.setInt(3, subject.getPassProcGradeP());
+            statement.setString(4, subject.getSubjectDescription());
             statement.execute();
         } catch (SQLException e) {
             logger.info("desc", e);
@@ -134,7 +136,25 @@ public class DAOSubjectImpl extends Oracle implements DAOSubject {
             statement.setString(1, subject.getSubjectName());
             statement.setInt(2, subject.getMaxGrade());
             statement.setInt(3, subject.getPassProcGradeP());
-            statement.setInt(4, Integer.parseInt(subject.getSubjectId()));
+            statement.setString(4, subject.getSubjectDescription());
+            statement.setInt(5, Integer.parseInt(subject.getSubjectId()));
+            statement.execute();
+        } catch (SQLException e) {
+            logger.info("desc", e);
+            throw new SQLException("desc", e);
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
+    public void actualizeMaxGrade(String subjectId) throws SQLException {
+        try {
+            connect();
+            statement = connection.prepareStatement(ACTUALIZE_MAX_GRADE.getQuery());
+
+            statement.setInt(1, Integer.parseInt(subjectId));
+            statement.setInt(2, Integer.parseInt(subjectId));
             statement.execute();
         } catch (SQLException e) {
             logger.info("desc", e);

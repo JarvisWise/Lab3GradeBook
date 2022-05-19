@@ -55,8 +55,8 @@ public class StudentTask {
 
     public static StudentTask parse(ResultSet result) throws SQLException {
         return new StudentTask(
-                result.getString("subject_id"),
                 result.getString("task_id"),
+                result.getString("subject_id"),
                 result.getString("student_subject_id"),
                 result.getInt("grade")
         );

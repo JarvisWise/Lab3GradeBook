@@ -113,7 +113,9 @@ public class SearchController {
             //        .append(st.getStudentId()).append("' />\">")
             result.append("<label><a href=\"/Lab3GradeBook/redirect/profile?userId=")
                     .append(st.getStudentId()).append("&userRole=").append(st.getRole()).append("\">")
-                    .append(st.getFirstName()).append(" ").append(st.getLastName()).append("</a></label>");
+                    .append(st.getFirstName()).append(" ").append(st.getLastName())
+                    .append(" (").append(st.getLoginName()).append(")\t")
+                    .append("</a></label>");
 
             Group group;
             try {

@@ -8,4 +8,5 @@ import java.sql.SQLException;
 public interface DAOTeacherSubject {
     void addTeacherSubject(TeacherSubject teacherSubject) throws SQLException;
     void deleteTeacherSubject(TeacherSubject teacherSubject);
+    void deleteTeacherSubjectsBySubjectId(String subjectId);
 }

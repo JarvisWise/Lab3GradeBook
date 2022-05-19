@@ -11,7 +11,7 @@ private String studentSubjectId;
 private String taskName;
 private int maxGrade;
 private int grade;
-
+<!-- TO DO: remove this page-->
 <body>
 <c:if test="${userType eq 'teacher'}">
     <a href="<c:url value='/redirect/add/studentTask' />">Add new subject</a>

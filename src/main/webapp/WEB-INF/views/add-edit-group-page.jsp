@@ -13,10 +13,22 @@
             <c:when test="${action eq 'edit'}">
                 <form action="<c:url value='/${action}/group/${group.getGroupId()}' />" method="POST">
                 <label>Group Name<input type="text" name="groupName" required value="${group.getGroupName()}" placeholder="Enter Group Name"></label><br>
+                <!--<label>Group Description<input type="text" name="groupDescription" required value="$--{group.getGroupDescription()}" placeholder="Enter Group Description"></label><br>-->
+                <label>Group Description<textarea name="groupDescription"
+                    cols="30"
+                    rows="5"
+                    maxlength="1000"
+                    placeholder="Enter Group Description" required>${group.getGroupDescription()}</textarea></label><br>
             </c:when>
             <c:otherwise>
                 <form action="<c:url value='/${action}/group' />" method="POST">
                 <label>Group Name<input type="text" name="groupName" required value="" placeholder="Enter Group Name"></label><br>
+                <!--<label>Group Description<input type="text" name="groupDescription" required value="" placeholder="Enter Group Description"></label><br>-->
+                <label>Group Description<textarea name="groupDescription"
+                    cols="30"
+                    rows="5"
+                    maxlength="1000"
+                    placeholder="Enter Group Description" required></textarea></label><br>
             </c:otherwise>
         </c:choose>
         <input type="submit" value="${action}">

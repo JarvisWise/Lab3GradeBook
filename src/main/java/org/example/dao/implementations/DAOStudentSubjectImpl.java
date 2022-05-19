@@ -189,6 +189,23 @@ public class DAOStudentSubjectImpl extends Oracle implements DAOStudentSubject {
     }
 
     @Override
+    public void actualizeTotalGrade(String studentSubjectId) throws SQLException {
+        try {
+            connect();
+            statement = connection.prepareStatement(ACTUALIZE_TOTAL_GRADE.getQuery());
+
+            statement.setInt(1, Integer.parseInt(studentSubjectId));
+            statement.setInt(2, Integer.parseInt(studentSubjectId));
+            statement.execute();
+        } catch (SQLException e) {
+            logger.info("desc", e);
+            throw new SQLException("desc", e);
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
     public void deleteStudentSubject(String studentSubjectId) {
         try {
             connect();
@@ -212,6 +229,41 @@ public class DAOStudentSubjectImpl extends Oracle implements DAOStudentSubject {
             statement.execute();
         } catch (SQLException e) {
             logger.info("desc");
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
+    public void deleteStudentSubjectsBySubjectId(String subjectId) {
+        try {
+            connect();
+            statement = connection.prepareStatement(DELETE_STUDENT_SUBJECT_BY_SUBJECT_ID.getQuery());
+            statement.setInt(1, Integer.parseInt(subjectId));
+            statement.execute();
+        } catch (SQLException e) {
+            logger.info("desc");
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
+    public String getLastStudentSubjectId() throws WrongEntityIdException {
+        try {
+            connect();
+            statement = connection.prepareStatement(
+                    GET_LAST_STUDENT_SUBJECT_ID.getQuery());
+
+            result = statement.executeQuery();
+            if(result.next()) {
+                return Integer.toString(result.getInt("last_id"));
+            } else {
+                throw new WrongEntityIdException("desc ");
+            }
+        } catch (SQLException | WrongEntityIdException e) {
+            e.printStackTrace();
+            throw new WrongEntityIdException("desc ", e);
         } finally {
             disconnect();
         }

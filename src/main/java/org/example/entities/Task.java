@@ -8,16 +8,26 @@ public class Task {
     private String SubjectId;
     private String taskName;
     private int maxGrade;
+    private String taskDescription;
 
     public Task() {
 
     }
 
-    public Task(String taskId, String subjectId, String taskName, int maxGrade) {
+    public Task(String taskId, String subjectId, String taskName, int maxGrade, String taskDescription) {
         this.taskId = taskId;
         this.SubjectId = subjectId;
         this.taskName = taskName;
         this.maxGrade = maxGrade;
+        this.taskDescription = taskDescription;
+    }
+
+    public String getTaskDescription() {
+        return taskDescription;
+    }
+
+    public void setTaskDescription(String taskDescription) {
+        this.taskDescription = taskDescription;
     }
 
     public String getTaskId() {
@@ -54,10 +64,11 @@ public class Task {
 
     public static Task parse(ResultSet result) throws SQLException {
         return new Task(
-                result.getString("subject_id"),
                 result.getString("task_id"),
+                result.getString("subject_id"),
                 result.getString("task_name"),
-                result.getInt("max_grade")
+                result.getInt("max_grade"),
+                result.getString("task_description")
         );
     }
 
@@ -68,6 +79,7 @@ public class Task {
                 ", SubjectId='" + SubjectId + '\'' +
                 ", taskName='" + taskName + '\'' +
                 ", maxGrade=" + maxGrade +
+                ", taskDescription='" + taskDescription + '\'' +
                 '}';
     }
 }

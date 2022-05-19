@@ -1,13 +1,15 @@
 package org.example.controllers;
 
 import org.example.dao.implementations.*;
-import org.example.entities.TeacherSubject;
+import org.example.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 import static org.example.tools.strings.PageName.ERROR_PAGE;
 
@@ -16,28 +18,45 @@ import static org.example.tools.strings.PageName.ERROR_PAGE;
 public class DeleteController {
 
     private final DAOStudentImpl daoStudent;
+    private final DAOTeacherImpl daoTeacher;
     private final DAOGroupImpl daoGroup;
     private final DAOSubjectImpl daoSubject;
     private final DAOTeacherSubjectImpl daoTeacherSubject;
     private final DAOStudentSubjectImpl daoStudentSubject;
+    private final DAOStudentTaskImpl daoStudentTask;
     private final DAOTaskImpl daoTask;
 
     @Autowired
-    public DeleteController(DAOStudentImpl daoStudent, DAOGroupImpl daoGroup, DAOSubjectImpl daoSubject, DAOTeacherSubjectImpl daoTeacherSubject, DAOStudentSubjectImpl daoStudentSubject, DAOTaskImpl daoTask) {
+    public DeleteController(DAOStudentImpl daoStudent, DAOTeacherImpl daoTeacher, DAOGroupImpl daoGroup, DAOSubjectImpl daoSubject, DAOTeacherSubjectImpl daoTeacherSubject, DAOStudentSubjectImpl daoStudentSubject, DAOStudentTaskImpl daoStudentTask, DAOTaskImpl daoTask) {
         this.daoStudent = daoStudent;
+        this.daoTeacher = daoTeacher;
         this.daoGroup = daoGroup;
         this.daoSubject = daoSubject;
         this.daoTeacherSubject = daoTeacherSubject;
         this.daoStudentSubject = daoStudentSubject;
+        this.daoStudentTask = daoStudentTask;
         this.daoTask = daoTask;
     }
 
     @RequestMapping(value = "/group")
     @GetMapping
     public ModelAndView deleteByGroupId(@RequestParam("groupId") String groupId) {
-        daoGroup.deleteGroup(groupId);
-        //add action
-        return new ModelAndView("main-page");
+
+        ModelAndView modelAndView = new ModelAndView();
+        try {
+
+            List<Student> studentList = daoStudent.getStudentsByGroupId(groupId);
+            for (Student s: studentList) {
+                daoStudent.deleteGroupOfStudent(s.getStudentId());
+            }
+            daoGroup.deleteGroup(groupId);
+            modelAndView.setViewName("redirect:/show/group-all");
+        } catch (Exception throwables) {
+            throwables.printStackTrace();
+            modelAndView.setViewName(ERROR_PAGE.getPageName());
+        }
+
+        return modelAndView;
     }
 
     @RequestMapping(value = "/student")
@@ -45,15 +64,35 @@ public class DeleteController {
     public ModelAndView deleteByStudentId(@RequestParam("studentId") String studentId) {
         daoStudent.deleteStudent(studentId);
         //add action
-        return new ModelAndView("main-page");
+        return new ModelAndView("redirect:/show/student-all");
+    }
+
+    @RequestMapping(value = "/teacher")
+    @GetMapping
+    public ModelAndView deleteByTeacherId(@RequestParam("teacherId") String teacherId) {
+        daoTeacher.deleteTeacher(teacherId);
+        //add action
+        return new ModelAndView("redirect:/show/teacher-all");
     }
 
     @RequestMapping(value = "/subject")
     @GetMapping
     public ModelAndView deleteBySubjectId(@RequestParam("subjectId") String subjectId) {
-        daoSubject.deleteSubject(subjectId);
-        //add action
-        return new ModelAndView("main-page");
+
+        ModelAndView modelAndView = new ModelAndView();
+        try {
+            daoStudentTask.deleteStudentTasksBySubjectId(subjectId);
+            daoTask.deleteTasksBySubjectId(subjectId);
+            daoTeacherSubject.deleteTeacherSubjectsBySubjectId(subjectId);
+            daoStudentSubject.deleteStudentSubjectsBySubjectId(subjectId);
+            daoSubject.deleteSubject(subjectId);
+            modelAndView.setViewName("redirect:/show/subject-all");
+        } catch (Exception throwables) {
+            throwables.printStackTrace();
+            modelAndView.setViewName(ERROR_PAGE.getPageName());
+        }
+
+        return modelAndView;
     }
 
     //TO DO
@@ -87,8 +126,28 @@ public class DeleteController {
 
         ModelAndView modelAndView = new ModelAndView();
         try {
+            StudentSubject studentSubject = daoStudentSubject.getStudentSubjectBySubjectIdAndStudentId(subjectId, studentId);
+            daoStudentTask.deleteStudentTasksByStudentSubjectId(studentSubject.getStudentSubjectId());
             daoStudentSubject.deleteStudentSubject(studentId, subjectId);
+
             modelAndView.setViewName("redirect:/show/subject?subjectId=" + subjectId);//
+        } catch (Exception throwables) {
+            throwables.printStackTrace();
+            modelAndView.setViewName(ERROR_PAGE.getPageName());
+        }
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/student-group")
+    @GetMapping
+    public ModelAndView deleteStudentGroup(@RequestParam("studentId") String studentId,
+                                                 @RequestParam("groupId") String groupId) {
+
+        ModelAndView modelAndView = new ModelAndView();
+        try {
+            daoStudent.deleteGroupOfStudent(studentId);
+            modelAndView.setViewName("redirect:/show/group?groupId=" + groupId);//
         } catch (Exception throwables) {
             throwables.printStackTrace();
             modelAndView.setViewName(ERROR_PAGE.getPageName());
@@ -104,8 +163,14 @@ public class DeleteController {
 
         ModelAndView modelAndView = new ModelAndView();
         try {
+            List<StudentSubject> studentSubjectList = daoStudentSubject.getStudentSubjectsBySubjectId(subjectId);
+            daoStudentTask.deleteStudentTasksByTaskId(taskId);
             daoTask.deleteTask(taskId);
-            modelAndView.setViewName("redirect:/show/subject?subjectId=" + subjectId);//
+            daoSubject.actualizeMaxGrade(subjectId);
+            for (StudentSubject s: studentSubjectList) {
+                daoStudentSubject.actualizeTotalGrade(s.getStudentSubjectId());
+            }
+            modelAndView.setViewName("redirect:/show/subject?subjectId=" + subjectId);
         } catch (Exception throwables) {
             throwables.printStackTrace();
             modelAndView.setViewName(ERROR_PAGE.getPageName());

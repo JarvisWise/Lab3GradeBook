@@ -16,6 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import java.sql.SQLException;
+
 import static org.example.tools.strings.PageName.*;
 import static org.example.tools.strings.Role.*;
 
@@ -39,16 +41,17 @@ public class LoginController extends AbstractController{
 
         ModelAndView modelAndView = new ModelAndView();
         try {
-            if (/*TEACHER.getRole().equals(loginType) && */daoTeacher.isExistTeacherByLogin(loginUserName)) {
+            if (daoTeacher.isExistTeacherByLogin(loginUserName)) {
                 modelAndView = loginTeacher(loginUserName, loginPassword, request);
-            } else if (/*STUDENT.getRole().equals(loginType) && */daoStudent.isExistStudentByLogin(loginUserName)) {
+            } else if (daoStudent.isExistStudentByLogin(loginUserName)) {
                 modelAndView = loginStudent(loginUserName, loginPassword, request);
             } else {
-                modelAndView.setViewName(ERROR_PAGE.getPageName());
+                modelAndView.addObject("ExceptionMessage", "You entered wrong login!");
+                modelAndView.setViewName(LOGIN_PAGE.getPageName());
             }
-        } catch (WrongEntityIdException e) {
-            e.printStackTrace();
-            modelAndView.setViewName(ERROR_PAGE.getPageName());
+        } catch (SQLException e) {
+            modelAndView.addObject("ExceptionMessage", "Sorry, we have unexpected error!");
+            modelAndView.setViewName(LOGIN_PAGE.getPageName());
         }
         return modelAndView;
     }
@@ -57,11 +60,11 @@ public class LoginController extends AbstractController{
         ModelAndView modelAndView = new ModelAndView();
         try {
             Teacher teacher = daoTeacher.getTeacherByLoginNameAndPassword(loginUserName, loginPassword);
-            setBaseSessionVariables(request, teacher);//
-            modelAndView.addObject("username", teacher.getFirstName());
-            modelAndView.setViewName(MAIN_PAGE.getPageName());
+            setBaseSessionVariables(request, teacher);
+            modelAndView.setViewName("redirect:/show/teacher?teacherId=" + teacher.getTeacherId());
         } catch (WrongLoginDataException e) {
-            modelAndView.setViewName(ERROR_PAGE.getPageName());
+            modelAndView.addObject("ExceptionMessage", "You entered wrong password!");
+            modelAndView.setViewName(LOGIN_PAGE.getPageName());
         }
         return modelAndView;
     }
@@ -70,11 +73,11 @@ public class LoginController extends AbstractController{
         ModelAndView modelAndView = new ModelAndView();
         try {
             Student student = daoStudent.getStudentByLoginNameAndPassword(loginUserName, loginPassword);
-            setBaseSessionVariables(request, student);//
-            modelAndView.addObject("username", student.getFirstName());
-            modelAndView.setViewName(MAIN_PAGE.getPageName());
+            setBaseSessionVariables(request, student);
+            modelAndView.setViewName("redirect:/show/student?studentId=" + student.getStudentId());
         } catch (WrongLoginDataException e) {
-            modelAndView.setViewName(ERROR_PAGE.getPageName());
+            modelAndView.addObject("ExceptionMessage", "You entered wrong password!");
+            modelAndView.setViewName(LOGIN_PAGE.getPageName());
         }
         return modelAndView;
     }

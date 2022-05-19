@@ -49,7 +49,7 @@ public class DAOStudentImpl extends Oracle implements DAOStudent {
     }
 
     @Override
-    public boolean isExistStudentByLogin(String loginName) throws WrongEntityIdException {
+    public boolean isExistStudentByLogin(String loginName) throws SQLException {
         try {
             connect();
             statement = connection.prepareStatement(
@@ -60,7 +60,7 @@ public class DAOStudentImpl extends Oracle implements DAOStudent {
             return result.next();
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new WrongEntityIdException("desc ", e);
+            throw new SQLException("desc ", e);
         } finally {
             disconnect();
         }
@@ -214,6 +214,11 @@ public class DAOStudentImpl extends Oracle implements DAOStudent {
         } finally {
             disconnect();
         }
+    }
+
+    @Override
+    public void deleteGroupOfStudent(String studentId) throws SQLException {
+        updateGroupOfStudent(studentId, null);
     }
 
     @Override
