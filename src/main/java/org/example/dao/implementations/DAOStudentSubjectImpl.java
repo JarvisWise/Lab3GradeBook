@@ -157,7 +157,6 @@ public class DAOStudentSubjectImpl extends Oracle implements DAOStudentSubject {
             statement.setInt(1, studentSubject.getTotalGrade());
             statement.setInt(2, Integer.parseInt(studentSubject.getStudentId()));
             statement.setInt(3, Integer.parseInt(studentSubject.getSubjectId()));
-            statement.setInt(4, Integer.parseInt(studentSubject.getTeacherId()));
 
             statement.execute();
         } catch (SQLException e) {
@@ -177,7 +176,6 @@ public class DAOStudentSubjectImpl extends Oracle implements DAOStudentSubject {
             statement.setInt(1, studentSubject.getTotalGrade());
             statement.setInt(2, Integer.parseInt(studentSubject.getStudentId()));
             statement.setInt(3, Integer.parseInt(studentSubject.getSubjectId()));
-            statement.setInt(4, Integer.parseInt(studentSubject.getTeacherId()));
             statement.setInt(4, Integer.parseInt(studentSubject.getStudentSubjectId()));
             statement.execute();
         } catch (SQLException e) {
@@ -240,6 +238,20 @@ public class DAOStudentSubjectImpl extends Oracle implements DAOStudentSubject {
             connect();
             statement = connection.prepareStatement(DELETE_STUDENT_SUBJECT_BY_SUBJECT_ID.getQuery());
             statement.setInt(1, Integer.parseInt(subjectId));
+            statement.execute();
+        } catch (SQLException e) {
+            logger.info("desc");
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
+    public void deleteStudentSubjectsByStudentId(String studentId) {
+        try {
+            connect();
+            statement = connection.prepareStatement(DELETE_STUDENT_SUBJECT_BY_STUDENT_ID.getQuery());
+            statement.setInt(1, Integer.parseInt(studentId));
             statement.execute();
         } catch (SQLException e) {
             logger.info("desc");

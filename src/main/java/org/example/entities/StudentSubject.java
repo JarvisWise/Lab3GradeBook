@@ -8,18 +8,17 @@ public class StudentSubject {
     private String studentSubjectId;
     private String studentId;
     private String subjectId;
-    private String teacherId;//delete this field and move it to teacher_subject
+    //private String teacherId;//delete this field and move it to teacher_subject
     private int totalGrade;
 
     public StudentSubject() {
 
     }
 
-    public StudentSubject(String studentSubjectId, String studentId, String subjectId, String teacherId, int totalGrade) {
+    public StudentSubject(String studentSubjectId, String studentId, String subjectId, int totalGrade) {
         this.studentSubjectId = studentSubjectId;
         this.studentId = studentId;
         this.subjectId = subjectId;
-        this.teacherId = teacherId;
         this.totalGrade = totalGrade;
     }
 
@@ -37,14 +36,6 @@ public class StudentSubject {
 
     public void setSubjectId(String subjectId) {
         this.subjectId = subjectId;
-    }
-
-    public String getTeacherId() {
-        return teacherId;
-    }
-
-    public void setTeacherId(String teacherId) {
-        this.teacherId = teacherId;
     }
 
     public int getTotalGrade() {
@@ -68,7 +59,6 @@ public class StudentSubject {
                 result.getString("student_subject_id"),
                 result.getString("student_id"),
                 result.getString("subject_id"),
-                result.getString("teacher_id"),
                 result.getInt("total_grade")
         );
     }
@@ -79,7 +69,6 @@ public class StudentSubject {
                 "studentSubjectId='" + studentSubjectId + '\'' +
                 ", studentId='" + studentId + '\'' +
                 ", subjectId='" + subjectId + '\'' +
-                ", teacherId='" + teacherId + '\'' +
                 ", totalGrade=" + totalGrade +
                 '}';
     }

@@ -8,34 +8,63 @@
 <body>
 <c:url value='/show/teacher-all' var="allTeacherURL"/>
 <jsp:include page="header.jsp" />
-<div>
-    <c:choose>
-        <c:when test="${action eq 'edit'}">
-            <form action="<c:url value='/${action}/teacher/${teacher.getTeacherId()}' />" method="POST">
-                <label>Login Name<input type="text" name="loginName" required value="${teacher.getLoginName()}" placeholder="Enter Login Name"></label><br>
-                 <label>First Name<input type="text" name="firstName" required value="${teacher.getFirstName()}" placeholder="Enter First Name"></label><br>
-                <label>Last Name<input type="text" name="lastName" required value="${teacher.getLastName()}" placeholder="Enter Last Name"></label><br>
-        <!-- edit can only owner of acc -->
-        <!--<label>Password<input type="text" name="password" required value="$-{studentInfoSet.getStudent().getPassword()}" placeholder="Enter Password"></label><br>-->
-        </c:when>
-        <c:otherwise>
-                <form action="<c:url value='/${action}/teacher' />" method="POST">
-                    <label>Login Name<input type="text" name="loginName" required value="" placeholder="Enter Login Name"></label><br>
-                    <label>First Name<input type="text" name="firstName" required value="" placeholder="Enter First Name"></label><br>
-                    <label>Last Name<input type="text" name="lastName" required value="" placeholder="Enter Last Name"></label><br>
-                    <label>Password<input type="text" name="password" required value="" placeholder="Enter Password"></label><br>
-        </c:otherwise>
-    </c:choose>
-        <input type="submit" value="${action}">
+<div class="container-fluid text-center">
+    <div class="row content">
+        <div class="col-sm-2 sidenav">
+        </div>
+        <div class="col-sm-8 text-left">
             <c:choose>
                 <c:when test="${action eq 'edit'}">
-                    <a href="<c:url value='/show/teacher?teacherId=${teacher.getTeacherId()}'/>">Cancel</a>
+                    <form action="<c:url value='/${action}/teacher/${teacher.getTeacherId()}' />" method="POST">
+                        <div class="form-group">
+                            <label for="loginName">Email: </label>
+                            <input type="text" name="loginName" id="loginName" class="form-control" required value="${teacher.getEmail()}" placeholder="Enter Email"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="firstName">First name: </label>
+                            <input type="text" name="firstName" id="firstName" class="form-control" required value="${teacher.getFirstName()}" placeholder="Enter First Name"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last name: </label>
+                            <input type="text" name="lastName" id="lastName" class="form-control" required value="${teacher.getLastName()}" placeholder="Enter Last Name"/>
+                        </div>
+                <!-- edit can only owner of acc -->
+                <!--<label>Password<input type="text" name="password" required value="$-{studentInfoSet.getStudent().getPassword()}" placeholder="Enter Password"></label><br>-->
                 </c:when>
                 <c:otherwise>
-                    <a href="<c:out value="${allTeacherURL}"/>">Cancel</a>
+                        <form action="<c:url value='/${action}/teacher' />" method="POST">
+                            <div class="form-group">
+                                <label for="loginNameA">Email: </label>
+                                <input type="text" name="loginName" id="loginNameA" class="form-control" required value="" placeholder="Enter Email"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="firstNameA">First name: </label>
+                                <input type="text" name="firstName" id="firstNameA" class="form-control" required value="" placeholder="Enter First Name"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastNameA">Last name: </label>
+                                <input type="text" name="lastName" id="lastNameA" class="form-control" required value="" placeholder="Enter Last Name"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password: </label>
+                                <input type="text" name="password" id="password" class="form-control" required value="" placeholder="Enter Password"/>
+                            </div>
                 </c:otherwise>
             </c:choose>
-        </form>
+            <button type="submit" class="btn btn-default">${action}</button>
+                <c:choose>
+                    <c:when test="${action eq 'edit'}">
+                        <a href="<c:url value='/show/teacher?teacherId=${teacher.getTeacherId()}'/>" class="btn btn-default">Cancel</a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="<c:out value="${allTeacherURL}"/>" class="btn btn-default">Cancel</a>
+                    </c:otherwise>
+                </c:choose>
+            </form>
+        </div>
+        <div class="col-sm-2 sidenav">
+        </div>
+    </div>
 </div>
 <jsp:include page="footer.jsp" />
 </body>

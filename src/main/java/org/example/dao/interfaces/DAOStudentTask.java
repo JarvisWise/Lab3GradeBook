@@ -18,5 +18,6 @@ public interface DAOStudentTask {
     void deleteStudentTasksBySubjectId(String subjectId);
     void deleteStudentTasksByStudentSubjectId(String studentSubjectId);
     void deleteStudentTasksByTaskId(String taskId);
+    void deleteStudentTasksByStudentId(String studentId);
     HashMap<Task, StudentTask> getStudentTasksInfoByStudentSubjectId(String studentSubjectId) throws WrongEntityIdException;
 }

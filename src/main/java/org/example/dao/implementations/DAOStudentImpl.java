@@ -11,7 +11,6 @@ import org.example.tools.custom.exceptions.WrongEntityIdException;
 import org.example.tools.custom.exceptions.WrongLoginDataException;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
@@ -49,13 +48,13 @@ public class DAOStudentImpl extends Oracle implements DAOStudent {
     }
 
     @Override
-    public boolean isExistStudentByLogin(String loginName) throws SQLException {
+    public boolean isExistStudentByEmail(String email) throws SQLException {
         try {
             connect();
             statement = connection.prepareStatement(
-                    EXIST_STUDENT_BY_LOGIN.getQuery());
+                    EXIST_STUDENT_BY_EMAIL.getQuery());
 
-            statement.setString(1, loginName);
+            statement.setString(1, email);
             result = statement.executeQuery();
             return result.next();
         } catch (SQLException e) {
@@ -67,13 +66,13 @@ public class DAOStudentImpl extends Oracle implements DAOStudent {
     }
 
     @Override
-    public Student getStudentByLoginNameAndPassword(String studentLoginName, String password) throws WrongLoginDataException {
+    public Student getStudentByEmailAndPassword(String email, String password) throws WrongLoginDataException {
         try {
             connect();
             statement = connection.prepareStatement(
-                    STUDENT_BY_LOGIN_NAME_AND_PASSWORD.getQuery());
+                    STUDENT_BY_EMAIL_AND_PASSWORD.getQuery());
 
-            statement.setString(1, studentLoginName);
+            statement.setString(1, email);
             statement.setString(2, password);
 
             result = statement.executeQuery();
@@ -144,7 +143,7 @@ public class DAOStudentImpl extends Oracle implements DAOStudent {
                 statement.setInt(1, Integer.parseInt(student.getHeadman()));
             }
 
-            statement.setString(2, student.getLoginName());
+            statement.setString(2, student.getEmail());
             statement.setString(3, student.getFirstName());
             statement.setString(4, student.getLastName());
 

@@ -88,7 +88,6 @@ public class DAOSubjectImpl extends Oracle implements DAOSubject {
         }
     }
 
-    //TO DO: no need at new view
     @Override
     public List<Subject> getSubjectsByTeacherId(String teacherId) throws WrongEntityIdException {
         try {

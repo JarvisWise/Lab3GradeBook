@@ -25,7 +25,7 @@ DROP TABLE teacher_subject /*CASCADE*/;
 Create table  student(
                          student_id  INTEGER NOT NULL ,
                          headman INTEGER,
-                         login_name varchar2(30) UNIQUE,
+                         email /*login_name*/ varchar2(30) UNIQUE,
                          first_name varchar2(30),
                          last_name varchar2(30),
                          group_id INTEGER ,
@@ -36,7 +36,7 @@ Create table  student(
 
 Create table  teacher(
                          teacher_id  INTEGER NOT NULL ,
-                         login_name varchar2(30) UNIQUE,
+                         email /*login_name*/ varchar2(30) UNIQUE,
                          first_name varchar2(30),
                          last_name varchar2(30),
                          password varchar2(30),
@@ -48,6 +48,7 @@ Create table  subject(
                          subject_name varchar2(30),
                          max_grade INTEGER NOT NULL,
                          pass_proc_grade INTEGER NOT NULL,
+                         subject_description varchar2(1000),
                          primary key(subject_id)
 );
 
@@ -56,12 +57,14 @@ Create table  task(
                       subject_id INTEGER NOT NULL,
                       task_name varchar2(30),
                       max_grade INTEGER NOT NULL,
+                      task_description varchar2(4000),
                       primary key(task_id)
 );
 
 Create table  group_(
                         group_id INTEGER NOT NULL ,
                         group_name varchar2(30),
+                        group_description varchar2(1000),
                         primary key(group_id)
 );
 
@@ -70,7 +73,7 @@ Create table  student_subject(
                                  total_grade INTEGER ,
                                  student_id INTEGER NOT NULL ,
                                  subject_id INTEGER NOT NULL ,
-                                 teacher_id INTEGER NOT NULL , --delete this field
+    --teacher_id INTEGER NOT NULL , --delete this field
                                  primary key(student_subject_id) --mb no need pk
 );
 
@@ -99,33 +102,33 @@ INSERT INTO teacher VALUES(user_id_seq.nextval, 'login6', 'bill2', 'smith', '123
 INSERT INTO teacher VALUES(user_id_seq.nextval, 'login7', 'bill3', 'smith', '1234');
 
 --subjects
-INSERT INTO subject VALUES(subject_id_seq.nextval, 'subject1', 100, 60); --for pass better %
-INSERT INTO subject VALUES(subject_id_seq.nextval, 'subject2', 100, 60); --for pass better %
-INSERT INTO subject VALUES(subject_id_seq.nextval, 'subject3', 100, 60); --for pass better %
+INSERT INTO subject VALUES(subject_id_seq.nextval, 'subject1', 100, 60, 'desc subject'); --for pass better %
+INSERT INTO subject VALUES(subject_id_seq.nextval, 'subject2', 100, 60, 'desc subject'); --for pass better %
+INSERT INTO subject VALUES(subject_id_seq.nextval, 'subject3', 100, 60, 'desc subject'); --for pass better %
 
 --tasks
-INSERT INTO task VALUES(task_id_seq.nextval, 1 /*sub id*/, 'task1', 7);
-INSERT INTO task VALUES(task_id_seq.nextval, 2 /*sub id*/, 'task2', 8);
-INSERT INTO task VALUES(task_id_seq.nextval, 3 /*sub id*/, 'task3', 9);
+INSERT INTO task VALUES(task_id_seq.nextval, 1 /*sub id*/, 'task1', 7, 'desc task');
+INSERT INTO task VALUES(task_id_seq.nextval, 2 /*sub id*/, 'task2', 8, 'desc task');
+INSERT INTO task VALUES(task_id_seq.nextval, 3 /*sub id*/, 'task3', 9, 'desc task');
 
 --groups
-INSERT INTO group_ VALUES(group_id_seq.nextval, 'group1');
-INSERT INTO group_ VALUES(group_id_seq.nextval, 'group2');
-INSERT INTO group_ VALUES(group_id_seq.nextval, 'group3');
+INSERT INTO group_ VALUES(group_id_seq.nextval, 'group1', 'desc group');
+INSERT INTO group_ VALUES(group_id_seq.nextval, 'group2', 'desc group');
+INSERT INTO group_ VALUES(group_id_seq.nextval, 'group3', 'desc group');
 
 --student_subject
-INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 70,1, 1, -1);
-INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 50,1, 2, -1);
-INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 80,1, 3, -1);
-INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 20,2, 1, -1);
-INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 40,2, 2, -1);
-INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 60,2, 3, -1);
-INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 90,3, 1, -1);
-INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 40,3, 2, -1);
-INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 60,3, 3, -1);
-INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 20,4, 1, -1);
-INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 70,4, 2, -1);
-INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 60,4, 3, -1);
+INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 70,1, 1);
+INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 50,1, 2);
+INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 80,1, 3);
+INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 20,2, 1);
+INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 40,2, 2);
+INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 60,2, 3);
+INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 90,3, 1);
+INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 40,3, 2);
+INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 60,3, 3);
+INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 20,4, 1);
+INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 70,4, 2);
+INSERT INTO student_subject VALUES(student_subject_id_seq.nextval, 60,4, 3);
 
 --student_task
 INSERT INTO student_task VALUES(1, 1, 1, 5);
@@ -142,13 +145,13 @@ INSERT INTO student_task VALUES(11, 2, 2, 5);
 INSERT INTO student_task VALUES(12, 3, 3, 5);
 
 --teacher_subject
-INSERT INTO teacher_subject VALUES(1, 1);
-INSERT INTO teacher_subject VALUES(1, 2);
-INSERT INTO teacher_subject VALUES(1, 3);
-INSERT INTO teacher_subject VALUES(2, 1);
-INSERT INTO teacher_subject VALUES(2, 2);
-INSERT INTO teacher_subject VALUES(2, 3);
-INSERT INTO teacher_subject VALUES(3, 1);
-INSERT INTO teacher_subject VALUES(3, 2);
-INSERT INTO teacher_subject VALUES(3, 3);
+INSERT INTO teacher_subject VALUES(1, 5);
+INSERT INTO teacher_subject VALUES(1, 6);
+INSERT INTO teacher_subject VALUES(1, 7);
+INSERT INTO teacher_subject VALUES(2, 5);
+INSERT INTO teacher_subject VALUES(2, 6);
+INSERT INTO teacher_subject VALUES(2, 7);
+INSERT INTO teacher_subject VALUES(3, 5);
+INSERT INTO teacher_subject VALUES(3, 6);
+INSERT INTO teacher_subject VALUES(3, 7);
 commit;

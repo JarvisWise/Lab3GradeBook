@@ -1,16 +1,16 @@
 package org.example.entities;
 
 public abstract class User {
-    public abstract String getLoginName();
+    public abstract String getEmail();
     public abstract String getFirstName();
     public abstract String getLastName();
     public String getFullName() {
         return getFirstName() + " " + getLastName();
     }
-    public String getFullNameWithLogin() {
+    public String getFullNameWithEmail() {
         return getFirstName() +
                 " " + getLastName() +
-                " (" + getLoginName() + ")";
+                " (" + getEmail() + ")";
     }
     public abstract String getUserId();
     public abstract String getRole();

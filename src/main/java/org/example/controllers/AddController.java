@@ -56,16 +56,14 @@ public class AddController {
             throwables.printStackTrace();
             modelAndView.setViewName(ERROR_PAGE.getPageName());
         }
-        //add action
+
         return modelAndView;
-        //return "redirect:/path/to/other/controller?param=" + value;
-        //TO DO: go to all-group-page
     }
 
     @RequestMapping(value = "/student")
     @GetMapping
     public ModelAndView addByStudent(@RequestParam("firstName") String firstName,
-                                       @RequestParam("loginName") String loginName,
+                                       @RequestParam("loginName") String email,
                                        @RequestParam("lastName") String lastName,
                                        @RequestParam("headman") String headman,
                                        @RequestParam("password") String password,
@@ -74,7 +72,7 @@ public class AddController {
         ModelAndView modelAndView = new ModelAndView();
         Student student = new Student(
                 null,
-                loginName,
+                email,
                 firstName,
                 lastName,
                 password,
@@ -89,22 +87,21 @@ public class AddController {
             throwables.printStackTrace();
             modelAndView.setViewName(ERROR_PAGE.getPageName());
         }
-        //add action
+
         return modelAndView;
-        //TO DO: go to all-student-page
     }
 
     @RequestMapping(value = "/teacher")
     @GetMapping
     public ModelAndView addByTeacher(@RequestParam("firstName") String firstName,
-                                     @RequestParam("loginName") String loginName,
+                                     @RequestParam("loginName") String email,
                                      @RequestParam("lastName") String lastName,
                                      @RequestParam("password") String password) {
 
         ModelAndView modelAndView = new ModelAndView();
         Teacher teacher = new Teacher(
                 null,
-                loginName,
+                email,
                 firstName,
                 lastName,
                 password
@@ -117,9 +114,8 @@ public class AddController {
             throwables.printStackTrace();
             modelAndView.setViewName(ERROR_PAGE.getPageName());
         }
-        //add action
+
         return modelAndView;
-        //TO DO: go to all-student-page
     }
 
     @RequestMapping(value = "/subject")
@@ -145,12 +141,10 @@ public class AddController {
             throwables.printStackTrace();
             modelAndView.setViewName(ERROR_PAGE.getPageName());
         }
-        //add action
+
         return modelAndView;
-        //TO DO: go to all-subject-page
     }
 
-    // TO DO
     @RequestMapping(value = "/teacher-subject")
     @GetMapping
     public ModelAndView addTeacherSubject(@RequestParam("teacherId") String teacherId,
@@ -173,7 +167,6 @@ public class AddController {
         return modelAndView;
     }
 
-    // TO DO
     @RequestMapping(value = "/student-subject")
     @GetMapping
     public ModelAndView addStudentSubject(@RequestParam("studentId") String studentId,
@@ -184,7 +177,6 @@ public class AddController {
                 null,
                 studentId,
                 subjectId,
-                "1", //for remove
                 0
         );
 
@@ -273,7 +265,7 @@ public class AddController {
 
         try {
             daoStudentTask.addStudentTask(studentTask);
-            modelAndView.setViewName("redirect:/show/subject?subjectId=" + subjectId);//TO DO: if need
+            modelAndView.setViewName("redirect:/show/subject?subjectId=" + subjectId);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             modelAndView.setViewName(ERROR_PAGE.getPageName());

@@ -8,31 +8,46 @@
     <%String userRole=(String)session.getAttribute("current_user_role");%>
     <c:set var = "userRole" value = "<%=userRole%>"/>
     <jsp:include page="header.jsp" />
+    <div class="container-fluid text-center">
+        <div class="row content">
+            <div class="col-sm-2 sidenav">
+            </div>
+            <div class="col-sm-8 text-left">
+                <div class="well">
+                    <c:if test="${userRole eq 'teacher'}">
+                        <a href="<c:url value='/redirect/add/teacher' />" class="btn btn-default">Add new teacher</a>
+                    </c:if>
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>More...</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="teacher" items="${teachers}">
+                            <tr>
+                                <td>${teacher.getEmail()}</td>
+                                <td>${teacher.getFirstName()}</td>
+                                <td>${teacher.getLastName()}</td>
 
-    <c:if test="${userRole eq 'teacher'}">
-        <a href="<c:url value='/redirect/add/teacher' />">Add new teacher</a>
-    </c:if>
-    <table>
-        <tr>
-            <th>Login</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>More...</th>
-        </tr>
-        <c:forEach var="teacher" items="${teachers}">
-            <tr>
-                <td>${teacher.getLoginName()}</td>
-                <td>${teacher.getFirstName()}</td>
-                <td>${teacher.getLastName()}</td>
-
-                <c:url value='/redirect/profile' var="teacherURL">
-                    <c:param name="userId" value="${teacher.getTeacherId()}"/>
-                    <c:param name="userRole" value="${teacher.getRole()}"/>
-                </c:url>
-                <td><a href="<c:out value="${teacherURL}"/>">More...</a></td>
-            </tr>
-        </c:forEach>
-    </table>
+                                <c:url value='/redirect/profile' var="teacherURL">
+                                    <c:param name="userId" value="${teacher.getTeacherId()}"/>
+                                    <c:param name="userRole" value="${teacher.getRole()}"/>
+                                </c:url>
+                                <td><a href="<c:out value="${teacherURL}"/>">More...</a></td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-2 sidenav">
+            </div>
+        </div>
+    </div>
     <jsp:include page="footer.jsp" />
 </body>
 </html>

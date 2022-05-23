@@ -9,4 +9,5 @@ public interface DAOTeacherSubject {
     void addTeacherSubject(TeacherSubject teacherSubject) throws SQLException;
     void deleteTeacherSubject(TeacherSubject teacherSubject);
     void deleteTeacherSubjectsBySubjectId(String subjectId);
+    void deleteTeacherSubjectsByTeacherId(String teacherId);
 }

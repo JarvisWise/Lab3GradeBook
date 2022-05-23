@@ -3,14 +3,11 @@ package org.example.dao.implementations;
 import org.apache.log4j.Logger;
 import org.example.dao.connection.Oracle;
 import org.example.dao.interfaces.DAOTeacher;
-import org.example.entities.Student;
-import org.example.entities.StudentSubject;
 import org.example.entities.Teacher;
 import org.example.tools.custom.exceptions.WrongEntityIdException;
 import org.example.tools.custom.exceptions.WrongLoginDataException;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,13 +43,13 @@ public class DAOTeacherImpl extends Oracle implements DAOTeacher {
     }
 
     @Override
-    public boolean isExistTeacherByLogin(String loginName) throws SQLException {
+    public boolean isExistTeacherByEmail(String email) throws SQLException {
         try {
             connect();
             statement = connection.prepareStatement(
-                    EXIST_TEACHER_BY_LOGIN.getQuery());
+                    EXIST_TEACHER_BY_EMAIL.getQuery());
 
-            statement.setString(1, loginName);
+            statement.setString(1, email);
             result = statement.executeQuery();
             return result.next();
 
@@ -85,13 +82,13 @@ public class DAOTeacherImpl extends Oracle implements DAOTeacher {
     }
 
     @Override
-    public Teacher getTeacherByLoginNameAndPassword(String teacherLoginName, String password) throws WrongLoginDataException {
+    public Teacher getTeacherByEmailAndPassword(String email, String password) throws WrongLoginDataException {
         try {
             connect();
             statement = connection.prepareStatement(
-                    TEACHER_BY_LOGIN_NAME_AND_PASSWORD.getQuery());
+                    TEACHER_BY_EMAIL_AND_PASSWORD.getQuery());
 
-            statement.setString(1, teacherLoginName);
+            statement.setString(1, email);
             statement.setString(2, password);
 
             result = statement.executeQuery();
@@ -130,7 +127,7 @@ public class DAOTeacherImpl extends Oracle implements DAOTeacher {
         try {
             connect();
             statement = connection.prepareStatement(ADD_TEACHER.getQuery());
-            statement.setString(1, teacher.getLoginName());
+            statement.setString(1, teacher.getEmail());
             statement.setString(2, teacher.getFirstName());
             statement.setString(3, teacher.getLastName());
             statement.setString(4, teacher.getPassword());
@@ -149,7 +146,7 @@ public class DAOTeacherImpl extends Oracle implements DAOTeacher {
             connect();
             statement = connection.prepareStatement(UPDATE_TEACHER.getQuery());
 
-            statement.setString(1, teacher.getLoginName());
+            statement.setString(1, teacher.getEmail());
             statement.setString(2, teacher.getFirstName());
             statement.setString(3, teacher.getLastName());
             statement.setInt(4, Integer.parseInt(teacher.getTeacherId()));

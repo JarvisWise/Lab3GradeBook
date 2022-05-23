@@ -16,19 +16,31 @@
 </c:url>
 
 <body>
-<c:choose>
-    <c:when test="${empty ExceptionMessage}">
-        <div>
-            <p>Error: ${ExceptionMessage}</p>
-            <label>Return to profile: <a href="<c:out value="${profileURL}"/>"><%=username%></a></label>
+<jsp:include page="header.jsp" />
+<div class="container-fluid text-center">
+    <div class="row content">
+        <div class="col-sm-2 sidenav">
         </div>
-    </c:when>
-    <c:otherwise>
-        <div>
-            <p>Unexpected error!</p>
-            <label>Return to profile: <a href="<c:out value="${profileURL}"/>"><%=username%></a></label>
+        <div class="col-sm-8 text-left">
+            <c:choose>
+                <c:when test="${empty ExceptionMessage}">
+                    <div>
+                        <p>Error: ${ExceptionMessage}</p>
+                        <label>Return to profile: <a href="<c:out value="${profileURL}"/>"><%=username%></a></label>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div>
+                        <p>Unexpected error!</p>
+                        <label>Return to profile: <a href="<c:out value="${profileURL}"/>"><%=username%></a></label>
+                    </div>
+                </c:otherwise>
+            </c:choose>
         </div>
-    </c:otherwise>
-</c:choose>
+        <div class="col-sm-2 sidenav">
+        </div>
+    </div>
+</div>
+<jsp:include page="footer.jsp" />
 </body>
 </html>

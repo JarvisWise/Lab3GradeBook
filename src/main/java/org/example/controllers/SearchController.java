@@ -114,7 +114,7 @@ public class SearchController {
             result.append("<label><a href=\"/Lab3GradeBook/redirect/profile?userId=")
                     .append(st.getStudentId()).append("&userRole=").append(st.getRole()).append("\">")
                     .append(st.getFirstName()).append(" ").append(st.getLastName())
-                    .append(" (").append(st.getLoginName()).append(")\t")
+                    .append(" (").append(st.getEmail()).append(")\t")
                     .append("</a></label>");
 
             Group group;
@@ -133,14 +133,13 @@ public class SearchController {
         return result.toString();
     }
 
-    //TO DO
     public String groupSearchListBuild(List<Group> groupSearchList) {
         StringBuilder result = new StringBuilder();
         for (Group gr: groupSearchList) {
             if(!result.toString().isEmpty()) {
                 result.append("<br/>");
             }
-            //add link
+
             result.append("<label><a href=\"/Lab3GradeBook/show/group?groupId=")
                     .append(gr.getGroupId()).append("\">")
                     .append(gr.getGroupName()).append("</a></label>");
@@ -148,19 +147,16 @@ public class SearchController {
         return result.toString();
     }
 
-    //TO DO
     public String subjectSearchListBuild(List<Subject> subjectSearchList) {
         StringBuilder result = new StringBuilder();
         for (Subject s: subjectSearchList) {
             if(!result.toString().isEmpty()) {
                 result.append("<br/>");
             }
-            //add link
+
             result.append("<label><a href=\"/Lab3GradeBook/show/subject?subjectId=")
                     .append(s.getSubjectId()).append("\">")
                     .append(s.getSubjectName()).append("</a></label>");
-            //rebuild ER and show teacher of subject
-            //teacher must be linked to subject!! not to student_subject!
         }
         return result.toString();
     }

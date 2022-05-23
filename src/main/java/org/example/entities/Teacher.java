@@ -8,7 +8,7 @@ import java.sql.SQLException;
 //public class Teacher implements Entity{
 public class Teacher extends User {
     private String teacherId;
-    private String loginName;
+    private String email;
     private String firstName;
     private String lastName;
     private String password;
@@ -17,20 +17,20 @@ public class Teacher extends User {
 
     }
 
-    public Teacher(String teacherId, String loginName, String firstName, String lastName, String password) {
+    public Teacher(String teacherId, String email, String firstName, String lastName, String password) {
         this.teacherId = teacherId;
-        this.loginName = loginName;
+        this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
     }
 
-    public String getLoginName() {
-        return loginName;
+    public String getEmail() {
+        return email;
     }
 
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getTeacherId() {
@@ -78,7 +78,7 @@ public class Teacher extends User {
     public static Teacher parse(ResultSet result) throws SQLException {
         return new Teacher(
                 result.getString("teacher_id"),
-                result.getString("login_name"),
+                result.getString("email"),
                 result.getString("first_name"),
                 result.getString("last_name"),
                 result.getString("password")
@@ -89,7 +89,7 @@ public class Teacher extends User {
     public String toString() {
         return "Teacher{" +
                 "teacherId='" + teacherId + '\'' +
-                ", loginName='" + loginName + '\'' +
+                ", email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", password='" + password + '\'' +

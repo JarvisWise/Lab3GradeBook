@@ -8,16 +8,30 @@
 <body>
     <c:url value='/show/student-all' var="allStudentURL"/>
     <jsp:include page="header.jsp" />
-    <div>
+    <div class="container-fluid text-center">
+        <div class="row content">
+            <div class="col-sm-2 sidenav">
+            </div>
+            <div class="col-sm-8 text-left">
         <c:choose>
             <c:when test="${action eq 'edit'}">
             <form action="<c:url value='/${action}/student/${studentInfoSet.getStudent().getStudentId()}' />" method="POST">
-                <label>Login Name<input type="text" name="loginName" required value="${studentInfoSet.getStudent().getLoginName()}" placeholder="Enter Login Name"></label><br>
-                <label>First Name<input type="text" name="firstName" required value="${studentInfoSet.getStudent().getFirstName()}" placeholder="Enter First Name"></label><br>
-                <label>Last Name<input type="text" name="lastName" required value="${studentInfoSet.getStudent().getLastName()}" placeholder="Enter Last Name"></label><br>
+                <div class="form-group">
+                    <label for="loginName">Email: </label>
+                    <input type="text" name="loginName" id="loginName" class="form-control" required value="${studentInfoSet.getStudent().getEmail()}" placeholder="Enter Email"/>
+                </div>
+                <div class="form-group">
+                    <label for="firstName">First name: </label>
+                    <input type="text" name="firstName" id="firstName" class="form-control" required value="${studentInfoSet.getStudent().getFirstName()}" placeholder="Enter First Name"/>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last name: </label>
+                    <input type="text" name="lastName" id="lastName" class="form-control" required value="${studentInfoSet.getStudent().getLastName()}" placeholder="Enter Last Name"/>
+                </div>
                 <!--headman-->
-                <label> Headman
-                    <select name="headman">
+                <div class="form-group">
+                    <label for="headman">Headman: </label>
+                    <select name="headman" id="headman" class="form-control">
                         <c:choose>
                             <c:when test="${empty studentInfoSet.getStudent().getHeadman()}">
                                 <option value="NotYet" selected="selected">no headman yet</option>
@@ -32,10 +46,11 @@
                             <option value="${headman.getStudentId()}">${headman.getFullName()}</option>
                         </c:forEach>
                     </select>
-                </label><br>
+                </div>
                 <!--group-->
-                <label> Group
-                    <select name="groupId">
+                <div class="form-group">
+                    <label for="groupId">Group: </label>
+                    <select name="groupId" id="groupId" class="form-control">
                         <c:choose>
                             <c:when test="${empty studentInfoSet.getStudent().getGroupId()}">
                                 <option value="NotYet" selected="selected">no headman yet</option>
@@ -50,46 +65,65 @@
                             <option value="${group.getGroupId()}">${group.getGroupName()}</option>
                         </c:forEach>
                     </select>
-                </label><br>
+                </div>
                 <!-- edit can only owner of acc -->
                 <!--<label>Password<input type="text" name="password" required value="$-{studentInfoSet.getStudent().getPassword()}" placeholder="Enter Password"></label><br>-->
             </c:when>
             <c:otherwise>
                 <form action="<c:url value='/${action}/student' />" method="POST">
-                    <label>Login Name<input type="text" name="loginName" required value="" placeholder="Enter Login Name"></label><br>
-                    <label>First Name<input type="text" name="firstName" required value="" placeholder="Enter First Name"></label><br>
-                    <label>Last Name<input type="text" name="lastName" required value="" placeholder="Enter Last Name"></label><br>
+                    <div class="form-group">
+                        <label for="loginNameA">Email: </label>
+                        <input type="text" name="loginName" id="loginNameA" class="form-control" required value="" placeholder="Enter Email"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="firstNameA">First name: </label>
+                        <input type="text" name="firstName" id="firstNameA" class="form-control" required value="" placeholder="Enter First Name"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastNameA">Last name: </label>
+                        <input type="text" name="lastName" id="lastNameA" class="form-control" required value="" placeholder="Enter Last Name"/>
+                    </div>
+                    <!--headman-->
                     <!--group-->
-                    <label> Headman
-                        <select name="headman">
+                    <div class="form-group">
+                        <label for="headmanA">Headman: </label>
+                        <select name="headman" id="headmanA" class="form-control">
                             <option value="NotYet" selected="selected">no headman yet</option>
                             <c:forEach var="headman" items="${headmanList}">
                                 <option value="${headman.getStudentId()}">${headman.getFullName()}</option>
                             </c:forEach>
                         </select>
-                    </label><br>
-                    <!--headman-->
-                    <label> Group
-                        <select name="groupId">
+                    </div>
+                    <!--group-->
+                    <div class="form-group">
+                        <label for="groupIdA">Group: </label>
+                        <select name="groupId" id="groupIdA" class="form-control">
                             <option value="NotYet" selected="selected">no group yet</option>
                             <c:forEach var="group" items="${groupList}">
                                 <option value="${group.getGroupId()}">${group.getGroupName()}</option>
                             </c:forEach>
                         </select>
-                    </label><br>
-                    <label>Password<input type="text" name="password" required value="" placeholder="Enter Password"></label><br>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password: </label>
+                        <input type="text" name="password" id="password" class="form-control" required value="" placeholder="Enter Password"/>
+                    </div>
             </c:otherwise>
         </c:choose>
-        <input type="submit" value="${action}">
+        <button type="submit" class="btn btn-default">${action}</button>
             <c:choose>
                 <c:when test="${action eq 'edit'}">
-                    <a href="<c:url value='/show/student?studentId=${studentInfoSet.getStudent().getStudentId()}'/>">Cancel</a>
+                    <a href="<c:url value='/show/student?studentId=${studentInfoSet.getStudent().getStudentId()}'/>" class="btn btn-default">Cancel</a>
                 </c:when>
                 <c:otherwise>
-                    <a href="<c:out value="${allStudentURL}"/>">Cancel</a>
+                    <a href="<c:out value="${allStudentURL}"/>" class="btn btn-default">Cancel</a>
                 </c:otherwise>
             </c:choose>
         </form>
+            </div>
+            <div class="col-sm-2 sidenav">
+            </div>
+        </div>
     </div>
     <jsp:include page="footer.jsp" />
 </body>

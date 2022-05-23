@@ -4,7 +4,6 @@ import org.example.dao.implementations.DAOStudentImpl;
 import org.example.dao.implementations.DAOTeacherImpl;
 import org.example.entities.Student;
 import org.example.entities.Teacher;
-import org.example.tools.custom.exceptions.WrongEntityIdException;
 import org.example.tools.custom.exceptions.WrongLoginDataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,12 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import java.sql.SQLException;
 
 import static org.example.tools.strings.PageName.*;
-import static org.example.tools.strings.Role.*;
 
 @Controller
 public class LoginController extends AbstractController{
@@ -35,16 +32,16 @@ public class LoginController extends AbstractController{
 
     @RequestMapping(value = "/login")
     @GetMapping
-    public ModelAndView checkUser(@RequestParam("loginUserName") String loginUserName,
-                                   @RequestParam("loginPassword") String loginPassword,
+    public ModelAndView checkUser(@RequestParam("loginUserName") String email,
+                                   @RequestParam("loginPassword") String password,
                                    HttpServletRequest request) {
 
         ModelAndView modelAndView = new ModelAndView();
         try {
-            if (daoTeacher.isExistTeacherByLogin(loginUserName)) {
-                modelAndView = loginTeacher(loginUserName, loginPassword, request);
-            } else if (daoStudent.isExistStudentByLogin(loginUserName)) {
-                modelAndView = loginStudent(loginUserName, loginPassword, request);
+            if (daoTeacher.isExistTeacherByEmail(email)) {
+                modelAndView = loginTeacher(email, password, request);
+            } else if (daoStudent.isExistStudentByEmail(email)) {
+                modelAndView = loginStudent(email, password, request);
             } else {
                 modelAndView.addObject("ExceptionMessage", "You entered wrong login!");
                 modelAndView.setViewName(LOGIN_PAGE.getPageName());
@@ -56,10 +53,10 @@ public class LoginController extends AbstractController{
         return modelAndView;
     }
 
-    private ModelAndView loginTeacher(String loginUserName, String loginPassword, HttpServletRequest request) {
+    private ModelAndView loginTeacher(String email, String password, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
         try {
-            Teacher teacher = daoTeacher.getTeacherByLoginNameAndPassword(loginUserName, loginPassword);
+            Teacher teacher = daoTeacher.getTeacherByEmailAndPassword(email, password);
             setBaseSessionVariables(request, teacher);
             modelAndView.setViewName("redirect:/show/teacher?teacherId=" + teacher.getTeacherId());
         } catch (WrongLoginDataException e) {
@@ -69,10 +66,10 @@ public class LoginController extends AbstractController{
         return modelAndView;
     }
 
-    private ModelAndView loginStudent(String loginUserName, String loginPassword, HttpServletRequest request) {
+    private ModelAndView loginStudent(String email, String password, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
         try {
-            Student student = daoStudent.getStudentByLoginNameAndPassword(loginUserName, loginPassword);
+            Student student = daoStudent.getStudentByEmailAndPassword(email, password);
             setBaseSessionVariables(request, student);
             modelAndView.setViewName("redirect:/show/student?studentId=" + student.getStudentId());
         } catch (WrongLoginDataException e) {

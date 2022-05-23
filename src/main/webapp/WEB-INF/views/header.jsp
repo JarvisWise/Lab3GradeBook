@@ -44,6 +44,80 @@
 </form>
 -->
 
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        /* Set black background color, white text and some padding */
+        footer {
+            background-color: #555;
+            color: white;
+            padding: 15px;
+        }
+        /* Remove the navbar's default rounded borders and increase the bottom margin */
+        .navbar {
+            margin-bottom: 0;
+            border-radius: 0;
+        }
+
+        /* Remove the jumbotron's default bottom margin */
+        .jumbotron {
+            margin-bottom: 0;
+        }
+
+        /* Set height of the grid so .sidenav can be 100% (adjust as needed) 600px*/
+        /*find something another thenheight: 640px; */
+        .row.content {
+            height: available;
+            min-height: 640px;
+            /*padding-top: 20px;*/
+            background-color: #ffffff;
+        }
+
+        div.well {
+            padding: 9px 19px 9px;
+            margin: 5px 0 5px;
+        }
+
+        .profile {
+            padding: 0;
+            margin: 0 auto;
+            /*align-items: center;
+            justify-content: center;*/
+            text-align: center;
+        }
+
+        .form-group.input-group.my,
+        .form-group.my,
+        form.my {
+            margin-bottom: 0;
+        }
+
+        /* Set gray background color and 100% height */
+        .sidenav {
+            padding-top: 20px;
+            background-color: #f1f1f1;
+            /*height: 100%;*/
+            max-height: 10000px; /*find way*/
+            min-height: 640px;
+        }
+
+        body {background-color: #f1f1f1}
+
+        /* On small screens, set height to 'auto' for sidenav and grid */
+        @media screen and (max-width: 767px) {
+            .sidenav {
+                height: auto;
+                padding: 15px;
+            }
+            .row.content {height:auto;}
+        }
+    </style>
+</head>
+
 <%
     String username=(String)session.getAttribute("current_username");
     String userId=(String)session.getAttribute("current_user_id");
@@ -61,8 +135,12 @@
 
 <!--<script src="searchMain.js"></script>-->
 <header>
-    <div>
-        <form name="search_form">
+    <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="">GradeBook</a>
+        </div>
+        <!--<form name="search_form">
             <label> Search Type:
                 <select name="searchType" id="searchTypeId">
                     <option value="byGroup">By Group</option>
@@ -72,20 +150,46 @@
                 <input type="text" name="search-box" id="searchBoxId" placeholder="Search" size="30" onkeyup="showResult(this.value)"/>
                 <div id="searchResultId"></div>
             </label>
+        </form>-->
 
-            <!-- or use href by <a> ->
-            <input type="button" value="All Student List" onclick="">
-            <input type="button" value="All Group List" onclick="">
-            <input type="button" value="All Subject List" onclick="">-->
-        </form>
-        <div>
-            <!--<a href="<\c:url value='/redirect/profile?userId=<-%=userId%>&userRole=<-%=userRole%>' />"><-%=username%><!-USER: $-{username}-></a> <!- link to profile-->
-            <a href="<c:out value="${allStudentURL}"/>">All Student List</a>
-            <a href="<c:out value="${allGroupURL}"/>">All Group List</a>
-            <a href="<c:out value="${allSubjectURL}"/>">All Subject List</a>
-            <a href="<c:out value="${allTeacherURL}"/>">All Teacher List</a>
-            <a href="<c:out value="${profileURL}"/>"><%=username%></a>
-            <a href="<c:out value="${logoutURL}"/>">Logout</a>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li><a href="<c:out value="${allStudentURL}"/>">Students</a></li>
+                <li><a href="<c:out value="${allGroupURL}"/>">Groups</a></li>
+                <li><a href="<c:out value="${allSubjectURL}"/>">Subjects</a></li>
+                <li><a href="<c:out value="${allTeacherURL}"/>">Teachers</a></li>
+            </ul>
+            <div class="nav navbar-nav">
+                <form name="search_form" class="navbar-form " role="search"><!--navbar-right-->
+                    <div class="form-group"> <!--input-group-->
+                        <!--<label for="searchTypeId">Type </label>-->
+                        <select class="form-control" name="searchType" id="searchTypeId">
+                            <option value="" disabled>Choose search type</option>
+                            <option value="byGroup">Search By Group</option>
+                            <option value="byStudent" selected="selected">Search By Student</option>
+                            <option value="bySubject">Search By Subject</option>
+                        </select>
+                        <input type="text" class="form-control" name="search-box" id="searchBoxId" placeholder="Search.." size="30" onkeyup="showResult(this.value)"/>
+                        <div id="searchResultId"></div>
+                            <!--<span class="input-group-btn">
+                            <button class="btn btn-default" type="button">
+                            <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                            </span>-->
+                    </div>
+                </form>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="<c:out value="${profileURL}"/>">
+                    <span class="glyphicon glyphicon-user"></span> <%=username%></a>
+                </li>
+                <li>
+                    <a href="<c:out value="${logoutURL}"/>">
+                    <span class="glyphicon glyphicon-log-out"></span> Logout</a>
+                </li>
+            </ul>
         </div>
     </div>
+    </nav>
 </header>

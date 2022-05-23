@@ -168,6 +168,20 @@ public class DAOStudentTaskImpl extends Oracle implements DAOStudentTask {
     }
 
     @Override
+    public void deleteStudentTasksByStudentId(String studentId) {
+        try {
+            connect();
+            statement = connection.prepareStatement(DELETE_STUDENT_TASK_BY_STUDENT_ID.getQuery());
+            statement.setInt(1, Integer.parseInt(studentId));
+            statement.execute();
+        } catch (SQLException e) {
+            logger.info("desc");
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
     public HashMap<Task, StudentTask> getStudentTasksInfoByStudentSubjectId(String studentSubjectId) throws WrongEntityIdException {
         try {
             connect();

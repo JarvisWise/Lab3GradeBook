@@ -21,9 +21,10 @@ public interface DAOStudentSubject {
     HashMap<Subject, StudentSubject> getSubjectsInfoByStudentId(String studentId) throws WrongEntityIdException;
     void addStudentSubject(StudentSubject studentSubject) throws SQLException;
     void updateStudentSubject(StudentSubject studentSubject) throws SQLException;
-    void  actualizeTotalGrade(String studentSubjectId) throws SQLException;
+    void actualizeTotalGrade(String studentSubjectId) throws SQLException;
     void deleteStudentSubject(String studentSubjectId);
     void deleteStudentSubject(String studentId, String subjectId);
     void deleteStudentSubjectsBySubjectId(String subjectId);
+    void deleteStudentSubjectsByStudentId(String studentId);
     String getLastStudentSubjectId() throws WrongEntityIdException;
 }

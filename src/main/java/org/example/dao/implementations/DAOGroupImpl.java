@@ -61,7 +61,7 @@ public class DAOGroupImpl extends Oracle implements DAOGroup {
         }
     }
 
-    @Override
+    /*@Override
     public void addGroup(String groupName) throws SQLException {
         try {
             connect();
@@ -74,7 +74,7 @@ public class DAOGroupImpl extends Oracle implements DAOGroup {
         } finally {
             disconnect();
         }
-    }
+    }*/
 
     @Override
     public void updateGroup(Group group) throws SQLException {

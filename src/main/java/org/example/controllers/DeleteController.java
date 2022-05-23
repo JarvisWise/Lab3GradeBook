@@ -62,16 +62,19 @@ public class DeleteController {
     @RequestMapping(value = "/student")
     @GetMapping
     public ModelAndView deleteByStudentId(@RequestParam("studentId") String studentId) {
+
+        daoStudentTask.deleteStudentTasksByStudentId(studentId);
+        daoStudentSubject.deleteStudentSubjectsByStudentId(studentId);
         daoStudent.deleteStudent(studentId);
-        //add action
         return new ModelAndView("redirect:/show/student-all");
     }
 
     @RequestMapping(value = "/teacher")
     @GetMapping
     public ModelAndView deleteByTeacherId(@RequestParam("teacherId") String teacherId) {
+
+        daoTeacherSubject.deleteTeacherSubjectsByTeacherId(teacherId);
         daoTeacher.deleteTeacher(teacherId);
-        //add action
         return new ModelAndView("redirect:/show/teacher-all");
     }
 
@@ -95,7 +98,6 @@ public class DeleteController {
         return modelAndView;
     }
 
-    //TO DO
     @RequestMapping(value = "/teacher-subject")
     @GetMapping
     public ModelAndView deleteTeacherSubjectById(@RequestParam("teacherId") String teacherId,
@@ -118,7 +120,6 @@ public class DeleteController {
         return modelAndView;
     }
 
-    //TO DO
     @RequestMapping(value = "/student-subject")
     @GetMapping
     public ModelAndView deleteStudentSubjectById(@RequestParam("studentId") String studentId,

@@ -169,10 +169,9 @@ public class ShowController extends AbstractController{
             //modelAndView.addObject("userType", currentRole);
             //--time solution
             //--and mb remove from [studentAllList] list current user
-            //TO DO: remove current student from LIST
-            //TO DO:
+            //TO DO: remove current student from LIST ???
 
-            //modelAndView.addObject("students", studentAllList); //remove this
+
             modelAndView.addObject("studentInfoSetList", studentInfoSetList);
             modelAndView.setViewName(STUDENT_LIST_PAGE.getPageName());
         } catch (WrongEntityIdException e) {

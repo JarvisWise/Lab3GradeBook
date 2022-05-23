@@ -8,7 +8,7 @@ import java.sql.SQLException;
 //public class Student implements Entity{
 public class Student extends User {
     private String studentId;
-    private String loginName;
+    private String email;
     private String firstName;
     private String lastName;
     private String password;
@@ -19,9 +19,9 @@ public class Student extends User {
 
     }
 
-    public Student(String studentId, String loginName, String firstName, String lastName, String password, String headman, String groupId) {
+    public Student(String studentId, String email, String firstName, String lastName, String password, String headman, String groupId) {
         this.studentId = studentId;
-        this.loginName = loginName;
+        this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
@@ -37,12 +37,12 @@ public class Student extends User {
         this.studentId = studentId;
     }
 
-    public String getLoginName() {
-        return loginName;
+    public String getEmail() {
+        return email;
     }
 
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getFirstName() {
@@ -98,7 +98,7 @@ public class Student extends User {
     public static Student parse(ResultSet result) throws SQLException {
         return new Student(
                 result.getString("student_id"),
-                result.getString("login_name"),
+                result.getString("email"),
                 result.getString("first_name"),
                 result.getString("last_name"),
                 result.getString("password"),
@@ -111,7 +111,7 @@ public class Student extends User {
     public String toString() {
         return "Student{" +
                 "studentId='" + studentId + '\'' +
-                ", loginName='" + loginName + '\'' +
+                ", email='" + email + '\'' +
                 ", fistName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", password='" + password + '\'' +

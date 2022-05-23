@@ -217,6 +217,12 @@ public class RedirectController extends AbstractController{
         return new ModelAndView("main-page");
     }
 
+    @RequestMapping(value = "/login")
+    @GetMapping
+    public ModelAndView redirectLogin() {
+        return new ModelAndView(PageName.LOGIN_PAGE.getPageName());
+    }
+
     @RequestMapping(value = "/profile")
     @GetMapping
     public ModelAndView redirectProfile(@RequestParam("userId") String userId,

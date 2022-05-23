@@ -21,6 +21,6 @@ public class LogoutController {
         HttpSession session = request.getSession(false);
         session.invalidate(); //destroy session
         //HttpCookie also try cookie next
-        return new ModelAndView(LOGIN_PAGE.getPageName());
+        return new ModelAndView("redirect:/redirect/login");
     }
 }

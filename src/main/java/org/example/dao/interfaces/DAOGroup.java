@@ -11,7 +11,7 @@ import java.util.List;
 public interface DAOGroup {
     Group getGroupById(String id) throws WrongEntityIdException;
     void addGroup(Group group) throws SQLException;
-    void addGroup(String groupName) throws SQLException; //TO DO:erase
+    /*void addGroup(String groupName) throws SQLException;*/
     void updateGroup(Group group) throws SQLException;
     void deleteGroup(String groupId);
     List<Group> getAllGroups() throws WrongEntityIdException;

@@ -65,7 +65,7 @@ public class EditController {
 
     @RequestMapping(value = "/student/{studentId}")
     @GetMapping
-    public ModelAndView editByStudentId(@RequestParam("loginName") String loginName,
+    public ModelAndView editByStudentId(@RequestParam("loginName") String email,
                                         @RequestParam("firstName") String firstName,
                                         @RequestParam("lastName") String lastName,
                                         @RequestParam("headman") String headman,
@@ -76,7 +76,7 @@ public class EditController {
         ModelAndView modelAndView = new ModelAndView();
         Student student = new Student(
                 studentId,
-                loginName,
+                email,
                 firstName,
                 lastName,
                 password,
@@ -97,15 +97,15 @@ public class EditController {
 
     @RequestMapping(value = "/teacher/{teacherId}")
     @GetMapping
-    public ModelAndView editByTeacherId(@RequestParam("loginName") String loginName,
+    public ModelAndView editByTeacherId(@RequestParam("loginName") String email,
                                         @RequestParam("firstName") String firstName,
                                         @RequestParam("lastName") String lastName,
                                         @PathVariable String teacherId) {
 
         ModelAndView modelAndView = new ModelAndView();
         Teacher teacher = new Teacher(
-                null,
-                loginName,
+                teacherId,
+                email,
                 firstName,
                 lastName,
                 null
