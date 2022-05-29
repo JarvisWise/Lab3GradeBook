@@ -135,14 +135,17 @@ public class ShowController extends AbstractController{
         Student student = null;
         Subject subject = null;
         StudentSubject studentSubject = null;
-        HashMap<Task, StudentTask> studentTaskMap = null;
+        List<StudentTaskInfoSet> studentTaskInfoMap = null;
+        /*HashMap<Task, StudentTask> studentTaskMap = null;*/
 
         try {
             subject = daoSubject.getSubjectById(subjectId);
             student = daoStudent.getStudentById(studentId);
             studentSubject = daoStudentSubject.getStudentSubjectBySubjectIdAndStudentId(subjectId, studentId);
-            studentTaskMap = daoStudentTask.
-                    getStudentTasksInfoByStudentSubjectId(studentSubject.getStudentSubjectId());
+            studentTaskInfoMap = daoStudentTask.
+                    getStudentTaskInfoSetList(studentSubject.getStudentSubjectId());
+            /*studentTaskMap = daoStudentTask.
+                    getStudentTasksInfoByStudentSubjectId(studentSubject.getStudentSubjectId());*/
         } catch (WrongEntityIdException e) {
             e.printStackTrace();
         }
@@ -150,7 +153,8 @@ public class ShowController extends AbstractController{
         modelAndView.addObject("student", student);
         modelAndView.addObject("subject", subject);
         modelAndView.addObject("studentSubject", studentSubject);
-        modelAndView.addObject("studentTaskMap", studentTaskMap);
+        /*modelAndView.addObject("studentTaskMap", studentTaskMap);*/
+        modelAndView.addObject("studentTaskInfoMap", studentTaskInfoMap);
         modelAndView.setViewName("student-task-list");
         return modelAndView;
     }

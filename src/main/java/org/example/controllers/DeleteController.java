@@ -73,9 +73,18 @@ public class DeleteController {
     @GetMapping
     public ModelAndView deleteByTeacherId(@RequestParam("teacherId") String teacherId) {
 
-        daoTeacherSubject.deleteTeacherSubjectsByTeacherId(teacherId);
-        daoTeacher.deleteTeacher(teacherId);
-        return new ModelAndView("redirect:/show/teacher-all");
+        ModelAndView modelAndView = new ModelAndView();
+        try {
+            daoStudentTask.deleteByTeacherId(teacherId);
+            daoTeacherSubject.deleteTeacherSubjectsByTeacherId(teacherId);
+            daoTeacher.deleteTeacher(teacherId);
+            modelAndView.setViewName("redirect:/show/teacher-all");
+        } catch (Exception throwables) {
+            throwables.printStackTrace();
+            modelAndView.setViewName(ERROR_PAGE.getPageName());
+        }
+
+        return modelAndView;
     }
 
     @RequestMapping(value = "/subject")

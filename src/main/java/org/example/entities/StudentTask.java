@@ -9,16 +9,18 @@ public class StudentTask {
     private String SubjectId;
     private String studentSubjectId;
     private int grade;
+    private String byTeacherId;
 
     public StudentTask() {
 
     }
 
-    public StudentTask(String taskId, String subjectId, String studentSubjectId, int grade) {
+    public StudentTask(String taskId, String subjectId, String studentSubjectId, int grade, String byTeacherId) {
         this.taskId = taskId;
         this.SubjectId = subjectId;
         this.studentSubjectId = studentSubjectId;
         this.grade = grade;
+        this.byTeacherId = byTeacherId;
     }
 
     public String getTaskId() {
@@ -53,12 +55,21 @@ public class StudentTask {
         this.grade = grade;
     }
 
+    public String getByTeacherId() {
+        return byTeacherId;
+    }
+
+    public void setByTeacherId(String byTeacherId) {
+        this.byTeacherId = byTeacherId;
+    }
+
     public static StudentTask parse(ResultSet result) throws SQLException {
         return new StudentTask(
                 result.getString("task_id"),
                 result.getString("subject_id"),
                 result.getString("student_subject_id"),
-                result.getInt("grade")
+                result.getInt("grade"),
+                result.getString("by_teacher_id")
         );
     }
 

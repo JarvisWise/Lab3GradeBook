@@ -2,11 +2,11 @@ package org.example.dao.implementations;
 
 import org.apache.log4j.Logger;
 import org.example.dao.connection.Oracle;
+import org.example.dao.interfaces.DAOGroup;
 import org.example.dao.interfaces.DAOStudentTask;
-import org.example.entities.Student;
-import org.example.entities.StudentSubject;
-import org.example.entities.StudentTask;
-import org.example.entities.Task;
+import org.example.dao.interfaces.DAOTask;
+import org.example.dao.interfaces.DAOTeacher;
+import org.example.entities.*;
 import org.example.tools.custom.exceptions.WrongEntityIdException;
 import org.springframework.stereotype.Repository;
 
@@ -23,14 +23,14 @@ public class DAOStudentTaskImpl extends Oracle implements DAOStudentTask {
     private static final Logger logger = Logger.getLogger(DAOStudentTaskImpl.class);
 
     @Override
-    public StudentTask getStudentTaskById(String taskId, String studentTaskId) throws WrongEntityIdException {
+    public StudentTask getStudentTaskById(String studentSubjectId, String taskId) throws WrongEntityIdException {
         try {
             connect();
             statement = connection.prepareStatement(
                     STUDENT_TASK_BY_ID.getQuery());
 
-            statement.setInt(1, Integer.parseInt(taskId));
-            statement.setInt(2, Integer.parseInt(studentTaskId));
+            statement.setInt(1, Integer.parseInt(studentSubjectId));
+            statement.setInt(2, Integer.parseInt(taskId));
 
             result = statement.executeQuery();
             if(result.next()) {
@@ -77,6 +77,7 @@ public class DAOStudentTaskImpl extends Oracle implements DAOStudentTask {
             statement.setInt(2, Integer.parseInt(studentTask.getTaskId()));
             statement.setInt(3, Integer.parseInt(studentTask.getSubjectId()));
             statement.setInt(4, studentTask.getGrade());
+            statement.setInt(5, Integer.parseInt(studentTask.getByTeacherId()));
 
             statement.execute();
         } catch (SQLException e) {
@@ -93,14 +94,15 @@ public class DAOStudentTaskImpl extends Oracle implements DAOStudentTask {
     }
 
     @Override
-    public void updateStudentTaskGrade(String taskId, String  studentSubjectId, int newGrade) throws SQLException {
+    public void updateStudentTaskGrade(String taskId, String  studentSubjectId, int newGrade, String teacherId) throws SQLException {
         try {
             connect();
             statement = connection.prepareStatement(UPDATE_STUDENT_TASK_GRADE.getQuery());
 
             statement.setInt(1, newGrade);
-            statement.setInt(2, Integer.parseInt(studentSubjectId));
-            statement.setInt(3, Integer.parseInt(taskId));
+            statement.setInt(2,  Integer.parseInt(teacherId));
+            statement.setInt(3, Integer.parseInt(studentSubjectId));
+            statement.setInt(4, Integer.parseInt(taskId));
             statement.execute();
         } catch (SQLException e) {
             logger.info("desc", e);
@@ -182,6 +184,23 @@ public class DAOStudentTaskImpl extends Oracle implements DAOStudentTask {
     }
 
     @Override
+    public void deleteByTeacherId(String teacherId) {
+        try {
+            connect();
+            statement = connection.prepareStatement(DELETE_STUDENT_TASK_BY_TEACHER.getQuery());
+
+            statement.setInt(2,  Integer.parseInt(teacherId));
+            statement.setInt(2,  Integer.parseInt(teacherId));
+
+            statement.execute();
+        } catch (SQLException e) {
+            logger.info("desc", e);
+        } finally {
+            disconnect();
+        }
+    }
+
+    @Override
     public HashMap<Task, StudentTask> getStudentTasksInfoByStudentSubjectId(String studentSubjectId) throws WrongEntityIdException {
         try {
             connect();
@@ -199,5 +218,27 @@ public class DAOStudentTaskImpl extends Oracle implements DAOStudentTask {
         } finally {
             disconnect();
         }
+    }
+
+    @Override
+    public StudentTaskInfoSet getStudentTaskInfoSet(StudentTask studentTask) throws WrongEntityIdException {
+        DAOTask daoTask = new DAOTaskImpl();
+        DAOTeacher daoTeacher = new DAOTeacherImpl();
+        Task task = daoTask.getTaskById(studentTask.getTaskId());
+        Teacher teacher = null;
+        if (studentTask.getByTeacherId() != null) {
+            teacher = daoTeacher.getTeacherById(studentTask.getByTeacherId());
+        }
+        return new StudentTaskInfoSet(studentTask, task, teacher);
+    }
+
+    @Override
+    public List<StudentTaskInfoSet> getStudentTaskInfoSetList(String studentSubjectId) throws WrongEntityIdException {
+        List<StudentTask> studentTaskList = getStudentTaskByStudentSubjectId(studentSubjectId);
+        List<StudentTaskInfoSet> studentTaskInfoSetList =  new ArrayList<>();
+        for (StudentTask s: studentTaskList) {
+            studentTaskInfoSetList.add(getStudentTaskInfoSet(s));
+        }
+        return studentTaskInfoSetList;
     }
 }

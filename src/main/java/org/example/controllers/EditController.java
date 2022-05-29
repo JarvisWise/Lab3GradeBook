@@ -191,16 +191,17 @@ public class EditController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/student-task")
+    @RequestMapping(value = "/student-task/{teacherId}")
     @GetMapping
     public ModelAndView editByTaskId(@RequestParam("taskId") String taskId,
                                      @RequestParam("studentSubjectId") String studentSubjectId,
-                                     @RequestParam("grade") String grade) {
+                                     @RequestParam("grade") String grade,
+                                     @PathVariable String teacherId) {
 
         ModelAndView modelAndView = new ModelAndView();
         StudentSubject studentSubject = null;
         try {
-            daoStudentTask.updateStudentTaskGrade(taskId, studentSubjectId, Integer.parseInt(grade));
+            daoStudentTask.updateStudentTaskGrade(taskId, studentSubjectId, Integer.parseInt(grade), teacherId);
             daoStudentSubject.actualizeTotalGrade(studentSubjectId);
             studentSubject = daoStudentSubject.getStudentSubjectById(studentSubjectId);
             modelAndView.setViewName("redirect:/show/student-task-list?subjectId=" +

@@ -49,6 +49,7 @@ public enum Query {
             "FROM student_subject " +
             "WHERE student_id = ? " +
             ")"),
+    DELETE_STUDENT_TASK_BY_TEACHER("UPDATE student_task SET by_teacher_id = null WHERE by_teacher_id = ?"),
     ADD_SUBJECT("INSERT INTO subject VALUES (subject_id_seq.nextval, ?, ?, ?, ?)"),
     ADD_STUDENT_SUBJECT("INSERT INTO student_subject VALUES (student_subject_id_seq.nextval, ?, ?, ?)"), //total_grade, student_id, subject_id, teacher_id(for remove)
     ADD_TEACHER_SUBJECT("INSERT INTO teacher_subject VALUES (?, ?)"), //subject_id, teacher_id
@@ -56,7 +57,7 @@ public enum Query {
     ADD_STUDENT("INSERT INTO student VALUES (user_id_seq.nextval, ?, ?, ?, ?, ?, ?)"),
     ADD_TEACHER("INSERT INTO teacher VALUES (user_id_seq.nextval, ?, ?, ?, ?)"),
     ADD_TASK("INSERT INTO task VALUES (task_id_seq.nextval, ?, ?, ?, ?)"),
-    ADD_STUDENT_TASK("INSERT INTO student_task VALUES (?, ?, ?, ?)"),
+    ADD_STUDENT_TASK("INSERT INTO student_task VALUES (?, ?, ?, ?, ?)"),
     UPDATE_SUBJECT("UPDATE subject SET subject_name=?, max_grade=?, pass_proc_grade=?, subject_description=? WHERE subject_id=?"),
     UPDATE_STUDENT_SUBJECT("UPDATE student_subject SET total_grade=?, student_id=?, subject_id=? WHERE student_subject_id=?"),
     UPDATE_GROUP("UPDATE group_ SET group_name=?, group_description=? WHERE group_id=?"),
@@ -67,7 +68,7 @@ public enum Query {
     UPDATE_TASK_NAME("UPDATE task SET task_name=? WHERE task_id=?"),
     UPDATE_TASK_MAX_GRADE("UPDATE task SET max_grade=? WHERE task_id=?"),
     UPDATE_TASK("UPDATE task SET max_grade = ?, task_name = ?, task_description = ? WHERE task_id = ?"),
-    UPDATE_STUDENT_TASK_GRADE("UPDATE student_task SET grade=? WHERE student_subject_id = ? AND task_id = ?"),
+    UPDATE_STUDENT_TASK_GRADE("UPDATE student_task SET grade=?, by_teacher_id=? WHERE student_subject_id = ? AND task_id = ?"),
     CHANGE_STUDENT_PASSWORD("UPDATE student SET password=? WHERE student_id=?"),
     CHANGE_TEACHER_PASSWORD("UPDATE teacher SET password=? WHERE teacher_id=?"),
     STUDENT_SUBJECT_LIST_BY_STUDENT_ID("SELECT * FROM student_subject WHERE student_id = ?"),

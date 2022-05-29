@@ -15,19 +15,30 @@
 <body>
 <jsp:include page="header.jsp" />
 <div class="container-fluid text-center">
-    <div class="row content">
-        <div class="col-sm-2 sidenav">
-        </div>
-        <div class="col-sm-8 text-left">
-            <div> <!--NEED?-->
-                <label>Subject name: ${subject.getSubjectName()}</label>
-                <label>Max grade: ${subject.getMaxGrade()}</label>
-                <label>Subject description: ${subject.getSubjectDescription()}</label>
-                <c:if test="${userRole eq 'teacher'}">
-                    <a href="<c:url value='/redirect/edit/subject?subjectId=${subject.getSubjectId()}' />" class="btn btn-default">Edit</a>
-                    <a href="<c:url value='/delete/subject?subjectId=${subject.getSubjectId()}' />" class="btn btn-default">Delete</a>
-                </c:if>
+    <div class="row content my-c">
+        <div class="col-xs-8 col-xs-offset-2 text-left my">
+
+            <c:if test="${userRole eq 'teacher'}">
+                <div class="well">
+                    <a href="<c:url value='/redirect/edit/subject?subjectId=${subject.getSubjectId()}' />" class="btn btn-default">Change Subject Info</a>
+                    <a href="<c:url value='/delete/subject?subjectId=${subject.getSubjectId()}' />" class="btn btn-default">Remove Subject</a>
+                </div>
+            </c:if>
+            <div class="well">
+                <table class="table table-bordered tb-my " >
+                    <tbody>
+                        <tr><th class="alert alert-info">Subject name</th><td class="bg-success">${subject.getSubjectName()}</td></tr>
+                        <tr><th class="alert alert-info">Max grade</th><td class="bg-success">${subject.getMaxGrade()}</td></tr>
+                        <tr><th class="alert alert-info">Subject description</th><td class="bg-success">${subject.getSubjectDescription()}</td></tr>
+                    </tbody>
+                </table>
             </div>
+
+            <!--<div> !--NEED?--
+                <label>Subject name: $-{subject.getSubjectName()}</label>
+                <label>Max grade: $-{subject.getMaxGrade()}</label>
+                <label>Subject description: $-{subject.getSubjectDescription()}</label>
+            </div>-->
             <!-- teachers -->
             <!--<hr>-->
             <c:if test="${userRole eq 'teacher'}">
@@ -119,7 +130,11 @@
                             <td>${e.getKey().getFirstName()}</td>
                             <td>${e.getKey().getLastName()}</td>
                             <td>${e.getValue().getTotalGrade()}</td>
-                            <td>${e.getValue().getTotalGrade()/subject.getMaxGrade()*100}%</td>
+                            <td><!--$-{e.getValue().getTotalGrade()/subject.getMaxGrade()*100}%-->
+                                <script>
+                                    document.write(Math.round(parseInt(${e.getValue().getTotalGrade()/subject.getMaxGrade()*100})));
+                                </script>%
+                            </td>
                             <td>${subject.getPassProcGradeP()}%</td>
                             <!-- ref to student-->
                             <c:url value='/redirect/profile' var="studentURL">
@@ -163,7 +178,10 @@
                     <c:forEach var="task" items="${taskList}">
                         <tr>
                             <td>${task.getTaskName()}</td>
-                            <td><a href="#" title="Task Description" data-toggle="popover" data-placement="right" data-content="${st.getKey().getTaskDescription()}">details..</a></td>
+                            <td class="desc-my">
+                                ${task.getTaskDescription()}
+                                <!--<a href="#" title="Task Description" data-toggle="popover" data-placement="right" data-content="$-{st.getKey().getTaskDescription()}">details..</a>-->
+                            </td>
                             <td>${task.getMaxGrade()}</td>
                             <c:if test="${userRole eq 'teacher'}">
                                 <td><a href="<c:url value='/redirect/edit/task?taskId=${task.getTaskId()}' />">Change</a></td>
@@ -173,8 +191,6 @@
                     </c:forEach>
                 </tbody>
             </table>
-        </div>
-        <div class="col-sm-2 sidenav">
         </div>
     </div>
 </div>

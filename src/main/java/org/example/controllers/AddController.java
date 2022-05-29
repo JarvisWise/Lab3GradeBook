@@ -192,7 +192,8 @@ public class AddController {
                         t.getTaskId(),
                         t.getSubjectId(),
                         lastStudentSubjectId,
-                        0
+                        0,
+                        null
                 ));
             }
 
@@ -234,7 +235,8 @@ public class AddController {
                         lastTaskId,
                         s.getSubjectId(),
                         s.getStudentSubjectId(),
-                        0
+                        0,
+                        null
                 ));
             }
 
@@ -260,7 +262,8 @@ public class AddController {
                 taskId,
                 subjectId,
                 studentSubjectId,
-                Integer.parseInt(grade)
+                Integer.parseInt(grade),
+                null
         );
 
         try {

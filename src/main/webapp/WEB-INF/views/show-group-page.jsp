@@ -15,18 +15,30 @@
 <body>
 <jsp:include page="header.jsp" />
 <div class="container-fluid text-center">
-    <div class="row content">
-        <div class="col-sm-2 sidenav">
-        </div>
-        <div class="col-sm-8 text-left">
-            <div> <!--NEED?-->
+    <div class="row content my-c">
+        <div class="col-xs-8 col-xs-offset-2 text-left my">
+
+
+            <c:if test="${userRole eq 'teacher'}">
+                <div class="well">
+                    <a href="<c:url value='/redirect/edit/group?groupId=${group.getGroupId()}' />" class="btn btn-default">Change Group Info</a>
+                    <a href="<c:url value='/delete/group?groupId=${group.getGroupId()}' />" class="btn btn-default">Remove Group</a>
+                </div>
+            </c:if>
+            <div class="well">
+                <table class="table table-bordered tb-my " >
+                    <tbody>
+                    <tr><th class="alert alert-info">Group name</th><td class="bg-success"> ${group.getGroupName()}</td></tr>
+                    <tr><th class="alert alert-info">Group description</th><td class="bg-success">${group.getGroupDescription()}</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <!--<div> !--NEED?--
                 <label>Group Name: ${group.getGroupName()}</label>
                 <label>Description: ${group.getGroupDescription()}</label>
-                <c:if test="${userRole eq 'teacher'}">
-                    <a href="<c:url value='/redirect/edit/group?groupId=${group.getGroupId()}' />" class="btn btn-default">Edit</a>
-                    <a href="<c:url value='/delete/group?groupId=${group.getGroupId()}' />" class="btn btn-default">Delete</a>
-                </c:if>
-            </div>
+            </div>-->
             <div> <!--NEED?-->
                 <c:if test="${userRole eq 'teacher'}">
                     <!-- student selector -->
@@ -75,8 +87,6 @@
                     </c:forEach>
                 </tbody>
             </table>
-        </div>
-        <div class="col-sm-2 sidenav">
         </div>
     </div>
 </div>

@@ -18,10 +18,8 @@
 <body>
 <jsp:include page="header.jsp" />
 <div class="container-fluid text-center">
-    <div class="row content">
-        <div class="col-sm-2 sidenav">
-        </div>
-        <div class="col-sm-8 text-left">
+    <div class="row content my-c">
+        <div class="col-xs-8 col-xs-offset-2 text-left my">
             <c:choose>
                 <c:when test="${empty ExceptionMessage}">
                     <div>
@@ -36,8 +34,6 @@
                     </div>
                 </c:otherwise>
             </c:choose>
-        </div>
-        <div class="col-sm-2 sidenav">
         </div>
     </div>
 </div>

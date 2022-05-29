@@ -9,10 +9,8 @@
 <c:set var = "userRole" value = "<%=userRole%>"/>
 <jsp:include page="header.jsp" />
 <div class="container-fluid text-center">
-    <div class="row content">
-        <div class="col-sm-2 sidenav">
-        </div>
-        <div class="col-sm-8 text-left">
+    <div class="row content my-c">
+        <div class="col-xs-8 col-xs-offset-2 text-left my">
             <div class="well">
                 <c:if test="${userRole eq 'teacher'}">
                     <a href="<c:url value='/redirect/add/subject' />" class="btn btn-default">Add new subject</a>
@@ -45,8 +43,6 @@
                     </c:forEach>
                 </tbody>
             </table>
-        </div>
-        <div class="col-sm-2 sidenav">
         </div>
     </div>
 </div>
