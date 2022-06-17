@@ -62,7 +62,7 @@
                         <a href="<c:url value='/show/subject?subjectId=${task.getSubjectId()}'/>" class="btn btn-default">Cancel</a>
                     </c:when>
                     <c:otherwise>
-                        <a href="<c:out value="/show/subject?subjectId=${subject.getSubjectId()}"/>" class="btn btn-default">Cancel</a>
+                        <a href="<c:url value="/show/subject?subjectId=${subject.getSubjectId()}"/>" class="btn btn-default">Cancel</a>
                     </c:otherwise>
                 </c:choose>
             </form>

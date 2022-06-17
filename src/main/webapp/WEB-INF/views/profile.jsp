@@ -23,6 +23,14 @@
                             <tr><th class="alert alert-info">Email</th><td class="bg-success">${user.getEmail()}</td></tr>
                             <tr><th class="alert alert-info">First name</th><td class="bg-success">${user.getFirstName()}</td></tr>
                             <tr><th class="alert alert-info">Last name</th><td class="bg-success">${user.getLastName()}</td></tr>
+                            <c:choose>
+                                <c:when test="${user.getRole() eq 'student'}">
+                                    <tr><th class="alert alert-info">Role</th><td class="bg-success">Student</td></tr>
+                                </c:when>
+                                <c:otherwise>
+                                    <tr><th class="alert alert-info">Role</th><td class="bg-success">Teacher</td></tr>
+                                </c:otherwise>
+                            </c:choose>
                             <c:if test="${user.getRole() eq 'student'}">
                                 <!-- headman -->
                                 <c:choose>

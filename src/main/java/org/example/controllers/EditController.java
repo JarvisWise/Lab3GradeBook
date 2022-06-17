@@ -47,7 +47,7 @@ public class EditController {
 
     @RequestMapping(value = "/group/{groupId}")
     @GetMapping
-    public ModelAndView editByGroupId(@RequestParam("groupName") String groupName,
+    public ModelAndView editGroup(@RequestParam("groupName") String groupName,
                                       @RequestParam("groupDescription") String groupDescription,
                                       @PathVariable String groupId) {
 
@@ -65,7 +65,7 @@ public class EditController {
 
     @RequestMapping(value = "/student/{studentId}")
     @GetMapping
-    public ModelAndView editByStudentId(@RequestParam("loginName") String email,
+    public ModelAndView editStudent(@RequestParam("loginName") String email,
                                         @RequestParam("firstName") String firstName,
                                         @RequestParam("lastName") String lastName,
                                         @RequestParam("headman") String headman,
@@ -97,7 +97,7 @@ public class EditController {
 
     @RequestMapping(value = "/teacher/{teacherId}")
     @GetMapping
-    public ModelAndView editByTeacherId(@RequestParam("loginName") String email,
+    public ModelAndView editTeacher(@RequestParam("loginName") String email,
                                         @RequestParam("firstName") String firstName,
                                         @RequestParam("lastName") String lastName,
                                         @PathVariable String teacherId) {
@@ -124,7 +124,7 @@ public class EditController {
 
     @RequestMapping(value = "/student-group")
     @GetMapping
-    public ModelAndView editByStudentId(@RequestParam("studentId") String studentId,
+    public ModelAndView editStudentGroup(@RequestParam("studentId") String studentId,
                                         @RequestParam("groupId") String groupId) {
 
         ModelAndView modelAndView = new ModelAndView();
@@ -142,7 +142,7 @@ public class EditController {
 
     @RequestMapping(value = "/subject/{subjectId}")
     @GetMapping
-    public ModelAndView editBySubjectId(@RequestParam("subjectName") String subjectName,
+    public ModelAndView editSubject(@RequestParam("subjectName") String subjectName,
                                         @RequestParam("maxGrade") String maxGrade,
                                         @RequestParam("passProcGrade") String passProcGrade,
                                         @RequestParam("subjectDescription") String subjectDescription,
@@ -171,7 +171,7 @@ public class EditController {
 
     @RequestMapping(value = "/task")
     @GetMapping
-    public ModelAndView editByTaskId(@RequestParam("taskId") String taskId,
+    public ModelAndView editTask(@RequestParam("taskId") String taskId,
                                      @RequestParam("subjectId") String subjectId,
                                      @RequestParam("taskName") String taskName,
                                      @RequestParam("maxGrade") String maxGrade,
@@ -193,7 +193,7 @@ public class EditController {
 
     @RequestMapping(value = "/student-task/{teacherId}")
     @GetMapping
-    public ModelAndView editByTaskId(@RequestParam("taskId") String taskId,
+    public ModelAndView editStudentTask(@RequestParam("taskId") String taskId,
                                      @RequestParam("studentSubjectId") String studentSubjectId,
                                      @RequestParam("grade") String grade,
                                      @PathVariable String teacherId) {

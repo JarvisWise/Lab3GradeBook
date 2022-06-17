@@ -45,7 +45,7 @@ public class AddController {
 
     @RequestMapping(value = "/group")
     @GetMapping
-    public ModelAndView addByGroup(@RequestParam("groupName") String groupName,
+    public ModelAndView addNewGroup(@RequestParam("groupName") String groupName,
                                    @RequestParam("groupDescription") String groupDescription) {
 
         ModelAndView modelAndView = new ModelAndView();
@@ -62,7 +62,7 @@ public class AddController {
 
     @RequestMapping(value = "/student")
     @GetMapping
-    public ModelAndView addByStudent(@RequestParam("firstName") String firstName,
+    public ModelAndView addNewStudent(@RequestParam("firstName") String firstName,
                                        @RequestParam("loginName") String email,
                                        @RequestParam("lastName") String lastName,
                                        @RequestParam("headman") String headman,
@@ -93,7 +93,7 @@ public class AddController {
 
     @RequestMapping(value = "/teacher")
     @GetMapping
-    public ModelAndView addByTeacher(@RequestParam("firstName") String firstName,
+    public ModelAndView addNewTeacher(@RequestParam("firstName") String firstName,
                                      @RequestParam("loginName") String email,
                                      @RequestParam("lastName") String lastName,
                                      @RequestParam("password") String password) {
@@ -120,7 +120,7 @@ public class AddController {
 
     @RequestMapping(value = "/subject")
     @GetMapping
-    public ModelAndView addBySubject(@RequestParam("subjectName") String subjectName,
+    public ModelAndView addNewSubject(@RequestParam("subjectName") String subjectName,
                                        @RequestParam("maxGrade") String maxGrade,
                                        @RequestParam("passProcGrade") String passProcGrade,
                                      @RequestParam("subjectDescription") String subjectDescription) {
@@ -147,7 +147,7 @@ public class AddController {
 
     @RequestMapping(value = "/teacher-subject")
     @GetMapping
-    public ModelAndView addTeacherSubject(@RequestParam("teacherId") String teacherId,
+    public ModelAndView addNewTeacherSubject(@RequestParam("teacherId") String teacherId,
                                      @RequestParam("subjectId") String subjectId) {
 
         ModelAndView modelAndView = new ModelAndView();
@@ -169,7 +169,7 @@ public class AddController {
 
     @RequestMapping(value = "/student-subject")
     @GetMapping
-    public ModelAndView addStudentSubject(@RequestParam("studentId") String studentId,
+    public ModelAndView addNewStudentSubject(@RequestParam("studentId") String studentId,
                                           @RequestParam("subjectId") String subjectId) {
 
         ModelAndView modelAndView = new ModelAndView();
@@ -208,7 +208,7 @@ public class AddController {
 
     @RequestMapping(value = "/task")
     @GetMapping
-    public ModelAndView addByTaskId(@RequestParam("subjectId") String subjectId,
+    public ModelAndView addNewTask(@RequestParam("subjectId") String subjectId,
                                     @RequestParam("taskName") String taskName,
                                     @RequestParam("maxGrade") String maxGrade,
                                     @RequestParam("taskDescription") String taskDescription) {
@@ -252,7 +252,7 @@ public class AddController {
     //TO DO: chekc if need
     @RequestMapping(value = "/student-task")
     @GetMapping
-    public ModelAndView addStudentTask(@RequestParam("studentSubjectId") String studentSubjectId,
+    public ModelAndView addNewStudentTask(@RequestParam("studentSubjectId") String studentSubjectId,
                                     @RequestParam("taskId") String taskId,
                                     @RequestParam("subjectId") String subjectId,
                                     @RequestParam("grade") String grade) {
